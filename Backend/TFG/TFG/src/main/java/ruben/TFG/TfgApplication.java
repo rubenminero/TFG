@@ -1,7 +1,8 @@
-package ruben.TFG;
+package Ruben.TFG;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 
 @SpringBootApplication
 public class TfgApplication {
