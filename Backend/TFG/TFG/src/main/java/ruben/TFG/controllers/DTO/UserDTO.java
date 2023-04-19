@@ -24,7 +24,9 @@ public class UserDTO {
     private String last_name;
     private String password;
     private String nif;
-    private String mail;
+    private String email;
+
+    private Boolean enabled;
 
     public UserDTO(User user) {
         this.id = user.getId();
@@ -33,7 +35,8 @@ public class UserDTO {
         this.last_name = user.getLast_name();
         this.password = user.getPassword();
         this.nif = user.getNif();
-        this.mail = user.getEmail();
+        this.email = user.getEmail();
+        this.enabled = user.isEnabled();
     }
 
     public static UserDTO fromUser(User user) {
@@ -45,6 +48,6 @@ public class UserDTO {
     }
 
     public static User toUser(UserDTO user) {
-        return new User(user.username, user.first_name,user.last_name,user.password,user.nif,user.mail);
+        return new User(user.username, user.first_name,user.last_name,user.password,user.nif,user.email);
     }
 }

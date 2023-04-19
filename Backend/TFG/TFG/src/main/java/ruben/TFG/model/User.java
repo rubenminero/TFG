@@ -6,8 +6,6 @@ import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name= "users")
-@SQLDelete(sql = "UPDATE user SET enabled = false WHERE id=?")
-@Where(clause = "enabled=true")
 public class User {
     private Long id;
     private String username;
@@ -15,7 +13,7 @@ public class User {
     private String first_name;
     private String last_name;
     private String nif;
-    private String mail;
+    private String email;
     private Boolean enabled = Boolean.TRUE;
 
     /**
@@ -32,15 +30,15 @@ public class User {
      * @param last_name, the last name of this user
      * @param password, the password of the user
      * @param nif, the nif of the user
-     * @param mail, the email of the user
+     * @param email, the email of the user
      */
-    public User(String username, String first_name, String last_name, String password, String nif, String mail){
+    public User(String username, String first_name, String last_name, String password, String nif, String email){
         this.username = username;
         this.first_name = first_name;
         this.last_name = last_name;
         this.password = password;
         this.nif = nif;
-        this.mail = mail;
+        this.email = email;
     }
 
 
@@ -107,9 +105,9 @@ public class User {
      * Get the mail of the user
      * @return the mail of the user.
      */
-    @Column(name = "mail")
+    @Column(name = "email")
     public String getEmail() {
-        return mail;
+        return email;
     }
 
     /**
@@ -174,7 +172,7 @@ public class User {
      * @param mail the new mail for this user
      */
     public void setEmail(String mail) {
-        this.mail = mail;
+        this.email = email;
     }
 
     /**

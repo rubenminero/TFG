@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ruben.TFG.model.User;
 import ruben.TFG.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ public class UserService {
 
     /**
      * Disable a user in the database
-     * @param user the user to be disabled
+     * @param id the id of the user to be disabled
      */
     public void disableUser(Long id){
         User user = this.getUser(id);
@@ -58,6 +59,16 @@ public class UserService {
     public List<User> getAllUsers() {
 
         return userRepository.findAll();
+    }
+    public List<User> getEnabledUsers() {
+        List<User> users_enabled = new ArrayList<User>();
+        List<User> users = userRepository.findAll();
+        for (User u : users) {
+            if (u.isEnabled()){
+                users_enabled.add(u);
+            }
+        }
+        return users_enabled;
     }
 
     public User getUserByUsername(String username) {

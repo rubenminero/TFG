@@ -35,22 +35,15 @@ public class UserController {
     @GetMapping("")
     @ApiOperation("Get all users")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        for (User u : users) {
-            if (u.isEnabled()){
-                continue;
-            }else{
-                users.remove(u);
-            }
-        }
+        List<User> users = userService.getEnabledUsers();
         if (users == null) {
-            log.warn("The supervisor is not authorized to get all the users");
+            log.warn("There is no users available.");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         // Convert the list of users to a list of UserDTOs
         List<UserDTO> userDTOs = users.stream().map(UserDTO::new).collect(Collectors.toList());
-        log.info("The supervisor has successfully retrieved all the users");
+        log.info("The users has successfully been retrieved.");
         return ResponseEntity.ok(userDTOs);
     }
     @GetMapping("/admin")
