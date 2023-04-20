@@ -46,20 +46,6 @@ public class UserController {
         log.info("The users has successfully been retrieved.");
         return ResponseEntity.ok(userDTOs);
     }
-    @GetMapping("/admin")
-    @ApiOperation("Get all users for the admin")
-    public ResponseEntity<List<UserDTO>> getAllUsers_Admin() {
-        List<User> users = userService.getAllUsers();
-        if (users == null) {
-            log.warn("The supervisor is not authorized to get all the users");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
-        // Convert the list of users to a list of UserDTOs
-        List<UserDTO> userDTOs = users.stream().map(UserDTO::new).collect(Collectors.toList());
-        log.info("The supervisor has successfully retrieved all the users");
-        return ResponseEntity.ok(userDTOs);
-    }
 
     @GetMapping("/{id}")
     @ApiOperation("Get a user by his id")
@@ -87,18 +73,6 @@ public class UserController {
         log.info("User updated successfully");
         return ResponseEntity.ok(UserDTO.fromUser(userService.saveUser(user)));
     }
-    @DeleteMapping("/{id}")
-    @ApiOperation("Delete a user by its id.Its a soft delete, only makes the user disabled.")
-    public ResponseEntity<UserDTO> deleteUser(@ApiParam("Identifier of the user") @PathVariable Long id) {
-        if (userService.getUser(id) == null) {
-            log.warn("Bad request to delete a user: user does not exist");
-            return ResponseEntity.notFound().build();
-        }
-        log.info("User disabled successfully");
-        userService.disableUser(id);
-        return ResponseEntity.ok().build();
-    }
-
 
     @PostMapping("")
     @ApiOperation("Create a user.")

@@ -42,20 +42,7 @@ public class OrganizerController {
         log.info("The organizers has successfully been retrieved.");
         return ResponseEntity.ok(organizerDTOs);
     }
-    @GetMapping("/admin")
-    @ApiOperation("Get all organizers for the admin")
-    public ResponseEntity<List<OrganizerDTO>> getAllOrganizers_Admin() {
-        List<Organizer> organizers = organizerService.getAllOrganizers();
-        if (organizers == null) {
-            log.warn("The supervisor is not authorized to get all the organizers");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
 
-        // Convert the list of organizers to a list of OrganizerDTOs
-        List<OrganizerDTO> userDTOs = organizers.stream().map(OrganizerDTO::new).collect(Collectors.toList());
-        log.info("The supervisor has successfully retrieved all the organizers");
-        return ResponseEntity.ok(userDTOs);
-    }
 
     @GetMapping("/{id}")
     @ApiOperation("Get a organizer by his id")
@@ -83,18 +70,6 @@ public class OrganizerController {
         log.info("Organizer updated successfully");
         return ResponseEntity.ok(OrganizerDTO.fromOrganizer(organizerService.saveOrganizer(organizer)));
     }
-    @DeleteMapping("/{id}")
-    @ApiOperation("Delete a organizer by its id.Its a soft delete, only makes the organizer disabled.")
-    public ResponseEntity<OrganizerDTO> deleteOrganizer(@ApiParam("Identifier of the organizer") @PathVariable Long id) {
-        if (organizerService.getOrganizer(id) == null) {
-            log.warn("Bad request to delete a organizer: organizer does not exist");
-            return ResponseEntity.notFound().build();
-        }
-        log.info("Organizer disabled successfully");
-        organizerService.disableOrganizer(id);
-        return ResponseEntity.ok().build();
-    }
-
 
     @PostMapping("")
     @ApiOperation("Create a organizer.")

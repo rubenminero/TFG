@@ -43,12 +43,12 @@ public class OrganizerService {
     }
 
     /**
-     * Disable an organizer in the database.
-     * @param id the id of the organizer to be disabled.
+     * Disable or enable a organizer in the database,depends on the last state.
+     * @param id the id of the organizer to be changed.
      */
-    public void disableOrganizer(Long id){
+    public void changeStateOrganizer(Long id){
         Organizer organizer = this.getOrganizer(id);
-        organizer.setEnabled(false);
+        organizer.setEnabled(!organizer.isEnabled());
         organizerRepository.save(organizer);
     }
 

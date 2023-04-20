@@ -42,12 +42,12 @@ public class UserService {
     }
 
     /**
-     * Disable a user in the database
-     * @param id the id of the user to be disabled
+     * Disable or enable a user in the database,depends on the last state.
+     * @param id the id of the user to be changed.
      */
-    public void disableUser(Long id){
+    public void changeStateUser(Long id){
         User user = this.getUser(id);
-        user.setEnabled(false);
+        user.setEnabled(!user.isEnabled());
         userRepository.save(user);
     }
 
