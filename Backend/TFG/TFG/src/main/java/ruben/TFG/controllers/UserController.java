@@ -62,7 +62,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @ApiOperation("Get a user by its id")
+    @ApiOperation("Get a user by his id")
     public ResponseEntity<UserDTO> getUserById(@ApiParam("The id of the user") @PathVariable(name = "id") Long id) {
 
         User user = userService.getUser(id);
@@ -94,15 +94,16 @@ public class UserController {
             log.warn("Bad request to delete a user: user does not exist");
             return ResponseEntity.notFound().build();
         }
-        log.info("User deleted successfully");
+        log.info("User disabled successfully");
         userService.disableUser(id);
         return ResponseEntity.ok().build();
     }
 
+
     @PostMapping("")
     @ApiOperation("Create a user.")
     public ResponseEntity<UserDTO> createUser(@ApiParam("Modified user object") @RequestBody User user) {
-        log.info("User updated successfully");
+        log.info("User created successfully");
         return ResponseEntity.ok(UserDTO.fromUser(userService.saveUser(user)));
     }
 

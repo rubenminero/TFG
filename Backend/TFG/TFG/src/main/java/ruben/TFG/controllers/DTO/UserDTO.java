@@ -6,15 +6,11 @@ import ruben.TFG.model.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 /**
  * DTO to manage the user data.
  */
 @Data
-@EqualsAndHashCode
-@ToString
 @AllArgsConstructor
 public class UserDTO {
 

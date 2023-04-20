@@ -1,8 +1,6 @@
 package ruben.TFG.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name= "users")
@@ -17,20 +15,20 @@ public class User {
     private Boolean enabled = Boolean.TRUE;
 
     /**
-     * Constructor without any parameters
+     * Constructor without any parameters.
      */
     public User(){
 
     }
 
     /**
-     * Constructor with all the parameters for a user
-     * @param username, the name that will be used in the app
-     * @param first_name, the first name of this user
-     * @param last_name, the last name of this user
-     * @param password, the password of the user
-     * @param nif, the nif of the user
-     * @param email, the email of the user
+     * Constructor with all the parameters for a user.
+     * @param username, the name that will be used in the app.
+     * @param first_name, the first name of this user.
+     * @param last_name, the last name of this user.
+     * @param password, the password of the user.
+     * @param nif, the nif of the user.
+     * @param email, the email of the user.
      */
     public User(String username, String first_name, String last_name, String password, String nif, String email){
         this.username = username;
@@ -45,7 +43,7 @@ public class User {
     // Getters of this model
 
     /**
-     * Get the id of the user
+     * Get the id of the user.
      * @return the id of the user.
      */
 
@@ -57,7 +55,7 @@ public class User {
     }
 
     /**
-     * Get the username of the user
+     * Get the username of the user.
      * @return the username of the user.
      */
     @Column(name = "username")
@@ -66,7 +64,7 @@ public class User {
     }
 
     /**
-     * Get the password of the user
+     * Get the password of the user.
      * @return the password of the user.
      */
     @Column(name = "password")
@@ -75,7 +73,7 @@ public class User {
     }
 
     /**
-     * Get the first name of the user
+     * Get the first name of the user.
      * @return the first name of the user.
      */
     @Column(name = "first_name")
@@ -84,7 +82,7 @@ public class User {
     }
 
     /**
-     * Get the last name of the user
+     * Get the last name of the user.
      * @return the last name of the user.
      */
     @Column(name = "last_name")
@@ -93,7 +91,7 @@ public class User {
     }
 
     /**
-     * Get the NIF of the user
+     * Get the NIF of the user.
      * @return the NIF of the user.
      */
     @Column(name = "NIF")
@@ -102,8 +100,8 @@ public class User {
     }
 
     /**
-     * Get the mail of the user
-     * @return the mail of the user.
+     * Get the email of the user.
+     * @return the email of the user.
      */
     @Column(name = "email")
     public String getEmail() {
@@ -111,7 +109,7 @@ public class User {
     }
 
     /**
-     * Get the enabled of the user
+     * Get the enabled of the user.
      * @return the enabled of the user.
      */
     @Column(name = "enabled")
@@ -121,7 +119,7 @@ public class User {
 
     /**
      * Set the id of the user, which cannot be repeated.
-     * @param id the new id for this user
+     * @param id the new id for this user.
      */
     public void setId(Long id) {
         this.id = id;
@@ -129,7 +127,7 @@ public class User {
 
     /**
      * Set the username of the user, which cannot be repeated.
-     * @param username the new username for this user
+     * @param username the new username for this user.
      */
     public void setUsername(String username) {
         this.username = username;
@@ -137,7 +135,7 @@ public class User {
 
     /**
      * Set the password of the user.
-     * @param password the new password for this user
+     * @param password the new password for this user.
      */
     public void setPassword(String password) {
         this.password = password;
@@ -145,7 +143,7 @@ public class User {
 
     /**
      * Set the first name of the user.
-     * @param first_name the new first name for this user
+     * @param first_name the new first name for this user.
      */
     public void setFirst_name(String first_name) {
         this.first_name = first_name;
@@ -153,7 +151,7 @@ public class User {
 
     /**
      * Set the last name of the user.
-     * @param last_name the new last name for this user
+     * @param last_name the new last name for this user.
      */
     public void setLast_name(String last_name) {
         this.last_name = last_name;
@@ -161,22 +159,22 @@ public class User {
 
     /**
      * Set the nif of the user.
-     * @param nif the new nif for this user
+     * @param nif the new nif for this user.
      */
     public void setNif(String nif) {
         this.nif = nif;
     }
 
     /**
-     * Set the mail of the user.
-     * @param mail the new mail for this user
+     * Set the email of the user.
+     * @param email the new email for this user.
      */
-    public void setEmail(String mail) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
     /**
-     * Set the enabled of the user
+     * Set the enabled of the user.
      * @param enabled the new enabled for the user.
      */
     public void setEnabled(Boolean enabled) {
