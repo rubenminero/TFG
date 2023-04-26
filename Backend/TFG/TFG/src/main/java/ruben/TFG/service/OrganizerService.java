@@ -61,6 +61,11 @@ public class OrganizerService {
 
         return organizerRepository.findAll();
     }
+
+    /**
+     * Gets all the enabled organizers from the database.
+     * @return A list with all the organizers.
+     */
     public List<Organizer> getEnabledOrganizers() {
         List<Organizer> organizers_enabled = new ArrayList<Organizer>();
         List<Organizer> organizers = organizerRepository.findAll();
@@ -71,7 +76,11 @@ public class OrganizerService {
         }
         return organizers_enabled;
     }
-
+    /**
+     * Recover an organizer from the database.
+     * @param username the username of the organizer.
+     * @return organizer the organizer with the username.
+     */
     public Organizer getOrganizerByUsername(String username) {
 
         return organizerRepository.findByUsername(username).orElse(null);
