@@ -7,11 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ruben.TFG.controllers.DTO.InscriptionDTO;
-import ruben.TFG.controllers.DTO.TournamentDTO;
 import ruben.TFG.model.Inscription;
-import ruben.TFG.model.Organizer;
-import ruben.TFG.model.Sports_type;
 import ruben.TFG.model.Tournament;
+import ruben.TFG.model.User;
 import ruben.TFG.service.*;
 
 import java.util.List;
@@ -73,8 +71,8 @@ public class InscriptionController {
     @PostMapping("")
     @ApiOperation("Create a inscription.")
     public ResponseEntity<InscriptionDTO> createInscription(@ApiParam("New inscription object") @RequestBody InscriptionDTO inscriptionDTO ) {
-        Tournament tournament = tournamentService.getTournament(inscriptionDTO.getTournament().getId());
-        User user = userService.getUser(inscriptionDTO.getUser().getId());
+        Tournament tournament = tournamentService.getTournament(inscriptionDTO.getTournament());
+        User user = userService.getUser(inscriptionDTO.getUser());
         Inscription inscription = InscriptionDTO.toInscription();
         inscription.setTournament(tournament);
         inscription.setUser(user);

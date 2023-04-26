@@ -88,14 +88,15 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ApiOperation("Get the inscriptions for this user")
-    public ResponseEntity<InscriptionDTO> getInscriptionById(@ApiParam("The id of the user") @PathVariable(name = "id") Long id) {
+    public ResponseEntity<List<InscriptionDTO>> getInscriptionById(@ApiParam("The id of the user") @PathVariable(name = "id") Long id) {
 
         List<Inscription> inscriptions = inscriptionService.getEnabledInscriptions(id);
-        if (inscriptions != null) {
-            log.info("The inscriptions has been found");
-            return ResponseEntity.ok(new InscriptionDTO(inscription));
+        if (inscriptions == null) {
+            log.info("There is not inscriptions");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         else {
+            // Convert the list of inscriptions to a list of inscriptionsDTO
             List<InscriptionDTO> inscriptionDTOS = inscriptions.stream().map(InscriptionDTO::new).collect(Collectors.toList());
             log.info("The inscriptions has successfully been retrieved.");
             return ResponseEntity.ok(inscriptionDTOS);
