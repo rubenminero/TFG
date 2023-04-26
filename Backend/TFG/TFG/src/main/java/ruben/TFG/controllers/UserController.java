@@ -5,8 +5,11 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
+import ruben.TFG.controllers.DTO.InscriptionDTO;
 import ruben.TFG.controllers.DTO.UserDTO;
+import ruben.TFG.model.Inscription;
 import ruben.TFG.model.User;
+import ruben.TFG.service.InscriptionService;
 import ruben.TFG.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
@@ -24,12 +27,14 @@ public class UserController {
 
     private final UserService userService;
 
+    private final InscriptionService inscriptionService;
     /**
      * Constructor of the class
      * @param userService, the service to manage the user's data
      */
-    public UserController(UserService userService) {
+    public UserController(UserService userService, InscriptionService inscriptionService) {
         this.userService = userService;
+        this.inscriptionService = inscriptionService;
     }
 
     @GetMapping("")
@@ -79,6 +84,22 @@ public class UserController {
     public ResponseEntity<UserDTO> createUser(@ApiParam("Modified user object") @RequestBody User user) {
         log.info("User created successfully");
         return ResponseEntity.ok(UserDTO.fromUser(userService.saveUser(user)));
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation("Get the inscriptions for this user")
+    public ResponseEntity<InscriptionDTO> getInscriptionById(@ApiParam("The id of the user") @PathVariable(name = "id") Long id) {
+
+        List<Inscription> inscriptions = inscriptionService.getEnabledInscriptions(id);
+        if (inscriptions != null) {
+            log.info("The inscriptions has been found");
+            return ResponseEntity.ok(new InscriptionDTO(inscription));
+        }
+        else {
+            List<InscriptionDTO> inscriptionDTOS = inscriptions.stream().map(InscriptionDTO::new).collect(Collectors.toList());
+            log.info("The inscriptions has successfully been retrieved.");
+            return ResponseEntity.ok(inscriptionDTOS);
+        }
     }
 
 

@@ -54,7 +54,7 @@ public class TournamentService {
     }
 
     /**
-     * Disable or enable the inscriptions for a tournament in the database,depends on the last state.
+     * Disable or enable the Inscription for a tournament in the database,depends on the last state.
      * @param id the id of the tournament to be changed.
      */
     public void changeInscriptionTournament(Long id){
