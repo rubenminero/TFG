@@ -1,10 +1,7 @@
 package ruben.TFG.service;
 
 import org.springframework.stereotype.Service;
-import ruben.TFG.model.Organizer;
-import ruben.TFG.model.Sports_type;
-import ruben.TFG.model.Tournament;
-import ruben.TFG.model.User;
+import ruben.TFG.model.*;
 import ruben.TFG.repository.AdminRepository;
 
 import java.util.List;
@@ -24,14 +21,16 @@ public class AdminService {
     private final UserService userService;
     private final TournamentService tournamentService;
     private final Sports_typeService sportsTypeService;
+    private final InscriptionService inscriptionService;
 
-    public AdminService(AdminRepository adminRepository, OrganizerService organizerService, UserService userService, TournamentService tournamentService, Sports_typeService sportsTypeService) {
+    public AdminService(AdminRepository adminRepository, OrganizerService organizerService, UserService userService, TournamentService tournamentService, Sports_typeService sportsTypeService, InscriptionService inscriptionService) {
 
         this.adminRepository = adminRepository;
         this.userService = userService;
         this.organizerService = organizerService;
         this.tournamentService = tournamentService;
         this.sportsTypeService = sportsTypeService;
+        this.inscriptionService = inscriptionService;
     }
 
     /**
@@ -67,12 +66,13 @@ public class AdminService {
     }
 
     /**
-     * Enable or disable a tournament in the database.
-     * @param id the id of the tournament to be changed.
+     * Enable or disable a sport type in the database.
+     * @param id the id of the sport type to be changed.
      */
-    public void changeStateTournament(Long id){
-        tournamentService.changeStateTournament(id);
+    public void changeStateSport_type(Long id){
+        sportsTypeService.changeStateSport_type(id);
     }
+
     /**
      * Gets all the sports types from the database.
      * Only for admins
@@ -82,29 +82,39 @@ public class AdminService {
         return sportsTypeService.getAllSports_types();
     }
 
+
     /**
-     * Enable or disable a sport type in the database.
-     * @param id the id of the sport type to be changed.
+     * Enable or disable a tournament in the database.
+     * @param id the id of the tournament to be changed.
      */
-    public void changeStateSport_type(Long id){
-        sportsTypeService.changeStateSport_type(id);
+    public void changeStateTournament(Long id){
+        tournamentService.changeStateTournament(id);
     }
 
     /**
-     * Save a sport type in the database.
-     * @param sport_type the sport type to be saved.
-     * @return sport_type the sport type that have been saved.
-     */
-    public Sports_type saveSport_type(Sports_type sport_type){
-        return sportsTypeService.saveSport_type(sport_type);
-    }
-    /**
      * Gets all the tournaments from the database.
      * Only for admins
-     * @return A list with all the tournaments.
+     * @return A list with all the sports types.
      */
     public List<Tournament> getAllTournaments() {
         return tournamentService.getAllTournaments();
+    }
+
+    /**
+     * Enable or disable an inscription in the database.
+     * @param id the id of the inscription to be changed.
+     */
+    public void changeStateInscription(Long id){
+        inscriptionService.changeStateInscription(id);
+    }
+
+    /**
+     * Gets all the inscriptions from the database.
+     * Only for admins
+     * @return A list with all the inscriptions.
+     */
+    public List<Inscription> getAllInscriptions() {
+        return inscriptionService.getAllInscriptions();
     }
 
     /**
@@ -145,6 +155,16 @@ public class AdminService {
     public Sports_type getSport_type(Long id){
 
         return sportsTypeService.getSport_type(id);
+    }
+
+    /**
+     * Recover an inscription from the database.
+     * @param id the id of the inscription.
+     * @return inscription the inscription with the id.
+     */
+    public Inscription getInscription(Long id){
+
+        return inscriptionService.getInscription(id);
     }
 
     }

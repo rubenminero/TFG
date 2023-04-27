@@ -6,14 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ruben.TFG.controllers.DTO.OrganizerDTO;
-import ruben.TFG.controllers.DTO.Sports_typeDTO;
-import ruben.TFG.controllers.DTO.TournamentDTO;
-import ruben.TFG.controllers.DTO.UserDTO;
-import ruben.TFG.model.Organizer;
-import ruben.TFG.model.Sports_type;
-import ruben.TFG.model.Tournament;
-import ruben.TFG.model.User;
+import ruben.TFG.controllers.DTO.*;
+import ruben.TFG.model.*;
 import ruben.TFG.service.AdminService;
 
 import java.util.List;
@@ -43,9 +37,9 @@ public class AdminController {
         }
 
         // Convert the list of organizers to a list of OrganizerDTOs
-        List<OrganizerDTO> userDTOs = organizers.stream().map(OrganizerDTO::new).collect(Collectors.toList());
+        List<OrganizerDTO> organizerDTOS = organizers.stream().map(OrganizerDTO::new).collect(Collectors.toList());
         log.info("The supervisor has successfully retrieved all the organizers");
-        return ResponseEntity.ok(userDTOs);
+        return ResponseEntity.ok(organizerDTOS);
     }
     @DeleteMapping("/organizers/{id}")
     @ApiOperation("Delete a organizer by its id.Its a soft delete, only makes the organizer disabled.")
@@ -141,4 +135,30 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/inscriptions")
+    @ApiOperation("Get all inscriptions for the admin")
+    public ResponseEntity<List<InscriptionDTO>> getAllInscriptionsAdmin() {
+        List<Inscription> inscriptions = adminService.getAllInscriptions();
+        if (inscriptions == null) {
+            log.warn("The supervisor is not authorized to get all the inscriptions");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        // Convert the list of inscriptions to a list of InscriptionsDTOs
+        List<InscriptionDTO> inscriptionDTOS = inscriptions.stream().map(InscriptionDTO::new).collect(Collectors.toList());
+        log.info("The supervisor has successfully retrieved all the inscriptions");
+        return ResponseEntity.ok(inscriptionDTOS);
+    }
+
+    @DeleteMapping("/inscriptions/{id}")
+    @ApiOperation("Delete a inscription by its id.Its a soft delete, only makes the inscriptions disabled.")
+    public ResponseEntity<InscriptionDTO> deleteInscription(@ApiParam("Identifier of the inscription") @PathVariable Long id) {
+        if (adminService.getInscription(id) == null) {
+            log.warn("Bad request to delete a inscription: inscription does not exist");
+            return ResponseEntity.notFound().build();
+        }
+        log.info("Inscription changed successfully");
+        adminService.changeStateInscription(id);
+        return ResponseEntity.ok().build();
+    }
 }

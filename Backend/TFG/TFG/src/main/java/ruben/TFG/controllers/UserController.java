@@ -86,7 +86,7 @@ public class UserController {
         return ResponseEntity.ok(UserDTO.fromUser(userService.saveUser(user)));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/inscriptions/{id}")
     @ApiOperation("Get the inscriptions for this user")
     public ResponseEntity<List<InscriptionDTO>> getInscriptionById(@ApiParam("The id of the user") @PathVariable(name = "id") Long id) {
 

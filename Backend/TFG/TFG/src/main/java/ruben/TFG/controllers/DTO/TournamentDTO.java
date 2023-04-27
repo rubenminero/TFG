@@ -24,8 +24,7 @@ public class TournamentDTO {
     private Long organizer;
     private Long sport_type;
 
-    public TournamentDTO(Long id, String name, String location, String address, String description, Boolean inscription, Long organizer, Long sport_type  ) {
-        this.id = id;
+    public TournamentDTO(String name, String location, String address, String description, Boolean inscription, Long organizer, Long sport_type  ) {
         this.name = name;
         this.location = location;
         this.address = address;

@@ -83,7 +83,7 @@ public class Sports_typeService {
      * @param name the name of the sport type.
      * @return sport type the sport type with the name.
      */
-    public Sports_type getSport_typetByName(String name) {
+    public Sports_type getSport_typeByName(String name) {
 
         return sportsTypeRepository.findByName(name).orElse(null);
     }

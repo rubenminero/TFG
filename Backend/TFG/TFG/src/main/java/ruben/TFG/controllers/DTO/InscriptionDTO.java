@@ -3,7 +3,6 @@ package ruben.TFG.controllers.DTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import ruben.TFG.model.Inscription;
-import ruben.TFG.model.Sports_type;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,12 +17,24 @@ public class InscriptionDTO {
     private Long id;
     private Long tournament;
     private Long user;
+    private Boolean enabled;
 
+    public InscriptionDTO(Long tournament, Long user) {
+        this.tournament = tournament;
+        this.user = user;
+        this.enabled = true;
+    }
     public InscriptionDTO(Inscription inscription) {
         this.id = inscription.getId();
         this.tournament = inscription.getTournament().getId();
         this.user = inscription.getUser().getId();
+        this.enabled = inscription.isEnabled();
     }
+
+    public InscriptionDTO() {
+
+    }
+
 
     public static InscriptionDTO fromInscription(Inscription inscription) {
         return new InscriptionDTO(inscription);

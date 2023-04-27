@@ -3,7 +3,7 @@ package ruben.TFG.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name= "inscriptions")
+@Table(name= "inscription")
 public class Inscription {
     private Long id;
     private Tournament tournament;
@@ -45,7 +45,8 @@ public class Inscription {
      * Get the tournament of the inscription.
      * @return the name of the inscription.
      */
-    @Column(name = "tournament")
+    @JoinColumn(name = "id_tournament")
+    @ManyToOne(targetEntity = Tournament.class)
     public Tournament getTournament() {
         return tournament;
     }
@@ -54,7 +55,8 @@ public class Inscription {
      * Get the user of the inscription.
      * @return the name of the user.
      */
-    @Column(name = "user")
+    @JoinColumn(name = "id_user")
+    @ManyToOne(targetEntity = User.class)
     public User getUser() {
         return user;
     }
@@ -86,7 +88,7 @@ public class Inscription {
 
     /**
      * Set the user of the inscription.
-     * @param user the new us for this inscription.
+     * @param user the new user for this inscription.
      */
     public void setUser(User user) {
         this.user = user;

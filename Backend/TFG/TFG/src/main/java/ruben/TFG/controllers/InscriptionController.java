@@ -3,7 +3,6 @@ package ruben.TFG.controllers;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ruben.TFG.controllers.DTO.InscriptionDTO;
@@ -11,9 +10,6 @@ import ruben.TFG.model.Inscription;
 import ruben.TFG.model.Tournament;
 import ruben.TFG.model.User;
 import ruben.TFG.service.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -53,7 +49,7 @@ public class InscriptionController {
 
     @PutMapping("/{id}")
     @ApiOperation("Change a inscription by his id.")
-    public ResponseEntity<InscriptionDTO> updateTournament(@ApiParam("The id of the inscription")  @PathVariable Long id, @ApiParam("Modified inscription object") @RequestBody Inscription inscription) {
+    public ResponseEntity<InscriptionDTO> updateInscription(@ApiParam("The id of the inscription")  @PathVariable Long id, @ApiParam("Modified inscription object") @RequestBody Inscription inscription) {
         if (!id.equals(inscription.getId())) {
             log.warn("Bad request , the id given in the path doesnt match with the id on the inscription");
             return ResponseEntity.badRequest().build();
@@ -73,9 +69,7 @@ public class InscriptionController {
     public ResponseEntity<InscriptionDTO> createInscription(@ApiParam("New inscription object") @RequestBody InscriptionDTO inscriptionDTO ) {
         Tournament tournament = tournamentService.getTournament(inscriptionDTO.getTournament());
         User user = userService.getUser(inscriptionDTO.getUser());
-        Inscription inscription = InscriptionDTO.toInscription();
-        inscription.setTournament(tournament);
-        inscription.setUser(user);
+        Inscription inscription = new Inscription(tournament,user);
         if (inscription.getTournament().isEnabled() && inscription.getUser().isEnabled()){
             log.info("Inscription created successfully");
             return ResponseEntity.ok(InscriptionDTO.fromInscription(inscriptionService.saveInscription(inscription)));
