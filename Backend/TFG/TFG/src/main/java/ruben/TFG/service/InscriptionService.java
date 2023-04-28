@@ -64,7 +64,7 @@ public class InscriptionService {
     }
     /**
      * Gets all the enabled inscriptions for a user.
-     * @return A list with all the tournaments for this user.
+     * @return A list with all the inscriptions for this user.
      */
     public List<Inscription> getEnabledInscriptions(Long id) {
         List<Inscription> inscriptions_enabled = new ArrayList<Inscription>();

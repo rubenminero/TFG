@@ -22,8 +22,9 @@ public class AdminService {
     private final TournamentService tournamentService;
     private final Sports_typeService sportsTypeService;
     private final InscriptionService inscriptionService;
+    private final WatchlistService watchlistService;
 
-    public AdminService(AdminRepository adminRepository, OrganizerService organizerService, UserService userService, TournamentService tournamentService, Sports_typeService sportsTypeService, InscriptionService inscriptionService) {
+    public AdminService(AdminRepository adminRepository, OrganizerService organizerService, UserService userService, TournamentService tournamentService, Sports_typeService sportsTypeService, InscriptionService inscriptionService, WatchlistService watchlistService) {
 
         this.adminRepository = adminRepository;
         this.userService = userService;
@@ -31,6 +32,7 @@ public class AdminService {
         this.tournamentService = tournamentService;
         this.sportsTypeService = sportsTypeService;
         this.inscriptionService = inscriptionService;
+        this.watchlistService = watchlistService;
     }
 
     /**
@@ -117,6 +119,24 @@ public class AdminService {
         return inscriptionService.getAllInscriptions();
     }
 
+
+    /**
+     * Enable or disable a watchlist in the database.
+     * @param id the id of the watchlist to be changed.
+     */
+    public void changeStateWatchlist(Long id){
+        watchlistService.changeStateWatchlist(id);
+    }
+
+    /**
+     * Gets all the watchlists from the database.
+     * Only for admins
+     * @return A list with all the watchlists.
+     */
+    public List<Watchlist> getAllWatchlists() {
+        return watchlistService.getAllWatchlists();
+    }
+
     /**
      * Recover an organizer from the database.
      * @param id the id of the organizer.
@@ -166,5 +186,15 @@ public class AdminService {
 
         return inscriptionService.getInscription(id);
     }
+    /**
+     * Recover a watchlist from the database.
+     * @param id the id of the watchlist.
+     * @return watchlist the watchlist with the id.
+     */
+    public Watchlist getWatchlist(Long id){
 
+        return watchlistService.getWatchList(id);
     }
+
+
+}

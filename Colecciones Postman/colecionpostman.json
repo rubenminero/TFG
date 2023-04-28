@@ -114,7 +114,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/users/inscriptions/2",
+							"raw": "http://localhost:8080/api/users/inscriptions/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -124,7 +124,29 @@
 								"api",
 								"users",
 								"inscriptions",
-								"2"
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Watchlist del user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/users/watchlists/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"watchlists",
+								"1"
 							]
 						}
 					},
@@ -440,6 +462,91 @@
 			]
 		},
 		{
+			"name": "Watchlist",
+			"item": [
+				{
+					"name": "Crear watchlist",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"tournament\": 1,\r\n    \"user\": 2\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/watchlists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"watchlists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Watchlist por id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/watchlists/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"watchlists",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update watchlists",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"1\",\r\n    \"email\": \"juan@gmail.com\",\r\n    \"username\": \"ESL\",\r\n    \"password\": \"1234\",\r\n    \"nif\": \"12344524\",\r\n    \"enabled\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/watchlists/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"watchlists",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Admin",
 			"item": [
 				{
@@ -663,6 +770,28 @@
 					"response": []
 				},
 				{
+					"name": "Disable sport type",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/admins/sports_types/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admins",
+								"sports_types",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Sports types admin",
 					"request": {
 						"method": "GET",
@@ -684,12 +813,21 @@
 					"response": []
 				},
 				{
-					"name": "Disable sport type",
+					"name": "Disable watchlist",
 					"request": {
 						"method": "DELETE",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": {\r\n        \"id\": \"1\",\r\n        \"username\": \"juan\",\r\n        \"password\": \"1234\",\r\n        \"first_name\": \"juan\",\r\n        \"last_name\": \"perez\",\r\n        \"nif\": \"12344524\",\r\n        \"mail\": \"juan@example.com\",\r\n        \"enabled\": \"true\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:8080/api/admins/sports_types/1",
+							"raw": "http://localhost:8080/api/admins/watchlists/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -698,8 +836,29 @@
 							"path": [
 								"api",
 								"admins",
-								"sports_types",
+								"watchlists",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Watchlists para admin",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/admins/watchlists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admins",
+								"watchlists"
 							]
 						}
 					},

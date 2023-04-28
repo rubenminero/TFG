@@ -161,4 +161,31 @@ public class AdminController {
         adminService.changeStateInscription(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/watchlists")
+    @ApiOperation("Get all watchlists for the admin")
+    public ResponseEntity<List<WatchlistDTO>> getAllWatchlists_Admin() {
+        List<Watchlist> watchlists = adminService.getAllWatchlists();
+        if (watchlists == null) {
+            log.warn("The supervisor is not authorized to get all the watchlists");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        // Convert the list of watchlists to a list of watchlistDTOs
+        List<WatchlistDTO> watchlistDTOS = watchlists.stream().map(WatchlistDTO::new).collect(Collectors.toList());
+        log.info("The supervisor has successfully retrieved all the watchlists");
+        return ResponseEntity.ok(watchlistDTOS);
+    }
+
+    @DeleteMapping("/watchlists/{id}")
+    @ApiOperation("Delete a watchlists by its id.Its a soft delete, only makes the watchlists disabled.")
+    public ResponseEntity<WatchlistDTO> deleteWatchlist(@ApiParam("Identifier of the watchlist") @PathVariable Long id) {
+        if (adminService.getWatchlist(id) == null) {
+            log.warn("Bad request to delete a watchlist: watchlist does not exist");
+            return ResponseEntity.notFound().build();
+        }
+        log.info("Watchlist changed successfully");
+        adminService.changeStateWatchlist(id);
+        return ResponseEntity.ok().build();
+    }
 }
