@@ -54,30 +54,30 @@ public class AdminController {
     }
 
 
-    @GetMapping("/users")
-    @ApiOperation("Get all users for the admin")
-    public ResponseEntity<List<UserDTO>> getAllUsers_Admin() {
-        List<User> users = adminService.getAllUsers();
-        if (users == null) {
-            log.warn("The supervisor is not authorized to get all the users");
+    @GetMapping("/athletes")
+    @ApiOperation("Get all athletes for the admin")
+    public ResponseEntity<List<AthleteDTO>> getAllAthletes_Admin() {
+        List<Athlete> athletes = adminService.getAllAthletes();
+        if (athletes == null) {
+            log.warn("The supervisor is not authorized to get all the athletes");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        // Convert the list of users to a list of UserDTOs
-        List<UserDTO> userDTOs = users.stream().map(UserDTO::new).collect(Collectors.toList());
-        log.info("The supervisor has successfully retrieved all the users");
-        return ResponseEntity.ok(userDTOs);
+        // Convert the list of athletes to a list of UserDTOs
+        List<AthleteDTO> athleteDTOS = athletes.stream().map(AthleteDTO::new).collect(Collectors.toList());
+        log.info("The supervisor has successfully retrieved all the athletes");
+        return ResponseEntity.ok(athleteDTOS);
     }
 
-    @DeleteMapping("/users/{id}")
-    @ApiOperation("Delete a user by its id.Its a soft delete, only makes the user disabled.")
-    public ResponseEntity<UserDTO> deleteUser(@ApiParam("Identifier of the user") @PathVariable Long id) {
-        if (adminService.getUser(id) == null) {
-            log.warn("Bad request to delete a user: user does not exist");
+    @DeleteMapping("/athletes/{id}")
+    @ApiOperation("Delete a athlete by its id.Its a soft delete, only makes the athlete disabled.")
+    public ResponseEntity<AthleteDTO> deleteAthlete(@ApiParam("Identifier of the athlete") @PathVariable Long id) {
+        if (adminService.getAthlete(id) == null) {
+            log.warn("Bad request to delete a athlete: athlete does not exist");
             return ResponseEntity.notFound().build();
         }
-        log.info("User changed successfully");
-        adminService.changeStateUser(id);
+        log.info("Athlete changed successfully");
+        adminService.changeStateAthlete(id);
         return ResponseEntity.ok().build();
     }
 
@@ -98,7 +98,7 @@ public class AdminController {
 
     @DeleteMapping("/tournaments/{id}")
     @ApiOperation("Delete a tournament by its id.Its a soft delete, only makes the tournament disabled.")
-    public ResponseEntity<UserDTO> deleteTournament(@ApiParam("Identifier of the tournament") @PathVariable Long id) {
+    public ResponseEntity<AthleteDTO> deleteTournament(@ApiParam("Identifier of the tournament") @PathVariable Long id) {
         if (adminService.getTournament(id) == null) {
             log.warn("Bad request to delete a tournament: tournament does not exist");
             return ResponseEntity.notFound().build();

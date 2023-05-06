@@ -7,13 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ruben.TFG.controllers.DTO.Sports_typeDTO;
-import ruben.TFG.controllers.DTO.TournamentDTO;
-import ruben.TFG.controllers.DTO.UserDTO;
 import ruben.TFG.model.Sports_type;
-import ruben.TFG.model.Tournament;
-import ruben.TFG.model.User;
 import ruben.TFG.service.Sports_typeService;
-import ruben.TFG.service.UserService;
 
 import java.util.List;
 import java.util.stream.Collectors;

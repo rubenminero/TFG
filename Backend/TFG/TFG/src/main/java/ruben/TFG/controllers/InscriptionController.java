@@ -6,9 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ruben.TFG.controllers.DTO.InscriptionDTO;
+import ruben.TFG.model.Athlete;
 import ruben.TFG.model.Inscription;
 import ruben.TFG.model.Tournament;
-import ruben.TFG.model.User;
 import ruben.TFG.service.*;
 
 @RestController
@@ -18,14 +18,14 @@ public class InscriptionController {
 
     private final InscriptionService inscriptionService;
     private final TournamentService tournamentService;
-    private final UserService userService;
+    private final AthleteService athleteService;
     /**
      * Constructor of the class
      * @param inscriptionService, the service to manage the inscription's data
      */
-    public InscriptionController(InscriptionService inscriptionService, TournamentService tournamentService, UserService userService) {
+    public InscriptionController(InscriptionService inscriptionService, TournamentService tournamentService, AthleteService athleteService) {
         this.inscriptionService = inscriptionService;
-        this.userService = userService;
+        this.athleteService = athleteService;
         this.tournamentService = tournamentService;
     }
 
@@ -68,13 +68,13 @@ public class InscriptionController {
     @ApiOperation("Create a inscription.")
     public ResponseEntity<InscriptionDTO> createInscription(@ApiParam("New inscription object") @RequestBody InscriptionDTO inscriptionDTO ) {
         Tournament tournament = tournamentService.getTournament(inscriptionDTO.getTournament());
-        User user = userService.getUser(inscriptionDTO.getUser());
-        Inscription inscription = new Inscription(tournament,user);
+        Athlete athlete = athleteService.getAthlete(inscriptionDTO.getUser());
+        Inscription inscription = new Inscription(tournament, athlete);
         if (inscription.getTournament().isEnabled() && inscription.getUser().isEnabled()){
             log.info("Inscription created successfully");
             return ResponseEntity.ok(InscriptionDTO.fromInscription(inscriptionService.saveInscription(inscription)));
         }else{
-            log.warn("Bad request , the tournament  or the user  is disabled or doesnt exit.");
+            log.warn("Bad request , the tournament  or the athlete  is disabled or doesnt exit.");
             return ResponseEntity.badRequest().build();
         }
 

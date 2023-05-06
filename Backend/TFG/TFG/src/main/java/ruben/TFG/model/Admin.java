@@ -4,7 +4,24 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name= "admins")
+<<<<<<< Updated upstream
 public class Admin {
+=======
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Admin extends User{
+    @Transient
+    private String username;
+    @Transient
+    private String password;
+    @Transient
+    private String first_name;
+    @Transient
+    private String last_name;
+    @Transient
+    private String nif;
+    @Transient
+    private String email;
+>>>>>>> Stashed changes
     private Long id;
     private String username;
     private String password;
@@ -48,7 +65,11 @@ public class Admin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+<<<<<<< Updated upstream
     @Column(name = "id")
+=======
+    @OneToOne(targetEntity = User.class, cascade = CascadeType.REMOVE, mappedBy = "id")
+>>>>>>> Stashed changes
     public Long getId() {
         return id;
     }

@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Inscription {
     private Long id;
     private Tournament tournament;
-    private User user;
+    private Athlete athlete;
     private Boolean enabled = Boolean.TRUE;
 
     /**
@@ -20,11 +20,11 @@ public class Inscription {
     /**
      * Constructor with all the parameters for an inscription.
      * @param tournament, the tournament of the inscription.
-     * @param user, the use of the inscription.
+     * @param athlete, the use of the inscription.
      */
-    public Inscription(Tournament tournament, User user){
+    public Inscription(Tournament tournament, Athlete athlete){
         this.tournament = tournament;
-        this.user = user;
+        this.athlete = athlete;
     }
 
     // Getters of this model
@@ -52,13 +52,13 @@ public class Inscription {
     }
 
     /**
-     * Get the user of the inscription.
-     * @return the name of the user.
+     * Get the athlete of the inscription.
+     * @return the name of the athlete.
      */
     @JoinColumn(name = "id_user")
-    @ManyToOne(targetEntity = User.class)
-    public User getUser() {
-        return user;
+    @ManyToOne(targetEntity = Athlete.class)
+    public Athlete getUser() {
+        return athlete;
     }
 
     /**
@@ -87,11 +87,11 @@ public class Inscription {
     }
 
     /**
-     * Set the user of the inscription.
-     * @param user the new user for this inscription.
+     * Set the athlete of the inscription.
+     * @param athlete the new athlete for this inscription.
      */
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Athlete athlete) {
+        this.athlete = athlete;
     }
     /**
      * Set the enabled of the inscription.

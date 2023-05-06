@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Watchlist {
     private Long id;
     private Tournament tournament;
-    private User user;
+    private Athlete athlete;
     private Boolean enabled = Boolean.TRUE;
 
     /**
@@ -20,11 +20,11 @@ public class Watchlist {
     /**
      * Constructor with all the parameters for a watchlist.
      * @param tournament, the tournament of the watchlist.
-     * @param user, the use of the watchlist.
+     * @param athlete, the use of the watchlist.
      */
-    public Watchlist(Tournament tournament, User user){
+    public Watchlist(Tournament tournament, Athlete athlete){
         this.tournament = tournament;
-        this.user = user;
+        this.athlete = athlete;
     }
 
     // Getters of this model
@@ -52,13 +52,13 @@ public class Watchlist {
     }
 
     /**
-     * Get the user of the watchlist.
-     * @return the name of the user.
+     * Get the athlete of the watchlist.
+     * @return the name of the athlete.
      */
     @JoinColumn(name = "id_user")
-    @ManyToOne(targetEntity = User.class)
-    public User getUser() {
-        return user;
+    @ManyToOne(targetEntity = Athlete.class)
+    public Athlete getUser() {
+        return athlete;
     }
 
     /**
@@ -87,11 +87,11 @@ public class Watchlist {
     }
 
     /**
-     * Set the user of the watchlist.
-     * @param user the new user for this watchlist.
+     * Set the athlete of the watchlist.
+     * @param athlete the new athlete for this watchlist.
      */
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Athlete athlete) {
+        this.athlete = athlete;
     }
     /**
      * Set the enabled of the watchlist.

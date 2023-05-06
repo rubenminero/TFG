@@ -6,13 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import ruben.TFG.controllers.DTO.InscriptionDTO;
-import ruben.TFG.controllers.DTO.UserDTO;
+import ruben.TFG.controllers.DTO.AthleteDTO;
 import ruben.TFG.controllers.DTO.WatchlistDTO;
+import ruben.TFG.model.Athlete;
 import ruben.TFG.model.Inscription;
-import ruben.TFG.model.User;
 import ruben.TFG.model.Watchlist;
 import ruben.TFG.service.InscriptionService;
-import ruben.TFG.service.UserService;
+import ruben.TFG.service.AthleteService;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -25,77 +25,77 @@ import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
-@RequestMapping("/api/users")
-public class UserController {
+@RequestMapping("/api/athletes")
+public class AthleteController {
 
-    private final UserService userService;
+    private final AthleteService athleteService;
 
     private final InscriptionService inscriptionService;
     private final WatchlistService watchlistService;
     /**
      * Constructor of the class
-     * @param userService, the service to manage the user's data
+     * @param athleteService, the service to manage the athlete's data
      * @param inscriptionService, the service to manage the inscription's data
      * @param watchlistService, the service to manage the watchlist's data
      */
-    public UserController(UserService userService, InscriptionService inscriptionService, WatchlistService watchlistService) {
-        this.userService = userService;
+    public AthleteController(AthleteService athleteService, InscriptionService inscriptionService, WatchlistService watchlistService) {
+        this.athleteService = athleteService;
         this.inscriptionService = inscriptionService;
         this.watchlistService = watchlistService;
     }
 
     @GetMapping("")
-    @ApiOperation("Get all users")
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        List<User> users = userService.getEnabledUsers();
-        if (users == null) {
-            log.warn("There is no users available.");
+    @ApiOperation("Get all athletes")
+    public ResponseEntity<List<AthleteDTO>> getAllAthletes() {
+        List<Athlete> athletes = athleteService.getEnabledAthletes();
+        if (athletes == null) {
+            log.warn("There is no athletes available.");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        // Convert the list of users to a list of UserDTOs
-        List<UserDTO> userDTOs = users.stream().map(UserDTO::new).collect(Collectors.toList());
-        log.info("The users has successfully been retrieved.");
-        return ResponseEntity.ok(userDTOs);
+        // Convert the list of athletes to a list of UserDTOs
+        List<AthleteDTO> athleteDTOS = athletes.stream().map(AthleteDTO::new).collect(Collectors.toList());
+        log.info("The athletes has successfully been retrieved.");
+        return ResponseEntity.ok(athleteDTOS);
     }
 
     @GetMapping("/{id}")
-    @ApiOperation("Get a user by his id")
-    public ResponseEntity<UserDTO> getUserById(@ApiParam("The id of the user") @PathVariable(name = "id") Long id) {
+    @ApiOperation("Get a athlete by his id")
+    public ResponseEntity<AthleteDTO> getAthleterById(@ApiParam("The id of the athlete") @PathVariable(name = "id") Long id) {
 
-        User user = userService.getUser(id);
-        if (user != null) {
-            log.info("The user has been found");
-            return ResponseEntity.ok(new UserDTO(user));
+        Athlete athlete = athleteService.getAthlete(id);
+        if (athlete != null) {
+            log.info("The athlete has been found");
+            return ResponseEntity.ok(new AthleteDTO(athlete));
         }
         else {
-            log.warn("The user by id has not been found");
+            log.warn("The athlete by id has not been found");
             return ResponseEntity.notFound().build();
         }
     }
 
 
     @PutMapping("/{id}")
-    @ApiOperation("Change a user by his id.")
-    public ResponseEntity<UserDTO> updateUser(@ApiParam("The id of the user")  @PathVariable Long id, @ApiParam("Modified user object") @RequestBody User user) {
-        if (!id.equals(user.getId())) {
-            log.warn("Bad request , the id given in the path doesnt match with the id on the user");
+    @ApiOperation("Change a athlete by his id.")
+    public ResponseEntity<AthleteDTO> updateAthlete(@ApiParam("The id of the athlete")  @PathVariable Long id, @ApiParam("Modified athlete object") @RequestBody Athlete athlete) {
+        if (!id.equals(athlete.getId())) {
+            log.warn("Bad request , the id given in the path doesnt match with the id on the athlete");
             return ResponseEntity.badRequest().build();
         }
-        log.info("User updated successfully");
-        return ResponseEntity.ok(UserDTO.fromUser(userService.saveUser(user)));
+        log.info("Athlete updated successfully");
+        return ResponseEntity.ok(AthleteDTO.fromUser(athleteService.saveAthlete(athlete)));
     }
 
     @PostMapping("")
-    @ApiOperation("Create a user.")
-    public ResponseEntity<UserDTO> createUser(@ApiParam("Modified user object") @RequestBody User user) {
-        log.info("User created successfully");
-        return ResponseEntity.ok(UserDTO.fromUser(userService.saveUser(user)));
+    @ApiOperation("Create a athlete.")
+    public ResponseEntity<AthleteDTO> createAthlete(@ApiParam("Modified athlete object") @RequestBody Athlete athlete) {
+        log.info("Athlete created successfully");
+        return ResponseEntity.ok(AthleteDTO.fromUser(athleteService.saveAthlete(athlete)));
     }
 
     @GetMapping("/inscriptions/{id}")
-    @ApiOperation("Get the inscriptions for this user")
-    public ResponseEntity<List<InscriptionDTO>> getInscriptionById(@ApiParam("The id of the user") @PathVariable(name = "id") Long id) {
+    @ApiOperation("Get the inscriptions for this athlete")
+    public ResponseEntity<List<InscriptionDTO>> getInscriptionById(@ApiParam("The id of the athlete") @PathVariable(name = "id") Long id) {
 
         List<Inscription> inscriptions = inscriptionService.getEnabledInscriptions(id);
         if (inscriptions == null) {
@@ -111,8 +111,8 @@ public class UserController {
     }
 
     @GetMapping("/watchlists/{id}")
-    @ApiOperation("Get the watchlists for this user")
-    public ResponseEntity<List<WatchlistDTO>> getWatchlistById(@ApiParam("The id of the user") @PathVariable(name = "id") Long id) {
+    @ApiOperation("Get the watchlists for this athlete")
+    public ResponseEntity<List<WatchlistDTO>> getWatchlistById(@ApiParam("The id of the athlete") @PathVariable(name = "id") Long id) {
 
         List<Watchlist> watchlists = watchlistService.getEnabledWatchlists(id);
         if (watchlists == null) {

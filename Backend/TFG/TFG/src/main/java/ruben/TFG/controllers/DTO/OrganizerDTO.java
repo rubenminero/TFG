@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * DTO to manage the user data.
+ * DTO to manage the organizer data.
  */
 @Data
 @AllArgsConstructor

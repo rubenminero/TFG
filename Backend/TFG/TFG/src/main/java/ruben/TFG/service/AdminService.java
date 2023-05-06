@@ -18,16 +18,16 @@ public class AdminService {
     private final AdminRepository adminRepository;
 
     private final OrganizerService organizerService;
-    private final UserService userService;
+    private final AthleteService athleteService;
     private final TournamentService tournamentService;
     private final Sports_typeService sportsTypeService;
     private final InscriptionService inscriptionService;
     private final WatchlistService watchlistService;
 
-    public AdminService(AdminRepository adminRepository, OrganizerService organizerService, UserService userService, TournamentService tournamentService, Sports_typeService sportsTypeService, InscriptionService inscriptionService, WatchlistService watchlistService) {
+    public AdminService(AdminRepository adminRepository, OrganizerService organizerService, AthleteService athleteService, TournamentService tournamentService, Sports_typeService sportsTypeService, InscriptionService inscriptionService, WatchlistService watchlistService) {
 
         this.adminRepository = adminRepository;
-        this.userService = userService;
+        this.athleteService = athleteService;
         this.organizerService = organizerService;
         this.tournamentService = tournamentService;
         this.sportsTypeService = sportsTypeService;
@@ -52,19 +52,19 @@ public class AdminService {
         return organizerService.getAllOrganizers();
     }
     /**
-     * Enable or disable a user in the database.
-     * @param id the id of the user to be changed.
+     * Enable or disable a athlete in the database.
+     * @param id the id of the athlete to be changed.
      */
-    public void changeStateUser(Long id){
-        userService.changeStateUser(id);
+    public void changeStateAthlete(Long id){
+        athleteService.changeStateAthlete(id);
     }
     /**
-     * Gets all the users from the database.
+     * Gets all the athletes from the database.
      * Only for admins
-     * @return A list with all the users.
+     * @return A list with all the athletes.
      */
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<Athlete> getAllAthletes() {
+        return athleteService.getAllAthletes();
     }
 
     /**
@@ -148,13 +148,13 @@ public class AdminService {
     }
 
     /**
-     * Recover a user from the database
-     * @param id the id of the user
-     * @return user the user with the id
+     * Recover a athlete from the database
+     * @param id the id of the athlete
+     * @return athlete the athlete with the id
      */
-    public User getUser(Long id){
+    public Athlete getAthlete(Long id){
 
-        return userService.getUser(id);
+        return athleteService.getAthlete(id);
     }
 
     /**
@@ -196,5 +196,19 @@ public class AdminService {
         return watchlistService.getWatchList(id);
     }
 
+<<<<<<< Updated upstream
+=======
+    /**
+     * Recover an admin from the database.
+     * @param id the id of the admin.
+     * @return admin the admin with the id.
+     */
+    public Admin getAdmin(Long id){
+
+        return adminRepository.findById(id).orElse(null);
+    }
+
+
+>>>>>>> Stashed changes
 
 }

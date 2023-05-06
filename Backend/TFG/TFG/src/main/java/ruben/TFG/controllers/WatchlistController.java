@@ -5,15 +5,12 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ruben.TFG.controllers.DTO.InscriptionDTO;
 import ruben.TFG.controllers.DTO.WatchlistDTO;
-import ruben.TFG.model.Inscription;
+import ruben.TFG.model.Athlete;
 import ruben.TFG.model.Tournament;
-import ruben.TFG.model.User;
 import ruben.TFG.model.Watchlist;
-import ruben.TFG.service.InscriptionService;
 import ruben.TFG.service.TournamentService;
-import ruben.TFG.service.UserService;
+import ruben.TFG.service.AthleteService;
 import ruben.TFG.service.WatchlistService;
 
 @RestController
@@ -23,16 +20,16 @@ public class WatchlistController {
 
     private final WatchlistService watchlistService;
     private final TournamentService tournamentService;
-    private final UserService userService;
+    private final AthleteService athleteService;
     /**
      * Constructor of the class
      * @param watchlistService, the service to manage the inscription's data
      * @param tournamentService, the service to manage the torunament's data
-     * @param userService, the service to manage the user's data
+     * @param athleteService, the service to manage the user's data
      */
-    public WatchlistController(WatchlistService watchlistService, TournamentService tournamentService, UserService userService) {
+    public WatchlistController(WatchlistService watchlistService, TournamentService tournamentService, AthleteService athleteService) {
         this.watchlistService = watchlistService;
-        this.userService = userService;
+        this.athleteService = athleteService;
         this.tournamentService = tournamentService;
     }
 
@@ -75,13 +72,13 @@ public class WatchlistController {
     @ApiOperation("Create a watchlist.")
     public ResponseEntity<WatchlistDTO> createWatchlist(@ApiParam("New watchlist object") @RequestBody WatchlistDTO watchlistDTO ) {
         Tournament tournament = tournamentService.getTournament(watchlistDTO.getTournament());
-        User user = userService.getUser(watchlistDTO.getUser());
-        Watchlist watchlist = new Watchlist(tournament,user);
+        Athlete athlete = athleteService.getAthlete(watchlistDTO.getUser());
+        Watchlist watchlist = new Watchlist(tournament, athlete);
         if (watchlist.getTournament().isEnabled() && watchlist.getUser().isEnabled()){
             log.info("Watchlist created successfully");
             return ResponseEntity.ok(WatchlistDTO.fromWatchlist(watchlistService.saveWatchlist(watchlist)));
         }else{
-            log.warn("Bad request , the tournament  or the user  is disabled or doesnt exit.");
+            log.warn("Bad request , the tournament  or the athlete  is disabled or doesnt exit.");
             return ResponseEntity.badRequest().build();
         }
 

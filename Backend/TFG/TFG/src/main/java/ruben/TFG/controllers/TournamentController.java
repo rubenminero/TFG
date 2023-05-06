@@ -74,7 +74,7 @@ public class TournamentController {
             return ResponseEntity.badRequest().build();
         }
         if (tournament.getSport_type().isEnabled() && tournament.getOrganizer().isEnabled()){
-            log.info("User updated successfully");
+            log.info("Athlete updated successfully");
             return ResponseEntity.ok(TournamentDTO.fromTournament(tournamentService.saveTournament(tournament)));
         }else{
             log.warn("Bad request , the sport type or the organizer of the tournament is disabled or doesnt exit.");
