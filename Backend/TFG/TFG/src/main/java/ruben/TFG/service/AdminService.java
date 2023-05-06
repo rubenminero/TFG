@@ -196,8 +196,6 @@ public class AdminService {
         return watchlistService.getWatchList(id);
     }
 
-<<<<<<< Updated upstream
-=======
     /**
      * Recover an admin from the database.
      * @param id the id of the admin.
@@ -207,8 +205,4 @@ public class AdminService {
 
         return adminRepository.findById(id).orElse(null);
     }
-
-
->>>>>>> Stashed changes
-
 }

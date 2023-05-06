@@ -1,12 +1,17 @@
 package ruben.TFG.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import ruben.TFG.controllers.DTO.AthleteDTO;
 
 import java.util.Date;
 
 @Entity
 @Table(name= "athletes")
 @Inheritance(strategy = InheritanceType.JOINED)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Athlete extends User {
     @Transient
     private String username;
@@ -25,29 +30,18 @@ public class Athlete extends User {
     private Date disabled_at = null;
     private Boolean enabled = Boolean.TRUE;
 
-    /**
-     * Constructor without any parameters.
-     */
-    public Athlete(){
 
+    public Athlete(AthleteDTO athletedto) {
+        this.id = athletedto.getId();
+        this.username = athletedto.getUsername();
+        this.first_name = athletedto.getFirst_name();
+        this.last_name = athletedto.getLast_name();
+        this.password = athletedto.getPassword();
+        this.nif = athletedto.getNif();
+        this.email = athletedto.getEmail();
+        this.enabled = athletedto.getEnabled();
+        this.phone_number = athletedto.getPhone_number();
     }
-
-    /**
-     * Constructor with all the parameters for a user.
-     * @param username, the name that will be used in the app.
-     * @param first_name, the first name of this user.
-     * @param last_name, the last name of this user.
-     * @param password, the password of the user.
-     * @param nif, the nif of the user.
-     * @param email, the email of the user.
-     * @param phone_number, the phone_number of the user.
-     */
-    public Athlete(String username, String first_name, String last_name, String password, String nif, String email, String phone_number){
-        super(username, password, first_name, last_name, nif, email);
-        this.phone_number = phone_number;
-
-    }
-
 
     // Getters of this model
 

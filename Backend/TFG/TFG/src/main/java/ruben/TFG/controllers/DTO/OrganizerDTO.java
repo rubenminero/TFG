@@ -1,9 +1,11 @@
 package ruben.TFG.controllers.DTO;
 
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import ruben.TFG.model.Organizer;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,20 +16,35 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class OrganizerDTO {
 
-    private Long id;
+    @Transient
     private String username;
+    @Transient
     private String password;
+    @Transient
+    private String first_name;
+    @Transient
+    private String last_name;
+    @Transient
     private String nif;
+    @Transient
     private String email;
-
-    private Boolean enabled;
+    private Long id;
+    private String company_name;
+    private String address;
+    private Boolean enabled = Boolean.TRUE;
+    private Date disabled_at = null;
 
     public OrganizerDTO(Organizer organizer) {
         this.id = organizer.getId();
         this.username = organizer.getUsername();
+        this.first_name = organizer.getFirst_name();
+        this.last_name = organizer.getLast_name();
         this.password = organizer.getPassword();
         this.nif = organizer.getNif();
         this.email = organizer.getEmail();
+        this.company_name = organizer.getCompany_name();
+        this.address = organizer.getAddress();
+        this.disabled_at = organizer.getDisabled_at();
         this.enabled = organizer.isEnabled();
     }
 
@@ -40,6 +57,6 @@ public class OrganizerDTO {
     }
 
     public static Organizer toOrganizer(OrganizerDTO organizer) {
-        return new Organizer(organizer.username,organizer.password,organizer.nif,organizer.email);
+        return new Organizer(organizer);
     }
 }

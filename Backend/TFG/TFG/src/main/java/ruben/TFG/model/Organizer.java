@@ -1,15 +1,18 @@
 package ruben.TFG.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import ruben.TFG.controllers.DTO.OrganizerDTO;
+
+import java.util.Date;
 
 @Entity
 @Table(name= "organisers")
-<<<<<<< Updated upstream
-public class Organizer {
-=======
 @Inheritance(strategy = InheritanceType.JOINED)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Organizer extends User {
-
     @Transient
     private String username;
     @Transient
@@ -22,35 +25,26 @@ public class Organizer extends User {
     private String nif;
     @Transient
     private String email;
->>>>>>> Stashed changes
     private Long id;
-    private String username;
-    private String password;
-    private String nif;
-    private String email;
+    private String company_name;
+    private String address;
     private Boolean enabled = Boolean.TRUE;
+    private Date disabled_at = null;
 
-    /**
-     * Constructor without any parameters
-     */
-    public Organizer(){
 
+    public Organizer(OrganizerDTO organizerDTO) {
+        this.id = organizerDTO.getId();
+        this.username = organizerDTO.getUsername();
+        this.first_name = organizerDTO.getFirst_name();
+        this.last_name = organizerDTO.getLast_name();
+        this.password = organizerDTO.getPassword();
+        this.nif = organizerDTO.getNif();
+        this.email = organizerDTO.getEmail();
+        this.company_name = organizerDTO.getCompany_name();
+        this.address = organizerDTO.getAddress();
+        this.disabled_at = organizerDTO.getDisabled_at();
+        this.enabled = organizerDTO.getEnabled();
     }
-
-    /**
-     * Constructor with all the parameters for a organiser.
-     * @param username, the name of the company that will be used in the app.
-     * @param password, the password of the organiser.
-     * @param nif, the nif of the organiser.
-     * @param email, the email of the organiser.
-     */
-    public Organizer(String username, String password, String nif, String email){
-        this.username = username;
-        this.password = password;
-        this.nif = nif;
-        this.email = email;
-    }
-
 
     // Getters of this model
 
@@ -60,11 +54,7 @@ public class Organizer extends User {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-<<<<<<< Updated upstream
-    @Column(name = "id")
-=======
-    @OneToOne(targetEntity = User.class, cascade = CascadeType.REMOVE, mappedBy = "id")
->>>>>>> Stashed changes
+    @OneToOne(targetEntity = User.class, cascade = CascadeType.REMOVE, mappedBy = "id_organizer")
     public Long getId() {
         return id;
     }
@@ -74,34 +64,26 @@ public class Organizer extends User {
      * @return the name of the company of the organiser.
      */
     @Column(name = "company_name")
-    public String getUsername() {
-        return username;
+    public String getCompany_name() {
+        return company_name;
     }
 
     /**
-     * Get the password of the organiser.
-     * @return the password of the organiser.
+     * Get the address of the company of the organiser.
+     * @return the address of the company of the organiser.
      */
-    @Column(name = "password")
-    public String getPassword() {
-        return password;
-    }
-    /**
-     * Get the NIF of the organiser.
-     * @return the NIF of the organiser.
-     */
-    @Column(name = "NIF")
-    public String getNif() {
-        return nif;
+    @Column(name = "address")
+    public String getAddress() {
+        return address;
     }
 
     /**
-     * Get the email of the organiser.
-     * @return the email of the organiser.
+     * Get the disabled_at of the organiser.
+     * @return the disabled_atof the organiser.
      */
-    @Column(name = "email")
-    public String getEmail() {
-        return email;
+    @Column(name = "disabled_at")
+    public Date getDisabled_at() {
+        return disabled_at;
     }
 
     /**
@@ -122,36 +104,27 @@ public class Organizer extends User {
     }
 
     /**
-     * Set the company name of the organiser.
-     * @param username the new name of the company for this organiser.
+     * Set the name of the company of the organiser.
+     * @param company_name the new name of the company of the organiser.
      */
-    public void setUsername(String username) {
-        this.username = username;
+    public void setCompany_name(String company_name) {
+        this.company_name = company_name;
     }
 
     /**
-     * Set the password of the organiser.
-     * @param password the new password for this organiser.
+     * Set the address of the company of the organiser.
+     * @param address the new address of the company of the organiser.
      */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
-    /**
-     * Set the nif of the organiser.
-     * @param nif the new nif for this organiser.
-     */
-    public void setNif(String nif) {
-        this.nif = nif;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     /**
-     * Set the email of the organiser.
-     * @param email the new mail for this organiser.
+     * Set the disabled_at of the company of the organiser.
+     * @param disabled_at the new disabled_at of the company of the organiser.
      */
-    public void setEmail(String email) {
-        this.email = email;
+    public void setDisabled_at(Date disabled_at) {
+        this.disabled_at = disabled_at;
     }
 
     /**

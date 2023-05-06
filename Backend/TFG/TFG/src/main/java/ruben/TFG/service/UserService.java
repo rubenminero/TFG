@@ -42,16 +42,6 @@ public class UserService {
     }
 
     /**
-     * Disable or enable a user in the database,depends on the last state.
-     * @param id the id of the user to be changed.
-     */
-    public void changeStateUser(Long id){
-        User user = this.getUser(id);
-        user.setEnabled(!user.isEnabled());
-        userRepository.save(user);
-    }
-
-    /**
      * Gets all the users from the database.
      * Only for admins.
      * @return A list with all the users.
@@ -60,20 +50,7 @@ public class UserService {
 
         return userRepository.findAll();
     }
-    /**
-     * Gets all the enabled users from the database.
-     * @return A list with all the users.
-     */
-    public List<User> getEnabledUsers() {
-        List<User> users_enabled = new ArrayList<User>();
-        List<User> users = userRepository.findAll();
-        for (User u : users) {
-            if (u.isEnabled()){
-                users_enabled.add(u);
-            }
-        }
-        return users_enabled;
-    }
+
     /**
      * Recover a user from the database.
      * @param username the username of the user.

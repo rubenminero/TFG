@@ -45,7 +45,7 @@ public class AthleteDTO {
     }
 
     public static Athlete toUser(AthleteDTO user) {
-        return new Athlete(user.username, user.first_name,user.last_name,user.password,user.nif,user.email,user.phone_number);
+        return new Athlete(user);
     }
 
 }
