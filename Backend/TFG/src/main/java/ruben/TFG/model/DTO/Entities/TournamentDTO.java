@@ -1,4 +1,4 @@
-package ruben.TFG.model.DTO;
+package ruben.TFG.model.DTO.Entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

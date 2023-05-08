@@ -1,4 +1,5 @@
-package ruben.TFG.model.DTO;
+package ruben.TFG.model.DTO.Auth.AuthRegisterDTOs;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,12 +11,14 @@ import ruben.TFG.model.Whitelist.Role;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterDTO {
+public class AuthRegisterAthleteDTO {
+    private Long id;
     private String username;
-    private String firstname;
-    private String lastname;
-    private String email;
+    private String first_name;
+    private String last_name;
     private String password;
     private String nif;
-    private Role role;
+    private String email;
+    private String phone_number;
+    private Role role = Role.ATHLETE;
 }

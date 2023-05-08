@@ -1,4 +1,4 @@
-package ruben.TFG.model.DTO;
+package ruben.TFG.model.DTO.Entities;
 import java.util.List;
 import java.util.stream.Collectors;
 

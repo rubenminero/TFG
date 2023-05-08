@@ -82,8 +82,12 @@ public class OrganizerService {
      * @return organizer the organizer with the username.
      */
     public Organizer getOrganizerByUsername(String username) {
-
-        return organizerRepository.findByUsername(username).orElse(null);
+        Organizer organizer = organizerRepository.findByUsername(username);
+        if (organizer == null){
+            return null;
+        }else{
+            return organizer;
+        }
     }
 
     }

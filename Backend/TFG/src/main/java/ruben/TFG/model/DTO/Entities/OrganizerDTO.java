@@ -1,4 +1,4 @@
-package ruben.TFG.model.DTO;
+package ruben.TFG.model.DTO.Entities;
 
 import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
@@ -16,17 +16,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class OrganizerDTO {
 
-    @Transient
     private String username;
-    @Transient
     private String password;
-    @Transient
     private String first_name;
-    @Transient
     private String last_name;
-    @Transient
     private String nif;
-    @Transient
     private String email;
     private Long id;
     private String company_name;

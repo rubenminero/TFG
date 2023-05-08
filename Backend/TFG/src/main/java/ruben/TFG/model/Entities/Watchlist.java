@@ -3,7 +3,7 @@ package ruben.TFG.model.Entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name= "inscription")
+@Table(name= "watchlist")
 public class Watchlist {
     private Long id;
     private Tournament tournament;

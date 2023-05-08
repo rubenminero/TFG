@@ -2,6 +2,7 @@ package ruben.TFG.model.Entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.Date;
 @Inheritance(strategy = InheritanceType.JOINED)
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Admin extends User {
     @Transient
     private String username;
@@ -30,6 +32,12 @@ public class Admin extends User {
     private Date valid_to;
 
 
+    public Admin( User user, Date valid_from) {
+        super(user.getId(), user.getUsername(),user.getPassword(),user.getFirst_name(),user.getLast_name(),user.getNif(),user.getEmail(),user.getRole(),user.getTokens());
+        this.valid_from = valid_from;
+        this.valid_to = null;
+    }
+
     // Getters of this model
 
     /**
@@ -38,7 +46,7 @@ public class Admin extends User {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @OneToOne(targetEntity = User.class, cascade = CascadeType.REMOVE, mappedBy = "id_admin")
+    @OneToOne(targetEntity = User.class, cascade = CascadeType.REMOVE, mappedBy = "id")
     public Long getId() {
         return id;
     }
@@ -54,7 +62,7 @@ public class Admin extends User {
 
     /**
      * Get the valid_to of the admin.
-     * @return the valid_to of the admin.
+     * @return the valid_toC of the admin.
      */
     public Date getValid_to() {
         return valid_to;

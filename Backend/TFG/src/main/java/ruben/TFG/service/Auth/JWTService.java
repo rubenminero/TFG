@@ -1,4 +1,4 @@
-package ruben.TFG.service.JWT;
+package ruben.TFG.service.Auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

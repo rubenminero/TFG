@@ -3,11 +3,12 @@ package ruben.TFG.model.Entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ruben.TFG.model.DTO.UserDTO;
+import ruben.TFG.model.DTO.Entities.UserDTO;
 import ruben.TFG.model.JWT_Token.Token;
 import ruben.TFG.model.Whitelist.Role;
 
@@ -19,13 +20,15 @@ import java.util.List;
  */
 @Entity
 @Data
+@Builder
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements UserDetails {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
     private String username;
     private String password;
@@ -64,7 +67,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override

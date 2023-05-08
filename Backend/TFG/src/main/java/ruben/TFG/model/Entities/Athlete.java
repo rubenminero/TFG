@@ -2,8 +2,9 @@ package ruben.TFG.model.Entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import ruben.TFG.model.DTO.AthleteDTO;
+import ruben.TFG.model.DTO.Entities.AthleteDTO;
 
 import java.util.Date;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 @Inheritance(strategy = InheritanceType.JOINED)
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Athlete extends User {
     @Transient
     private String username;
@@ -30,6 +32,10 @@ public class Athlete extends User {
     private Date disabled_at = null;
     private Boolean enabled = Boolean.TRUE;
 
+    public Athlete( User user, String phone_number) {
+        super(user.getId(), user.getUsername(),user.getPassword(),user.getFirst_name(),user.getLast_name(),user.getNif(),user.getEmail(),user.getRole(),user.getTokens());
+        this.phone_number = phone_number;
+    }
 
     public Athlete(AthleteDTO athletedto) {
         this.id = athletedto.getId();
@@ -52,7 +58,7 @@ public class Athlete extends User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @OneToOne(targetEntity = User.class, cascade = CascadeType.REMOVE, mappedBy = "id_athlete")
+    @OneToOne(targetEntity = User.class, cascade = CascadeType.REMOVE, mappedBy = "id")
     public Long getId() {
         return id;
     }

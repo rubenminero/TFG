@@ -1,9 +1,11 @@
 package ruben.TFG.controllers.EntitiesControllers;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ruben.TFG.model.DTO.InscriptionDTO;
+import ruben.TFG.model.DTO.Entities.InscriptionDTO;
 import ruben.TFG.model.Entities.Athlete;
 import ruben.TFG.model.Entities.Inscription;
 import ruben.TFG.model.Entities.Tournament;
@@ -14,24 +16,17 @@ import ruben.TFG.service.EntitiesServices.TournamentService;
 @RestController
 @Slf4j
 @RequestMapping("/api/inscriptions")
+@AllArgsConstructor
 public class InscriptionController {
 
     private final InscriptionService inscriptionService;
     private final TournamentService tournamentService;
     private final AthleteService athleteService;
-    /**
-     * Constructor of the class
-     * @param inscriptionService, the service to manage the inscription's data
-     */
-    public InscriptionController(InscriptionService inscriptionService, TournamentService tournamentService, AthleteService athleteService) {
-        this.inscriptionService = inscriptionService;
-        this.athleteService = athleteService;
-        this.tournamentService = tournamentService;
-    }
 
 
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ahtlete:read')")
     public ResponseEntity<InscriptionDTO> getInscriptionById(@PathVariable(name = "id") Long id) {
 
         Inscription inscription = inscriptionService.getInscription(id);
@@ -45,6 +40,7 @@ public class InscriptionController {
 
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ahtlete:update')")
     public ResponseEntity<InscriptionDTO> updateInscription(@PathVariable Long id, @RequestBody Inscription inscription) {
         if (!id.equals(inscription.getId())) {
             return ResponseEntity.badRequest().build();
@@ -58,6 +54,7 @@ public class InscriptionController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAuthority('ahtlete:create')")
     public ResponseEntity<InscriptionDTO> createInscription(@RequestBody InscriptionDTO inscriptionDTO ) {
         Tournament tournament = tournamentService.getTournament(inscriptionDTO.getTournament());
         Athlete athlete = athleteService.getAthlete(inscriptionDTO.getUser());

@@ -1,7 +1,9 @@
-package ruben.TFG.model.DTO;
+package ruben.TFG.model.DTO.Entities;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import jakarta.persistence.Transient;
 import ruben.TFG.model.Entities.Athlete;
 
 import lombok.AllArgsConstructor;
@@ -14,13 +16,13 @@ import lombok.Data;
 @AllArgsConstructor
 public class AthleteDTO {
 
-    private Long id;
     private String username;
+    private String password;
     private String first_name;
     private String last_name;
-    private String password;
     private String nif;
     private String email;
+    private Long id;
     private String phone_number;
     private Boolean enabled;
 

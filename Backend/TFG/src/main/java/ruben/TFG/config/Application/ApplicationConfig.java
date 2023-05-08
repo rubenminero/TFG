@@ -1,4 +1,4 @@
-package ruben.TFG.config.Security;
+package ruben.TFG.config.Application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

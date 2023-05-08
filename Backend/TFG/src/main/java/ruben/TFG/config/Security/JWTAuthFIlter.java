@@ -12,8 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ruben.TFG.repository.EntitiesRepositories.TokenRepository;
-import ruben.TFG.service.JWT.JWTService;
+import ruben.TFG.repository.TokenRepository.TokenRepository;
+import ruben.TFG.service.Auth.JWTService;
 
 import java.io.IOException;
 

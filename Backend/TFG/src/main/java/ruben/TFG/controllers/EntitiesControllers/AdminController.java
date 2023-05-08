@@ -1,10 +1,15 @@
 package ruben.TFG.controllers.EntitiesControllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ruben.TFG.model.DTO.*;
+import ruben.TFG.model.DTO.Entities.*;
 import ruben.TFG.model.Entities.*;
 import ruben.TFG.service.EntitiesServices.AdminService;
 
@@ -14,18 +19,14 @@ import java.util.stream.Collectors;
 @RestController
 @Slf4j
 @RequestMapping("/api/admins")
+@PreAuthorize("hasRole('ADMIN')")
+@Tag(name="Admin")
+@AllArgsConstructor
 public class AdminController {
 
     private final AdminService adminService;
-
-    /**
-     * Constructor of the class.
-     * @param adminService, the service to manage the admin data.
-     */
-    public AdminController(AdminService adminService) {
-        this.adminService = adminService;
-    }
     @GetMapping("/organizers")
+    @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<List<OrganizerDTO>> getAllOrganizers_Admin() {
         List<Organizer> organizers = adminService.getAllOrganizers();
         if (organizers == null) {
@@ -35,6 +36,7 @@ public class AdminController {
         return ResponseEntity.ok(organizerDTOS);
     }
     @DeleteMapping("/organizers/{id}")
+    @PreAuthorize("hasAuthority('admin:delete')")
     public ResponseEntity<OrganizerDTO> deleteOrganizer(@PathVariable Long id) {
         if (adminService.getOrganizer(id) == null) {
             return ResponseEntity.notFound().build();
@@ -45,6 +47,7 @@ public class AdminController {
 
 
     @GetMapping("/athletes")
+    @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<List<AthleteDTO>> getAllAthletes_Admin() {
         List<Athlete> athletes = adminService.getAllAthletes();
         if (athletes == null) {
@@ -55,17 +58,17 @@ public class AdminController {
     }
 
     @DeleteMapping("/athletes/{id}")
+    @PreAuthorize("hasAuthority('admin:delete')")
     public ResponseEntity<AthleteDTO> deleteAthlete(@PathVariable Long id) {
         if (adminService.getAthlete(id) == null) {
-            log.warn("Bad request to delete a athlete: athlete does not exist");
             return ResponseEntity.notFound().build();
         }
-        log.info("Athlete changed successfully");
         adminService.changeStateAthlete(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/tournaments")
+    @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<List<TournamentDTO>> getAllTournaments_Admin() {
         List<Tournament> tournaments = adminService.getAllTournaments();
         if (tournaments == null) {
@@ -76,6 +79,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/tournaments/{id}")
+    @PreAuthorize("hasAuthority('admin:delete')")
     public ResponseEntity<AthleteDTO> deleteTournament(@PathVariable Long id) {
         if (adminService.getTournament(id) == null) {
             return ResponseEntity.notFound().build();
@@ -85,6 +89,7 @@ public class AdminController {
     }
 
     @GetMapping("/sports_types")
+    @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<List<Sports_typeDTO>> getAllSports_types_Admin() {
         List<Sports_type> sportsTypes = adminService.getAllSports_types();
         if (sportsTypes == null) {
@@ -95,17 +100,17 @@ public class AdminController {
     }
 
     @DeleteMapping("/sports_types/{id}")
+    @PreAuthorize("hasAuthority('admin:delete')")
     public ResponseEntity<Sports_typeDTO> deleteSport_type(@PathVariable Long id) {
         if (adminService.getSport_type(id) == null) {
-            log.warn("Bad request to delete a sport type: sport type does not exist");
             return ResponseEntity.notFound().build();
         }
-        log.info("Sport type changed successfully");
         adminService.changeStateSport_type(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/inscriptions")
+    @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<List<InscriptionDTO>> getAllInscriptionsAdmin() {
         List<Inscription> inscriptions = adminService.getAllInscriptions();
         if (inscriptions == null) {
@@ -116,6 +121,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/inscriptions/{id}")
+    @PreAuthorize("hasAuthority('admin:delete')")
     public ResponseEntity<InscriptionDTO> deleteInscription(@PathVariable Long id) {
         if (adminService.getInscription(id) == null) {
             return ResponseEntity.notFound().build();
@@ -125,6 +131,7 @@ public class AdminController {
     }
 
     @GetMapping("/watchlists")
+    @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<List<WatchlistDTO>> getAllWatchlists_Admin() {
         List<Watchlist> watchlists = adminService.getAllWatchlists();
         if (watchlists == null) {
@@ -135,6 +142,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/watchlists/{id}")
+    @PreAuthorize("hasAuthority('admin:delete')")
     public ResponseEntity<WatchlistDTO> deleteWatchlist(@PathVariable Long id) {
         if (adminService.getWatchlist(id) == null) {
             return ResponseEntity.notFound().build();

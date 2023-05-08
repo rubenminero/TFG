@@ -1,10 +1,12 @@
 package ruben.TFG.controllers.EntitiesControllers;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ruben.TFG.model.DTO.OrganizerDTO;
+import ruben.TFG.model.DTO.Entities.OrganizerDTO;
 import ruben.TFG.model.Entities.Organizer;
 import ruben.TFG.service.EntitiesServices.OrganizerService;
 
@@ -14,19 +16,13 @@ import java.util.stream.Collectors;
 @RestController
 @Slf4j
 @RequestMapping("/api/organizers")
+@AllArgsConstructor
 public class OrganizerController {
 
     private final OrganizerService organizerService;
 
-    /**
-     * Constructor of the class.
-     * @param organizerService, the service to manage the organizer's data.
-     */
-    public OrganizerController(OrganizerService organizerService) {
-        this.organizerService = organizerService;
-    }
-
     @GetMapping("")
+    @PreAuthorize("hasAuthority('organizer:read')")
     public ResponseEntity<List<OrganizerDTO>> getAllOrganizers() {
         List<Organizer> organizers = organizerService.getEnabledOrganizers();
         if (organizers == null) {
@@ -42,6 +38,7 @@ public class OrganizerController {
 
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('organizer:read')")
     public ResponseEntity<OrganizerDTO> getOrganizerById( @PathVariable(name = "id") Long id) {
 
         Organizer organizer = organizerService.getOrganizer(id);
@@ -57,6 +54,7 @@ public class OrganizerController {
 
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('organizer:update')")
     public ResponseEntity<OrganizerDTO> updateOrganizer(@PathVariable Long id, @RequestBody Organizer organizer) {
         if (!id.equals(organizer.getId())) {
             log.warn("Bad request , the id given in the path doesnt match with the id on the organizer");
@@ -67,6 +65,7 @@ public class OrganizerController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAuthority('organizer:create')")
     public ResponseEntity<OrganizerDTO> createOrganizer(@RequestBody Organizer organizer) {
         log.info("Organizer created successfully");
         return ResponseEntity.ok(OrganizerDTO.fromOrganizer(organizerService.saveOrganizer(organizer)));

@@ -1,10 +1,12 @@
 package ruben.TFG.controllers.EntitiesControllers;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ruben.TFG.model.DTO.TournamentDTO;
+import ruben.TFG.model.DTO.Entities.TournamentDTO;
 import ruben.TFG.model.Entities.Organizer;
 import ruben.TFG.model.Entities.Sports_type;
 import ruben.TFG.model.Entities.Tournament;
@@ -18,22 +20,15 @@ import java.util.stream.Collectors;
 @RestController
 @Slf4j
 @RequestMapping("/api/tournaments")
+@AllArgsConstructor
 public class TournamentController {
 
     private final TournamentService tournamentService;
     private final OrganizerService organizerService;
     private final Sports_typeService sportsTypeService;
-    /**
-     * Constructor of the class
-     * @param tournamentService, the service to manage the tournament's data
-     */
-    public TournamentController(TournamentService tournamentService, OrganizerService organizerService, Sports_typeService sportsTypeService ) {
-        this.tournamentService = tournamentService;
-        this.organizerService = organizerService;
-        this.sportsTypeService = sportsTypeService;
-    }
 
     @GetMapping("")
+    @PreAuthorize("hasAuthority('athlete:read')")
     public ResponseEntity<List<TournamentDTO>> getAllTournaments() {
         List<Tournament> tournaments = tournamentService.getEnabledTournaments();
         if (tournaments == null) {
@@ -48,6 +43,7 @@ public class TournamentController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('athlete:read')")
     public ResponseEntity<TournamentDTO> getTournamentById(@PathVariable(name = "id") Long id) {
 
         Tournament tournament = tournamentService.getTournament(id);
@@ -63,6 +59,7 @@ public class TournamentController {
 
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('organizer:read')")
     public ResponseEntity<TournamentDTO> updateTournament(@PathVariable Long id, @RequestBody Tournament tournament) {
         if (!id.equals(tournament.getId())) {
             log.warn("Bad request , the id given in the path doesnt match with the id on the tournament");
@@ -79,6 +76,7 @@ public class TournamentController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAuthority('organizer:create')")
     public ResponseEntity<TournamentDTO> createTournament(@RequestBody TournamentDTO tournamentDTO ) {
         Organizer organizer = organizerService.getOrganizer(tournamentDTO.getOrganizer());
         Sports_type sportType = sportsTypeService.getSport_type(tournamentDTO.getSport_type());

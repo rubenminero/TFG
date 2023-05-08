@@ -2,8 +2,10 @@ package ruben.TFG.model.Entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import ruben.TFG.model.DTO.OrganizerDTO;
+import ruben.TFG.model.DTO.Entities.OrganizerDTO;
+import ruben.TFG.model.Whitelist.Role;
 
 import java.util.Date;
 
@@ -12,6 +14,7 @@ import java.util.Date;
 @Inheritance(strategy = InheritanceType.JOINED)
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Organizer extends User {
     @Transient
     private String username;
@@ -25,11 +28,19 @@ public class Organizer extends User {
     private String nif;
     @Transient
     private String email;
+    @Transient
+    private Role role;
     private Long id;
     private String company_name;
     private String address;
     private Boolean enabled = Boolean.TRUE;
     private Date disabled_at = null;
+
+    public Organizer( User user, String company_name, String address) {
+        super(user.getId(), user.getUsername(),user.getPassword(),user.getFirst_name(),user.getLast_name(),user.getNif(),user.getEmail(),user.getRole(),user.getTokens());
+        this.company_name = company_name;
+        this.address = address;
+    }
 
 
     public Organizer(OrganizerDTO organizerDTO) {
@@ -46,6 +57,7 @@ public class Organizer extends User {
         this.enabled = organizerDTO.getEnabled();
     }
 
+
     // Getters of this model
 
     /**
@@ -54,7 +66,7 @@ public class Organizer extends User {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @OneToOne(targetEntity = User.class, cascade = CascadeType.REMOVE, mappedBy = "id_organizer")
+    @OneToOne(targetEntity = User.class, cascade = CascadeType.REMOVE, mappedBy = "id")
     public Long getId() {
         return id;
     }

@@ -3,7 +3,6 @@ package ruben.TFG.model.Whitelist;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import ruben.TFG.model.Whitelist.Permission;
 
 import java.util.List;
 import java.util.Set;
@@ -14,12 +13,12 @@ import static ruben.TFG.model.Whitelist.Permission.*;
 @RequiredArgsConstructor
 public enum Role {
 
-    USER(
+    ATHLETE(
             Set.of(
-                    USER_READ,
-                    USER_UPDATE,
-                    USER_DELETE,
-                    USER_CREATE
+                    ATHLETE_READ,
+                    ATHLETE_UPDATE,
+                    ATHLETE_DELETE,
+                    ATHLETE_CREATE
             )
     ),
     ORGANIZER(
@@ -28,10 +27,10 @@ public enum Role {
                     ORGANIZER_UPDATE,
                     ORGANIZER_DELETE,
                     ORGANIZER_CREATE,
-                    USER_READ,
-                    USER_UPDATE,
-                    USER_DELETE,
-                    USER_CREATE
+                    ATHLETE_READ,
+                    ATHLETE_UPDATE,
+                    ATHLETE_DELETE,
+                    ATHLETE_CREATE
             )
     ),
     ADMIN(
@@ -44,10 +43,10 @@ public enum Role {
                     ORGANIZER_UPDATE,
                     ORGANIZER_DELETE,
                     ORGANIZER_CREATE,
-                    USER_READ,
-                    USER_UPDATE,
-                    USER_DELETE,
-                    USER_CREATE
+                    ATHLETE_READ,
+                    ATHLETE_UPDATE,
+                    ATHLETE_DELETE,
+                    ATHLETE_CREATE
             )
     )
 
