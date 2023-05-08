@@ -25,6 +25,7 @@ public class AuthController {
     private final AuthService service;
 
     @PostMapping("/register-organizer")
+
     public ResponseEntity<AuthResponseDTO> registerOrganizer(
             @RequestBody AuthRegisterOrganizerDTO request
     ) {

@@ -1,20 +1,23 @@
 package ruben.TFG.service.EntitiesServices;
 
+import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ruben.TFG.model.Entities.*;
+import ruben.TFG.model.Whitelist.Role;
 import ruben.TFG.repository.EntitiesRepositories.AdminRepository;
+import ruben.TFG.repository.EntitiesRepositories.AthleteRepository;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Service for Admin class.
  */
 @Service
+@AllArgsConstructor
 public class AdminService {
-
-    /**
-     * Access for Admin data.
-     */
     private final AdminRepository adminRepository;
 
     private final OrganizerService organizerService;
@@ -24,16 +27,7 @@ public class AdminService {
     private final InscriptionService inscriptionService;
     private final WatchlistService watchlistService;
 
-    public AdminService(AdminRepository adminRepository, OrganizerService organizerService, AthleteService athleteService, TournamentService tournamentService, Sports_typeService sportsTypeService, InscriptionService inscriptionService, WatchlistService watchlistService) {
-
-        this.adminRepository = adminRepository;
-        this.athleteService = athleteService;
-        this.organizerService = organizerService;
-        this.tournamentService = tournamentService;
-        this.sportsTypeService = sportsTypeService;
-        this.inscriptionService = inscriptionService;
-        this.watchlistService = watchlistService;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Enable or disable a user in the database.
@@ -204,5 +198,61 @@ public class AdminService {
     public Admin getAdmin(Long id){
 
         return adminRepository.findById(id).orElse(null);
+    }
+
+    /**
+     * Save an admin in the database.
+     * @param admin the admin to be saved.
+     */
+    public Admin saveAdmin(Admin admin){
+        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+        admin.setRole(Role.ADMIN);
+        return adminRepository.save(admin);
+    }
+
+    /**
+     * Disable or enable an admin in the database,depends on the last state.
+     * @param id the id of the admin to be changed.
+     */
+    public void changeStateAdmin(Long id){
+        Admin admin = this.getAdmin(id);
+        if (admin.getValid_to() == null){
+            admin.setValid_to(new Date());
+        }else{
+            admin.setValid_to(null);
+        }
+        adminRepository.save(admin);
+    }
+
+    /**
+     * Gets all the admins from the database.
+     * @return A list with all the admins.
+     */
+    public List<Admin> getAllAdmins() {
+
+        return adminRepository.findAll();
+    }
+    /**
+     * Gets all the enabled admins from the database.
+     * @return A list with all the admins.
+     */
+    public List<Admin> getEnabledAdmins() {
+        List<Admin> admins_enabled = new ArrayList<Admin>();
+        List<Admin> admins = adminRepository.findAll();
+        for (Admin a : admins) {
+            if (a.getValid_to() != null){
+                admins_enabled.add(a);
+            }
+        }
+        return admins_enabled;
+    }
+    /**
+     * Recover a admin from the database.
+     * @param username the username of the admin.
+     * @return admin the admin with the username.
+     */
+    public Admin getAdmijnByUsername(String username) {
+
+        return adminRepository.findByUsername(username).orElse(null);
     }
 }

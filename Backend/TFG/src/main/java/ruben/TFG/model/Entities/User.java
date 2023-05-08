@@ -2,6 +2,7 @@ package ruben.TFG.model.Entities;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,6 +36,7 @@ public class User implements UserDetails {
     private String first_name;
     private String last_name;
     private String nif;
+    @Email
     private String email;
 
     @Enumerated(EnumType.STRING)

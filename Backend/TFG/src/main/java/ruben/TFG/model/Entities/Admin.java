@@ -1,6 +1,7 @@
 package ruben.TFG.model.Entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,7 @@ public class Admin extends User {
     @Transient
     private String nif;
     @Transient
+    @Email
     private String email;
 
     private Long id;

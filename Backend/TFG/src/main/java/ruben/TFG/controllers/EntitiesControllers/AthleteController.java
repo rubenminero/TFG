@@ -34,7 +34,7 @@ public class AthleteController {
     private final WatchlistService watchlistService;
 
     @GetMapping("")
-    @PreAuthorize("hasAuthority('ahtlete:read')")
+    @PreAuthorize("hasAuthority('athlete:read')")
     public ResponseEntity<List<AthleteDTO>> getAllAthletes() {
         List<Athlete> athletes = athleteService.getEnabledAthletes();
         if (athletes == null) {
@@ -45,7 +45,7 @@ public class AthleteController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ahtlete:read')")
+    @PreAuthorize("hasAuthority('athlete:read')")
     public ResponseEntity<AthleteDTO> getAthleteById(@PathVariable(name = "id") Long id) {
 
         Athlete athlete = athleteService.getAthlete(id);
@@ -59,7 +59,7 @@ public class AthleteController {
 
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ahtlete:update')")
+    @PreAuthorize("hasAuthority('athlete:update')")
     public ResponseEntity<AthleteDTO> updateAthlete(@PathVariable Long id, @RequestBody Athlete athlete) {
         if (!id.equals(athlete.getId())) {
             return ResponseEntity.badRequest().build();
@@ -68,13 +68,13 @@ public class AthleteController {
     }
 
     @PostMapping("")
-    @PreAuthorize("hasAuthority('ahtlete:create')")
+    @PreAuthorize("hasAuthority('athlete:create')")
     public ResponseEntity<AthleteDTO> createAthlete(@RequestBody Athlete athlete) {
         return ResponseEntity.ok(AthleteDTO.fromUser(athleteService.saveAthlete(athlete)));
     }
 
     @GetMapping("/inscriptions/{id}")
-    @PreAuthorize("hasAuthority('ahtlete:read')")
+    @PreAuthorize("hasAuthority('athlete:read')")
     public ResponseEntity<List<InscriptionDTO>> getInscriptionById(@PathVariable(name = "id") Long id) {
 
         List<Inscription> inscriptions = inscriptionService.getEnabledInscriptions(id);
@@ -88,7 +88,7 @@ public class AthleteController {
     }
 
     @GetMapping("/watchlists/{id}")
-    @PreAuthorize("hasAuthority('ahtlete:read')")
+    @PreAuthorize("hasAuthority('athlete:read')")
     public ResponseEntity<List<WatchlistDTO>> getWatchlistById(@PathVariable(name = "id") Long id) {
 
         List<Watchlist> watchlists = watchlistService.getEnabledWatchlists(id);

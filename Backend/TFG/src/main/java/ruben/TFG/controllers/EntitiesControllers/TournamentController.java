@@ -59,7 +59,7 @@ public class TournamentController {
 
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('organizer:read')")
+    @PreAuthorize("hasAuthority('organizer:update')")
     public ResponseEntity<TournamentDTO> updateTournament(@PathVariable Long id, @RequestBody Tournament tournament) {
         if (!id.equals(tournament.getId())) {
             log.warn("Bad request , the id given in the path doesnt match with the id on the tournament");

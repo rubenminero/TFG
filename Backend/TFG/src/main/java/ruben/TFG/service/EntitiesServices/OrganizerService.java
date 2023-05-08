@@ -1,7 +1,10 @@
 package ruben.TFG.service.EntitiesServices;
 
+import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ruben.TFG.model.Entities.Organizer;
+import ruben.TFG.model.Whitelist.Role;
 import ruben.TFG.repository.EntitiesRepositories.OrganizerRepository;
 
 import java.util.ArrayList;
@@ -11,17 +14,11 @@ import java.util.List;
  * Service for Organizer class.
  */
 @Service
+@AllArgsConstructor
 public class OrganizerService {
-
-    /**
-     * Access for Organizer data.
-     */
     private final OrganizerRepository organizerRepository;
 
-    public OrganizerService(OrganizerRepository organizerRepository) {
-
-        this.organizerRepository = organizerRepository;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Recover an organizer from the database.
@@ -38,7 +35,8 @@ public class OrganizerService {
      * @param organizer the organizer to be saved.
      */
     public Organizer saveOrganizer(Organizer organizer){
-
+        organizer.setPassword(passwordEncoder.encode(organizer.getPassword()));
+        organizer.setRole(Role.ORGANIZER);
         return organizerRepository.save(organizer);
     }
 

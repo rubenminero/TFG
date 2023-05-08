@@ -26,7 +26,7 @@ public class InscriptionController {
 
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ahtlete:read')")
+    @PreAuthorize("hasAuthority('athlete:read')")
     public ResponseEntity<InscriptionDTO> getInscriptionById(@PathVariable(name = "id") Long id) {
 
         Inscription inscription = inscriptionService.getInscription(id);
@@ -40,7 +40,7 @@ public class InscriptionController {
 
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ahtlete:update')")
+    @PreAuthorize("hasAuthority('athlete:update')")
     public ResponseEntity<InscriptionDTO> updateInscription(@PathVariable Long id, @RequestBody Inscription inscription) {
         if (!id.equals(inscription.getId())) {
             return ResponseEntity.badRequest().build();
@@ -54,7 +54,7 @@ public class InscriptionController {
     }
 
     @PostMapping("")
-    @PreAuthorize("hasAuthority('ahtlete:create')")
+    @PreAuthorize("hasAuthority('athlete:create')")
     public ResponseEntity<InscriptionDTO> createInscription(@RequestBody InscriptionDTO inscriptionDTO ) {
         Tournament tournament = tournamentService.getTournament(inscriptionDTO.getTournament());
         Athlete athlete = athleteService.getAthlete(inscriptionDTO.getUser());

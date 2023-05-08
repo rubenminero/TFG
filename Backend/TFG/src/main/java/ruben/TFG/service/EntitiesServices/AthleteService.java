@@ -1,7 +1,10 @@
 package ruben.TFG.service.EntitiesServices;
 
+import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ruben.TFG.model.Entities.Athlete;
+import ruben.TFG.model.Whitelist.Role;
 import ruben.TFG.repository.EntitiesRepositories.AthleteRepository;
 
 import java.util.ArrayList;
@@ -11,17 +14,14 @@ import java.util.List;
  * Service for user class.
  */
 @Service
+@AllArgsConstructor
 public class AthleteService {
 
     /**
      * Access for Athlete data.
      */
     private final AthleteRepository athleteRepository;
-
-    public AthleteService(AthleteRepository athleteRepository) {
-
-        this.athleteRepository = athleteRepository;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Recover a athlete from the database.
@@ -38,6 +38,8 @@ public class AthleteService {
      * @param athlete the athlete to be saved.
      */
     public Athlete saveAthlete(Athlete athlete){
+        athlete.setPassword(passwordEncoder.encode(athlete.getPassword()));
+        athlete.setRole(Role.ATHLETE);
         return athleteRepository.save(athlete);
     }
 

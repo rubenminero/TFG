@@ -38,7 +38,7 @@ public class Sports_typeController {
         return ResponseEntity.ok(Sports_typeDTO.fromSport_type(sportsTypeService.saveSport_type(sport_type)));
     }
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('athletes:read')")
+    @PreAuthorize("hasAuthority('athlete:read')")
     public ResponseEntity<Sports_typeDTO> getSport_typeById( @PathVariable(name = "id") Long id) {
 
         Sports_type sportType = sportsTypeService.getSport_type(id);
@@ -53,7 +53,7 @@ public class Sports_typeController {
     }
 
     @GetMapping("")
-    @PreAuthorize("hasAuthority('athletes:read')")
+    @PreAuthorize("hasAuthority('athlete:read')")
     public ResponseEntity<List<Sports_typeDTO>> getAllSports_types() {
         List<Sports_type> sportsTypes = sportsTypeService.getEnabledSport_types();
         if (sportsTypes == null) {
