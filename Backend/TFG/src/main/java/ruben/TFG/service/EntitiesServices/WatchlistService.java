@@ -34,7 +34,7 @@ public class WatchlistService {
 
     /**
      * Save a watchlist in the database.
-     * @param inscription the watchlist to be saved.
+     * @param watchlist the watchlist to be saved.
      */
     public Watchlist saveWatchlist(Watchlist watchlist){
 

@@ -1,14 +1,19 @@
 package ruben.TFG.controllers.EntitiesControllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ruben.TFG.model.DTO.Entities.OrganizerDTO;
 import ruben.TFG.model.Entities.Organizer;
+import ruben.TFG.model.Entities.User;
 import ruben.TFG.service.EntitiesServices.OrganizerService;
+import ruben.TFG.service.EntitiesServices.UserService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,17 +22,32 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequestMapping("/api/organizers")
 @AllArgsConstructor
+@Tag(name="Organizers")
 public class OrganizerController {
 
     private final OrganizerService organizerService;
+    private final UserService userService;
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('organizer:read')")
-    public ResponseEntity<List<OrganizerDTO>> getAllOrganizers() {
+    @Operation(summary = "Return all the enabled organizers in the database.")
+    public ResponseEntity getAllOrganizers() {
+        User user = userService.isAuthorized();
+
+        if (user == null){
+            String msg = "This user cant do that operation.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(msg);
+        }
         List<Organizer> organizers = organizerService.getEnabledOrganizers();
-        if (organizers == null) {
-            log.warn("There is no organizers available.");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        if (organizers.size() == 0 || organizers == null) {
+            String msg = "There is no athletes.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(msg);
         }
 
         // Convert the list of organizers to a list of OrganizerDTOs
@@ -39,26 +59,61 @@ public class OrganizerController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('organizer:read')")
-    public ResponseEntity<OrganizerDTO> getOrganizerById( @PathVariable(name = "id") Long id) {
+    @Operation(summary = "Return the organizer with the id provided.")
+    public ResponseEntity getOrganizerById( @PathVariable(name = "id") Long id) {
+        User user = userService.isAuthorized();
+
+        if (user == null){
+            String msg = "This user cant do that operation.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(msg);
+        }
 
         Organizer organizer = organizerService.getOrganizer(id);
         if (organizer != null) {
-            log.info("The organizer has been found");
-            return ResponseEntity.ok(new OrganizerDTO(organizer));
+            if (organizer.isEnabled()){
+                log.info("The organizer has been found");
+                return ResponseEntity.ok(new OrganizerDTO(organizer));
+            }else {
+                String msg = "The organizer that you asked is disabled.";
+                log.warn(msg);
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .body(msg);
+            }
+
         }
         else {
-            log.warn("The organizer has not been found");
-            return ResponseEntity.notFound().build();
+            String msg = "The organizer that you asked doesnt exist.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(msg);
         }
     }
 
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('organizer:update')")
-    public ResponseEntity<OrganizerDTO> updateOrganizer(@PathVariable Long id, @RequestBody Organizer organizer) {
+    @Operation(summary = "Update a organizer with the data provided.")
+    public ResponseEntity updateOrganizer(@PathVariable Long id, @RequestBody Organizer organizer) {
+        User user = userService.isAuthorized();
+
+        if (user == null){
+            String msg = "This user cant do that operation.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(msg);
+        }
         if (!id.equals(organizer.getId())) {
-            log.warn("Bad request , the id given in the path doesnt match with the id on the organizer");
-            return ResponseEntity.badRequest().build();
+            String msg = "Bad request ,the id given in the path doesnt match with the id on the organizer.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(msg);
         }
         log.info("Organizer updated successfully");
         return ResponseEntity.ok(OrganizerDTO.fromOrganizer(organizerService.saveOrganizer(organizer)));
@@ -66,10 +121,22 @@ public class OrganizerController {
 
     @PostMapping("")
     @PreAuthorize("hasAuthority('organizer:create')")
-    public ResponseEntity<OrganizerDTO> createOrganizer(@RequestBody Organizer organizer) {
+    @Operation(summary = "Create a organizer with the data provided.")
+    public ResponseEntity createOrganizer(@RequestBody Organizer organizer) {
+        User user = userService.isAuthorized();
+
+        if (user == null){
+            String msg = "This user cant do that operation.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(msg);
+        }
         log.info("Organizer created successfully");
         return ResponseEntity.ok(OrganizerDTO.fromOrganizer(organizerService.saveOrganizer(organizer)));
     }
+
+
 
 
 

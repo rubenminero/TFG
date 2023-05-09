@@ -60,6 +60,7 @@ public class JWTAuthFIlter extends OncePerRequestFilter {
     ) throws IOException {
         try {
 
+
             if (auth_whitelist.contains(request.getServletPath()) || request.getServletPath().startsWith("v3/api-docs/")|| request.getServletPath().startsWith("/swagger-ui/")){
                 filterChain.doFilter(request, response);
                 return;

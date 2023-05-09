@@ -1,7 +1,11 @@
 package ruben.TFG.service.EntitiesServices;
 
+import ch.qos.logback.core.encoder.EchoEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ruben.TFG.model.Entities.User;
+import ruben.TFG.model.Whitelist.Role;
 import ruben.TFG.repository.EntitiesRepositories.UserRepository;
 
 import java.util.List;
@@ -16,6 +20,7 @@ public class UserService {
      * Access for User data.
      */
     private final UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository) {
 
@@ -37,6 +42,7 @@ public class UserService {
      * @param user the user to be saved.
      */
     public User saveUser(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -58,6 +64,12 @@ public class UserService {
     public User getUserByUsername(String username) {
 
         return userRepository.findByUsername(username).orElse(null);
+    }
+
+    public User isAuthorized(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = this.getUserByUsername(username);
+        return user;
     }
 
     }

@@ -196,7 +196,6 @@ public class AdminService {
      * @return admin the admin with the id.
      */
     public Admin getAdmin(Long id){
-
         return adminRepository.findById(id).orElse(null);
     }
 
@@ -251,7 +250,7 @@ public class AdminService {
      * @param username the username of the admin.
      * @return admin the admin with the username.
      */
-    public Admin getAdmijnByUsername(String username) {
+    public Admin getAdminByUsername(String username) {
 
         return adminRepository.findByUsername(username).orElse(null);
     }
