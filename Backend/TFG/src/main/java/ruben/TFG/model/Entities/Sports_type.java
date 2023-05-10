@@ -1,27 +1,23 @@
 package ruben.TFG.model.Entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import ruben.TFG.model.DTO.Entities.Sports_typeDTO;
 
 @Entity
 @Table(name= "sports_types")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Sports_type {
     private Long id;
     private String name;
     private Boolean enabled = Boolean.TRUE;
 
-    /**
-     * Constructor without any parameters.
-     */
-    public Sports_type(){
-
-    }
-
-    /**
-     * Constructor with all the parameters for a tournament.
-     * @param name, the name of the tournament.
-     */
-    public Sports_type(String name){
-        this.name = name;
+    public Sports_type(Sports_typeDTO sports_typeDTO) {
+        this.id = sports_typeDTO.getId();
+        this.name = sports_typeDTO.getName();
+        this.enabled = sports_typeDTO.getEnabled();
     }
 
     // Getters of this model

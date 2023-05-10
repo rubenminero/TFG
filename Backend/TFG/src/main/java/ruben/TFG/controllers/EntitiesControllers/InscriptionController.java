@@ -7,10 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ruben.TFG.model.DTO.Entities.InscriptionDTO;
-import ruben.TFG.model.DTO.Entities.Sports_typeDTO;
 import ruben.TFG.model.Entities.*;
 import ruben.TFG.service.EntitiesServices.AthleteService;
 import ruben.TFG.service.EntitiesServices.InscriptionService;
@@ -49,7 +47,7 @@ public class InscriptionController {
         }
 
         Inscription inscription = inscriptionService.getInscription(id);
-        if (inscription == null) {
+        if (inscription != null) {
             if (inscription.isEnabled() == false){
                 String msg = "The inscription that you asked is disabled.";
                 log.warn(msg);
@@ -57,16 +55,16 @@ public class InscriptionController {
                         .status(HttpStatus.FORBIDDEN)
                         .body(msg);
             }else {
-                String msg = "The inscription that you asked doesnt exit.";
-                log.warn(msg);
-                return ResponseEntity
-                        .status(HttpStatus.NO_CONTENT)
-                        .body(msg);
+                log.info("The inscription has successfully been retrieved.");
+                return ResponseEntity.ok(inscription);
             }
         }
         else {
-            log.info("The inscription has successfully been retrieved.");
-            return ResponseEntity.ok(inscription);
+            String msg = "The inscription that you asked doesnt exit.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(msg);
         }
     }
 
@@ -74,7 +72,7 @@ public class InscriptionController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('athlete:update')")
     @Operation(summary = "Update a inscription with the data provided.")
-    public ResponseEntity updateInscription(@PathVariable Long id, @RequestBody Inscription inscription) {
+    public ResponseEntity updateInscription(@PathVariable Long id, @RequestBody InscriptionDTO inscriptionDTO) {
         User user = userService.isAuthorized();
 
         if (user == null){
@@ -84,30 +82,57 @@ public class InscriptionController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
-        if (!id.equals(inscription.getId())) {
+        if (!id.equals(inscriptionDTO.getId())) {
             String msg = "The id that you give doesnt match with the id of the inscription.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
-        if (!inscription.getTournament().isEnabled() || !inscription.getUser().isEnabled()){
-            if (!inscription.getTournament().isEnabled()) {
-                String msg = "The tournament of the inscription is disabled.";
+
+        if (inscriptionService.getInscription(id) == null) {
+            String msg = "Bad request ,there is no inscription for that id.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(msg);
+        }
+        Tournament tournament = tournamentService.getTournament(inscriptionDTO.getTournament());
+        Athlete athlete = athleteService.getAthlete(inscriptionDTO.getAthlete());
+        Inscription inscription = InscriptionDTO.toInscription(inscriptionDTO,tournament,athlete);
+        if (inscription.getTournament() == null || inscription.getAthlete() == null){
+            if (inscription.getTournament() == null ) {
+                String msg = "The tournament of the inscription doesnt exist.";
                 log.warn(msg);
                 return ResponseEntity
-                        .status(HttpStatus.NO_CONTENT)
+                        .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }else {
-                String msg = "The user of the inscription is disabled.";
+                String msg = "The user of the inscription doesnt exist.";
                 log.warn(msg);
                 return ResponseEntity
-                        .status(HttpStatus.NO_CONTENT)
+                        .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }
         }else{
-            log.info("The inscription has successfully been updated.");
-            return ResponseEntity.ok(InscriptionDTO.fromInscription(inscriptionService.saveInscription(inscription)));
+            if (!inscription.getTournament().isEnabled() || !inscription.getAthlete().isEnabled()){
+                if (!inscription.getTournament().isEnabled()) {
+                    String msg = "The tournament of the inscription is disabled.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.NOT_FOUND)
+                            .body(msg);
+                }else {
+                    String msg = "The user of the inscription is disabled.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.NOT_FOUND)
+                            .body(msg);
+                }
+            }else{
+                log.info("The inscription has successfully been updated.");
+                return ResponseEntity.ok(InscriptionDTO.fromInscription(inscriptionService.saveInscription(inscription)));
+            }
         }
 
     }
@@ -115,7 +140,7 @@ public class InscriptionController {
     @PostMapping("")
     @PreAuthorize("hasAuthority('athlete:create')")
     @Operation(summary = "Create a inscription with the data provided.")
-    public ResponseEntity createInscription(@RequestBody InscriptionDTO inscriptionDTO ) {
+    public ResponseEntity createInscription(@RequestBody InscriptionDTO inscriptionDTO) {
         User user = userService.isAuthorized();
 
         if (user == null){
@@ -125,27 +150,43 @@ public class InscriptionController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
-
         Tournament tournament = tournamentService.getTournament(inscriptionDTO.getTournament());
-        Athlete athlete = athleteService.getAthlete(inscriptionDTO.getUser());
-        Inscription inscription = new Inscription(tournament, athlete);
-        if (!inscription.getTournament().isEnabled() || !inscription.getUser().isEnabled()){
-            if (!inscription.getTournament().isEnabled()) {
-                String msg = "The tournament of the inscription is disabled.";
+        Athlete athlete = athleteService.getAthlete(inscriptionDTO.getAthlete());
+        Inscription inscription = InscriptionDTO.toInscription(inscriptionDTO,tournament,athlete);
+        inscription.setEnabled(true);
+        if (inscription.getTournament() == null || inscription.getAthlete() == null){
+            if (inscription.getTournament() == null ) {
+                String msg = "The tournament of the inscription doesnt exist.";
                 log.warn(msg);
                 return ResponseEntity
-                        .status(HttpStatus.NO_CONTENT)
+                        .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }else {
-                String msg = "The user of the inscription is disabled.";
+                String msg = "The user of the inscription doesnt exist.";
                 log.warn(msg);
                 return ResponseEntity
-                        .status(HttpStatus.NO_CONTENT)
+                        .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }
         }else{
-            log.info("The inscription has successfully been saved.");
-            return ResponseEntity.ok(InscriptionDTO.fromInscription(inscriptionService.saveInscription(inscription)));
+            if (!inscription.getTournament().isEnabled() || !inscription.getAthlete().isEnabled()){
+                if (!inscription.getTournament().isEnabled()) {
+                    String msg = "The tournament of the inscription is disabled.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.NOT_FOUND)
+                            .body(msg);
+                }else {
+                    String msg = "The user of the inscription is disabled.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.NOT_FOUND)
+                            .body(msg);
+                }
+            }else{
+                log.info("The inscription has successfully been saved.");
+                return ResponseEntity.ok(InscriptionDTO.fromInscription(inscriptionService.saveInscription(inscription)));
+            }
         }
 
     }

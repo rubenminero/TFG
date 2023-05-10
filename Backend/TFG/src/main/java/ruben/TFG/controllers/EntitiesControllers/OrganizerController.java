@@ -46,7 +46,7 @@ public class OrganizerController {
             String msg = "There is no athletes.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
 
@@ -89,7 +89,7 @@ public class OrganizerController {
             String msg = "The organizer that you asked doesnt exist.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
     }
@@ -113,6 +113,14 @@ public class OrganizerController {
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
+                    .body(msg);
+        }
+
+        if (organizerService.getOrganizer(id) == null) {
+            String msg = "Bad request ,there is no organizer for that id.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
         log.info("Organizer updated successfully");

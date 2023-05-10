@@ -1,30 +1,27 @@
 package ruben.TFG.model.Entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import ruben.TFG.model.DTO.Entities.InscriptionDTO;
 
 @Entity
 @Table(name= "inscription")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Inscription {
     private Long id;
     private Tournament tournament;
     private Athlete athlete;
     private Boolean enabled = Boolean.TRUE;
 
-    /**
-     * Constructor without any parameters.
-     */
-    public Inscription(){
 
-    }
 
-    /**
-     * Constructor with all the parameters for an inscription.
-     * @param tournament, the tournament of the inscription.
-     * @param athlete, the use of the inscription.
-     */
-    public Inscription(Tournament tournament, Athlete athlete){
+    public Inscription(InscriptionDTO inscriptionDTO,Tournament tournament, Athlete athlete) {
+        this.id = inscriptionDTO.getId();
         this.tournament = tournament;
         this.athlete = athlete;
+        this.enabled = inscriptionDTO.getEnabled();
     }
 
     // Getters of this model
@@ -57,7 +54,7 @@ public class Inscription {
      */
     @JoinColumn(name = "id_user")
     @ManyToOne(targetEntity = Athlete.class)
-    public Athlete getUser() {
+    public Athlete getAthlete() {
         return athlete;
     }
 
@@ -90,7 +87,7 @@ public class Inscription {
      * Set the athlete of the inscription.
      * @param athlete the new athlete for this inscription.
      */
-    public void setUser(Athlete athlete) {
+    public void setAthlete(Athlete athlete) {
         this.athlete = athlete;
     }
     /**

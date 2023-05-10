@@ -2,6 +2,8 @@ package ruben.TFG.model.DTO.Entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import ruben.TFG.model.Entities.Organizer;
+import ruben.TFG.model.Entities.Sports_type;
 import ruben.TFG.model.Entities.Tournament;
 
 import java.util.List;
@@ -24,16 +26,6 @@ public class TournamentDTO {
     private Long organizer;
     private Long sport_type;
 
-    public TournamentDTO(String name, String location, String address, String description, Boolean inscription, Long organizer, Long sport_type  ) {
-        this.name = name;
-        this.location = location;
-        this.address = address;
-        this.description = description;
-        this.enabled = true;
-        this.inscription = inscription;
-        this.organizer = organizer;
-        this.sport_type = sport_type;
-    }
     public TournamentDTO(Tournament tournament) {
         this.id = tournament.getId();
         this.name = tournament.getName();
@@ -58,7 +50,7 @@ public class TournamentDTO {
         return tournaments.stream().map(TournamentDTO::fromTournament).collect(Collectors.toList());
     }
 
-    public static Tournament toTournament(TournamentDTO tournament) {
-        return new Tournament(tournament.name,tournament.inscription,tournament.location,tournament.address,tournament.description);
+    public static Tournament toTournament(TournamentDTO tournament, Organizer organizer, Sports_type sportsType) {
+        return new Tournament(tournament, organizer, sportsType);
     }
 }

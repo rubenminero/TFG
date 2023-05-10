@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ruben.TFG.model.DTO.Entities.InscriptionDTO;
-import ruben.TFG.model.DTO.Entities.Sports_typeDTO;
 import ruben.TFG.model.DTO.Entities.WatchlistDTO;
 import ruben.TFG.model.Entities.*;
 import ruben.TFG.service.EntitiesServices.TournamentService;
@@ -64,7 +62,7 @@ public class WatchlistController {
             String msg = "The watchlist that you asked doesnt exist.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
     }
@@ -73,7 +71,7 @@ public class WatchlistController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('athlete:read')")
     @Operation(summary = "Update a watchlist with the data provided.")
-    public ResponseEntity updateWatchlist(@PathVariable Long id, @RequestBody Watchlist watchlist) {
+    public ResponseEntity updateWatchlist(@PathVariable Long id, @RequestBody WatchlistDTO watchlistDTO) {
         User user = userService.isAuthorized();
 
         if (user == null){
@@ -82,38 +80,64 @@ public class WatchlistController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
-        if (!id.equals(watchlist.getId())) {
-            String msg = "The id that you give doesnt match with the id of the watchlist.";
+        if (!id.equals(watchlistDTO.getId())) {
+            String msg = "Bad request ,the id given in the path doesnt match with the id on the watchlist provided.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
-        if (!watchlist.getTournament().isEnabled() || !watchlist.getUser().isEnabled()){
-            if (!watchlist.getTournament().isEnabled()) {
-                String msg = "The tournament of the watchlist is disabled.";
+
+        if (watchlistService.getWatchList(id) == null) {
+            String msg = "Bad request ,there is no watchlist for that id.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(msg);
+        }
+        Tournament tournament = tournamentService.getTournament(watchlistDTO.getTournament());
+        Athlete athlete = athleteService.getAthlete(watchlistDTO.getAthlete());
+        Watchlist watchlist = WatchlistDTO.toWatchlist(watchlistDTO,tournament,athlete);
+        if (watchlist.getTournament() == null || watchlist.getAthlete() == null){
+            if (watchlist.getTournament() == null ) {
+                String msg = "The tournament of the watchlist doesnt exist.";
                 log.warn(msg);
                 return ResponseEntity
-                        .status(HttpStatus.NO_CONTENT)
+                        .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }else {
-                String msg = "The user of the watchlist is disabled.";
+                String msg = "The user of the watchlist doesnt exist.";
                 log.warn(msg);
                 return ResponseEntity
-                        .status(HttpStatus.NO_CONTENT)
+                        .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }
         }else{
-            log.info("The watchlist has successfully been updated.");
-            return ResponseEntity.ok(WatchlistDTO.fromWatchlist(watchlistService.saveWatchlist(watchlist)));
+            if (!watchlist.getTournament().isEnabled() || !watchlist.getAthlete().isEnabled()){
+                if (!watchlist.getTournament().isEnabled()) {
+                    String msg = "The tournament of the watchlist is disabled.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.NOT_FOUND)
+                            .body(msg);
+                }else {
+                    String msg = "The user of the watchlist is disabled.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.NOT_FOUND)
+                            .body(msg);
+                }
+            }else{
+                log.info("The watchlist has successfully been updated.");
+                return ResponseEntity.ok(WatchlistDTO.fromWatchlist(watchlistService.saveWatchlist(watchlist)));
+            }
         }
-
     }
 
     @PostMapping("")
     @PreAuthorize("hasAuthority('athlete:create')")
     @Operation(summary = "Create a watchlist with the data provided.")
-    public ResponseEntity createWatchlist(@RequestBody WatchlistDTO watchlistDTO ) {
+    public ResponseEntity createWatchlist(@RequestBody WatchlistDTO watchlistDTO) {
         User user = userService.isAuthorized();
 
         if (user == null){
@@ -124,29 +148,43 @@ public class WatchlistController {
         }
 
         Tournament tournament = tournamentService.getTournament(watchlistDTO.getTournament());
-        Athlete athlete = athleteService.getAthlete(watchlistDTO.getUser());
-        Watchlist watchlist = new Watchlist(tournament, athlete);
-        if (!watchlist.getTournament().isEnabled() || !watchlist.getUser().isEnabled()){
-            if (!watchlist.getTournament().isEnabled()) {
-                String msg = "The tournament of the watchlist is disabled.";
+        Athlete athlete = athleteService.getAthlete(watchlistDTO.getAthlete());
+        Watchlist watchlist = WatchlistDTO.toWatchlist(watchlistDTO,tournament,athlete);
+        watchlist.setEnabled(true);
+        if (watchlist.getTournament() == null || watchlist.getAthlete() == null){
+            if (watchlist.getTournament() == null ) {
+                String msg = "The tournament of the watchlist doesnt exist.";
                 log.warn(msg);
                 return ResponseEntity
-                        .status(HttpStatus.NO_CONTENT)
+                        .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }else {
-                String msg = "The user of the watchlist is disabled.";
+                String msg = "The user of the watchlist doesnt exist.";
                 log.warn(msg);
                 return ResponseEntity
-                        .status(HttpStatus.NO_CONTENT)
+                        .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }
         }else{
-            log.info("The watchlist has successfully been saved.");
-            return ResponseEntity.ok(WatchlistDTO.fromWatchlist(watchlistService.saveWatchlist(watchlist)));
+            if (!watchlist.getTournament().isEnabled() || !watchlist.getAthlete().isEnabled()){
+                if (!watchlist.getTournament().isEnabled()) {
+                    String msg = "The tournament of the watchlist is disabled.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.NOT_FOUND)
+                            .body(msg);
+                }else {
+                    String msg = "The user of the watchlist is disabled.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.NOT_FOUND)
+                            .body(msg);
+                }
+            }else{
+                log.info("The watchlist has successfully been saved.");
+                return ResponseEntity.ok(WatchlistDTO.fromWatchlist(watchlistService.saveWatchlist(watchlist)));
+            }
         }
-
-
-
     }
 
 

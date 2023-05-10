@@ -2,6 +2,9 @@ package ruben.TFG.model.DTO.Entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import ruben.TFG.model.Entities.Athlete;
+import ruben.TFG.model.Entities.Tournament;
 import ruben.TFG.model.Entities.Watchlist;
 
 import java.util.List;
@@ -12,27 +15,19 @@ import java.util.stream.Collectors;
  */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class WatchlistDTO {
 
     private Long id;
     private Long tournament;
-    private Long user;
+    private Long athlete;
     private Boolean enabled;
 
-    public WatchlistDTO(Long tournament, Long user) {
-        this.tournament = tournament;
-        this.user = user;
-        this.enabled = true;
-    }
     public WatchlistDTO(Watchlist watchlist) {
         this.id = watchlist.getId();
         this.tournament = watchlist.getTournament().getId();
-        this.user = watchlist.getUser().getId();
+        this.athlete = watchlist.getAthlete().getId();
         this.enabled = watchlist.isEnabled();
-    }
-
-    public WatchlistDTO() {
-
     }
 
 
@@ -44,7 +39,8 @@ public class WatchlistDTO {
         return watchlists.stream().map(WatchlistDTO::fromWatchlist).collect(Collectors.toList());
     }
 
-    public static Watchlist toWatchlist() {
-        return new Watchlist();
+    public static Watchlist toWatchlist(WatchlistDTO watchlistDTO, Tournament tournament, Athlete athlete) {
+
+        return new Watchlist(watchlistDTO,tournament,athlete);
     }
 }

@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import ruben.TFG.model.DTO.Entities.InscriptionDTO;
@@ -54,12 +53,11 @@ public class AthleteController {
                     .body(msg);
         }
         List<Athlete> athletes = athleteService.getEnabledAthletes();
-        System.out.println(athletes);
         if (athletes.size() == 0 || athletes == null) {
             String msg = "There is no athletes.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
         List<AthleteDTO> athleteDTOS = athletes.stream().map(AthleteDTO::new).collect(Collectors.toList());
@@ -97,7 +95,7 @@ public class AthleteController {
                 String msg = "The athlete that you asked doesnt exist.";
                 log.warn(msg);
                 return ResponseEntity
-                        .status(HttpStatus.NO_CONTENT)
+                        .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }
 
@@ -122,7 +120,15 @@ public class AthleteController {
             String msg = "The id that you give doesnt match with the id of the user.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(msg);
+        }
+
+        if (athleteService.getAthlete(id) == null) {
+            String msg = "Bad request ,there is no athlete for that id.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
         log.info("The athlete has successfully been updated.");
@@ -161,7 +167,7 @@ public class AthleteController {
         }
 
         List<Inscription> inscriptions = inscriptionService.getEnabledInscriptions(id);
-        if (inscriptions == null) {
+        if (inscriptions.size() == 0 || inscriptions == null) {
             if (user.isEnabled() == false){
                 String msg = "The athlete that you asked is disabled.";
                 log.warn(msg);
@@ -172,7 +178,7 @@ public class AthleteController {
                 String msg = "The athlete that you asked doesnt have inscriptions.";
                 log.warn(msg);
                 return ResponseEntity
-                        .status(HttpStatus.NO_CONTENT)
+                        .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }
         }
@@ -198,7 +204,7 @@ public class AthleteController {
         }
 
         List<Watchlist> watchlists = watchlistService.getEnabledWatchlists(id);
-        if (watchlists == null) {
+        if (watchlists.size() == 0 || watchlists == null) {
             if (user.isEnabled() == false){
                 String msg = "The athlete that you asked is disabled.";
                 log.warn(msg);
@@ -209,7 +215,7 @@ public class AthleteController {
                 String msg = "The athlete that you asked doesnt have watchlists.";
                 log.warn(msg);
                 return ResponseEntity
-                        .status(HttpStatus.NO_CONTENT)
+                        .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }
         }

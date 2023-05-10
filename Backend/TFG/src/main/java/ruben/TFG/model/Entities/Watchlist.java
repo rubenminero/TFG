@@ -1,31 +1,28 @@
 package ruben.TFG.model.Entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import ruben.TFG.model.DTO.Entities.WatchlistDTO;
 
 @Entity
 @Table(name= "watchlist")
+@AllArgsConstructor
 public class Watchlist {
     private Long id;
     private Tournament tournament;
     private Athlete athlete;
     private Boolean enabled = Boolean.TRUE;
 
-    /**
-     * Constructor without any parameters.
-     */
+    public Watchlist(WatchlistDTO watchlist,Tournament tournament, Athlete athlete) {
+        this.id = watchlist.getId();
+        this.tournament = tournament;
+        this.athlete = athlete;
+        this.enabled = watchlist.getEnabled();
+    }
     public Watchlist(){
 
     }
 
-    /**
-     * Constructor with all the parameters for a watchlist.
-     * @param tournament, the tournament of the watchlist.
-     * @param athlete, the use of the watchlist.
-     */
-    public Watchlist(Tournament tournament, Athlete athlete){
-        this.tournament = tournament;
-        this.athlete = athlete;
-    }
 
     // Getters of this model
 
@@ -57,7 +54,7 @@ public class Watchlist {
      */
     @JoinColumn(name = "id_user")
     @ManyToOne(targetEntity = Athlete.class)
-    public Athlete getUser() {
+    public Athlete getAthlete() {
         return athlete;
     }
 
@@ -90,7 +87,7 @@ public class Watchlist {
      * Set the athlete of the watchlist.
      * @param athlete the new athlete for this watchlist.
      */
-    public void setUser(Athlete athlete) {
+    public void setAthlete(Athlete athlete) {
         this.athlete = athlete;
     }
     /**

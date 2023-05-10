@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ruben.TFG.model.DTO.Entities.Sports_typeDTO;
 import ruben.TFG.model.DTO.Entities.TournamentDTO;
 import ruben.TFG.model.Entities.Organizer;
 import ruben.TFG.model.Entities.Sports_type;
@@ -52,7 +51,7 @@ public class TournamentController {
             String msg = "There is no tournaments.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
 
@@ -89,8 +88,11 @@ public class TournamentController {
             }
         }
         else {
-            log.warn("The tournament by id has not been found");
-            return ResponseEntity.notFound().build();
+            String msg = "The tournament by id has not been found";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(msg);
         }
     }
 
@@ -98,7 +100,7 @@ public class TournamentController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('organizer:update')")
     @Operation(summary = "Update a tournament with the data provided.")
-    public ResponseEntity updateTournament(@PathVariable Long id, @RequestBody Tournament tournament) {
+    public ResponseEntity updateTournament(@PathVariable Long id, @RequestBody TournamentDTO tournamentDTO) {
         User user = userService.isAuthorized();
 
         if (user == null){
@@ -108,31 +110,59 @@ public class TournamentController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
-        if (!id.equals(tournament.getId())) {
+        if (!id.equals(tournamentDTO.getId())) {
             String msg = "Bad request ,the id given in the path doesnt match with the id on the organizer.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
-        if (!tournament.getSport_type().isEnabled() || !tournament.getOrganizer().isEnabled()){
-            if (!tournament.getSport_type().isEnabled()){
-                String msg = "Bad request ,the sport type for the tournament is disabled.";
+
+        if (tournamentService.getTournament(id) == null) {
+            String msg = "Bad request ,there is no tournament for that id.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(msg);
+        }
+        Organizer organizer = organizerService.getOrganizer(tournamentDTO.getOrganizer());
+        Sports_type sportType = sportsTypeService.getSport_type(tournamentDTO.getSport_type());
+        Tournament tournament = TournamentDTO.toTournament(tournamentDTO,organizer,sportType);
+        tournament.setOrganizer(organizer);
+        tournament.setSport_type(sportType);
+        if (tournament.getOrganizer() == null || tournament.getSport_type() == null){
+            if (tournament.getOrganizer() == null ) {
+                String msg = "The organizer of the tournament doesnt exist.";
                 log.warn(msg);
                 return ResponseEntity
-                        .status(HttpStatus.FORBIDDEN)
+                        .status(HttpStatus.NOT_FOUND)
                         .body(msg);
-            }else{
-                String msg = "Bad request ,the organizer for the tournament is disabled.";
+            }else {
+                String msg = "The sport type for the tournament doesnt exist.";
                 log.warn(msg);
                 return ResponseEntity
-                        .status(HttpStatus.FORBIDDEN)
+                        .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }
-
         }else{
-            log.info("Tournament updated successfully");
-            return ResponseEntity.ok(TournamentDTO.fromTournament(tournamentService.saveTournament(tournament)));
+            if (!tournament.getOrganizer().isEnabled() || !tournament.getSport_type().isEnabled()){
+                if (!tournament.getOrganizer().isEnabled()) {
+                    String msg = "The organizer of the tournament is disabled.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.NOT_FOUND)
+                            .body(msg);
+                }else {
+                    String msg = "The sport type for the tournament is disabled.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.NOT_FOUND)
+                            .body(msg);
+                }
+            }else{
+                log.info("The tournament has successfully been updated.");
+                return ResponseEntity.ok(TournamentDTO.fromTournament(tournamentService.saveTournament(tournament)));
+            }
         }
 
     }
@@ -150,30 +180,43 @@ public class TournamentController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
-
         Organizer organizer = organizerService.getOrganizer(tournamentDTO.getOrganizer());
         Sports_type sportType = sportsTypeService.getSport_type(tournamentDTO.getSport_type());
-        Tournament tournament = TournamentDTO.toTournament(tournamentDTO);
-        tournament.setOrganizer(organizer);
-        tournament.setSport_type(sportType);
-        if (!tournament.getSport_type().isEnabled() || !tournament.getOrganizer().isEnabled()){
-            if (!tournament.getSport_type().isEnabled()){
-                String msg = "Bad request ,the sport type for the tournament is disabled.";
+        Tournament tournament = TournamentDTO.toTournament(tournamentDTO,organizer,sportType);
+        tournament.setEnabled(true);
+        if (tournament.getOrganizer() == null || tournament.getSport_type() == null){
+            if (tournament.getOrganizer() == null ) {
+                String msg = "The organizer of the tournament doesnt exist.";
                 log.warn(msg);
                 return ResponseEntity
-                        .status(HttpStatus.FORBIDDEN)
+                        .status(HttpStatus.NOT_FOUND)
                         .body(msg);
-            }else{
-                String msg = "Bad request ,the organizer for the tournament is disabled.";
+            }else {
+                String msg = "The sport type for the tournament doesnt exist.";
                 log.warn(msg);
                 return ResponseEntity
-                        .status(HttpStatus.FORBIDDEN)
+                        .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }
-
         }else{
-            log.info("Tournament created successfully");
-            return ResponseEntity.ok(TournamentDTO.fromTournament(tournamentService.saveTournament(tournament)));
+            if (!tournament.getOrganizer().isEnabled() || !tournament.getSport_type().isEnabled()){
+                if (!tournament.getOrganizer().isEnabled()) {
+                    String msg = "The organizer of the tournament is disabled.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.NOT_FOUND)
+                            .body(msg);
+                }else {
+                    String msg = "The sport type for the tournament is disabled.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.NOT_FOUND)
+                            .body(msg);
+                }
+            }else{
+                log.info("The tournament has successfully been saved.");
+                return ResponseEntity.ok(TournamentDTO.fromTournament(tournamentService.saveTournament(tournament)));
+            }
         }
 
     }

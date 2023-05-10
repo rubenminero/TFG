@@ -1,9 +1,13 @@
 package ruben.TFG.model.Entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import ruben.TFG.model.DTO.Entities.TournamentDTO;
 
 @Entity
 @Table(name= "tournaments")
+@AllArgsConstructor
 public class Tournament {
     private Long id;
     private String name;
@@ -15,48 +19,20 @@ public class Tournament {
     private Organizer organizer;
     private Sports_type sport_type;
 
-    /**
-     * Constructor without any parameters.
-     */
     public Tournament(){
 
     }
-
-    /**
-     * Constructor with all the parameters for a tournament.
-     * @param name, the name of the tournament.
-     * @param inscription, the boolean that says if users can register for that tournament.
-     * @param location, the location for this tournament.
-     * @param address, the address for this tournament.
-     * @param description, the description for this tournament.
-     * @param organizer, the organizer for this tournament.
-     * @param sport_type, the sport for this tournament.
-     */
-        public Tournament(String name, Boolean inscription, String location, String address, String description,Organizer organizer,Sports_type sport_type){
-        this.name = name;
-        this.inscription = inscription;
-        this.location = location;
-        this.address = address;
-        this.description = description;
+    public Tournament(TournamentDTO tournament, Organizer organizer, Sports_type sportsType) {
+        this.id = tournament.getId();
+        this.name = tournament.getName();
+        this.location = tournament.getLocation();
+        this.address = tournament.getAddress();
+        this.description = tournament.getDescription();
+        this.enabled = tournament.getEnabled();
+        this.inscription = tournament.getInscription();
         this.organizer = organizer;
-        this.sport_type = sport_type;
+        this.sport_type = sportsType;
     }
-    /**
-     * Constructor with all the parameters for a tournament, without the organizer and the sport type.
-     * @param name, the name of the tournament.
-     * @param inscription, the boolean that says if users can register for that tournament.
-     * @param location, the location for this tournament.
-     * @param address, the address for this tournament.
-     * @param description, the description for this tournament.
-     */
-    public Tournament(String name, Boolean inscription, String location, String address, String description){
-        this.name = name;
-        this.inscription = inscription;
-        this.location = location;
-        this.address = address;
-        this.description = description;
-    }
-
 
     // Getters of this model
 

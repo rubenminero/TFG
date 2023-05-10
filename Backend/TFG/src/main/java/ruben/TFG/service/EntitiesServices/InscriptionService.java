@@ -68,7 +68,7 @@ public class InscriptionService {
         List<Inscription> inscriptions_enabled = new ArrayList<Inscription>();
         List<Inscription> inscriptions = this.getAllInscriptions();
         for (Inscription i : inscriptions) {
-            if (i.isEnabled() && i.getUser().getId() == id){
+            if (i.isEnabled() && i.getAthlete().getId() == id){
                 inscriptions_enabled.add(i);
             }
         }

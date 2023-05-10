@@ -28,7 +28,7 @@ public class Sports_typeController {
     private final Sports_typeService sportsTypeService;
     private final UserService userService;
 
-    @PostMapping("/")
+    @PostMapping("")
     @PreAuthorize("hasAuthority('admin:create')")
     @Operation(summary = "Create a sport type with the data provided.")
     public ResponseEntity createSport_Type(@RequestBody Sports_type sport_type) {
@@ -64,6 +64,14 @@ public class Sports_typeController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
+
+        if (sportsTypeService.getSport_type(id) == null) {
+            String msg = "Bad request ,there is no sport type for that id.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(msg);
+        }
         log.info("Sport type updated successfully");
         return ResponseEntity.ok(Sports_typeDTO.fromSport_type(sportsTypeService.saveSport_type(sport_type)));
     }
@@ -97,7 +105,7 @@ public class Sports_typeController {
             String msg = "The sport type that you asked doesnt exist.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
     }
@@ -120,7 +128,7 @@ public class Sports_typeController {
             String msg = "There is no sports types.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
 

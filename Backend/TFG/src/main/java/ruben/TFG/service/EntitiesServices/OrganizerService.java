@@ -8,6 +8,7 @@ import ruben.TFG.model.Whitelist.Role;
 import ruben.TFG.repository.EntitiesRepositories.OrganizerRepository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,6 +48,7 @@ public class OrganizerService {
     public void changeStateOrganizer(Long id){
         Organizer organizer = this.getOrganizer(id);
         organizer.setEnabled(!organizer.isEnabled());
+        organizer.setDisabled_at(new Date());
         organizerRepository.save(organizer);
     }
 

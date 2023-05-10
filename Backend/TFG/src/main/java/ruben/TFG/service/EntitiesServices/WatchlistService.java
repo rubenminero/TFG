@@ -69,7 +69,7 @@ public class WatchlistService {
         List<Watchlist> watchlists_enabled = new ArrayList<Watchlist>();
         List<Watchlist> watchlists = this.getAllWatchlists();
         for (Watchlist w : watchlists) {
-            if (w.isEnabled() && w.getUser().getId() == id){
+            if (w.isEnabled() && w.getAthlete().getId() == id){
                 watchlists_enabled.add(w);
             }
         }

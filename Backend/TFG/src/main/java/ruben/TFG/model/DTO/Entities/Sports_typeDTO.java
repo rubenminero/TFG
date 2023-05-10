@@ -33,6 +33,6 @@ public class Sports_typeDTO {
     }
 
     public static Sports_type toSport_type(Sports_typeDTO sport_type) {
-        return new Sports_type(sport_type.name);
+        return new Sports_type(sport_type);
     }
 }

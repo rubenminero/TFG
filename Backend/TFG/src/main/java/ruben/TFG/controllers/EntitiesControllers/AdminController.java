@@ -7,9 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ruben.TFG.model.DTO.Entities.*;
+import ruben.TFG.model.DTO.Entities.WatchlistDTO;
 import ruben.TFG.model.Entities.*;
 import ruben.TFG.service.EntitiesServices.AdminService;
 import ruben.TFG.service.EntitiesServices.UserService;
@@ -47,7 +47,7 @@ public class AdminController {
             String msg = "There is no organizers.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
         List<OrganizerDTO> organizerDTOS = organizers.stream().map(OrganizerDTO::new).collect(Collectors.toList());
@@ -72,7 +72,7 @@ public class AdminController {
             String msg = "There is no organizer with this id.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
         adminService.changeStateOrganizer(id);
@@ -102,7 +102,7 @@ public class AdminController {
             String msg = "There is no athletes.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
         List<AthleteDTO> athleteDTOS = athletes.stream().map(AthleteDTO::new).collect(Collectors.toList());
@@ -128,7 +128,7 @@ public class AdminController {
             String msg = "There is no athlete with this id.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
         adminService.changeStateAthlete(id);
@@ -158,7 +158,7 @@ public class AdminController {
             String msg = "There is no tournaments.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
         List<TournamentDTO> tournamentDTOS = tournaments.stream().map(TournamentDTO::new).collect(Collectors.toList());
@@ -184,7 +184,7 @@ public class AdminController {
             String msg = "There is no tournament with this id.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
         adminService.changeStateTournament(id);
@@ -214,7 +214,7 @@ public class AdminController {
             String msg = "There is no sports types.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
         List<Sports_typeDTO> sportsTypeDTOS = sportsTypes.stream().map(Sports_typeDTO::new).collect(Collectors.toList());
@@ -239,7 +239,7 @@ public class AdminController {
             String msg = "There is no sport type with this id.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
         adminService.changeStateSport_type(id);
@@ -268,7 +268,7 @@ public class AdminController {
             String msg = "There is no inscriptions.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
         List<InscriptionDTO> inscriptionDTOS = inscriptions.stream().map(InscriptionDTO::new).collect(Collectors.toList());
@@ -293,7 +293,7 @@ public class AdminController {
             String msg = "There is no inscription with this id.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
         adminService.changeStateInscription(id);
@@ -323,7 +323,7 @@ public class AdminController {
             String msg = "There is no watchlists.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
         List<WatchlistDTO> watchlistDTOS = watchlists.stream().map(WatchlistDTO::new).collect(Collectors.toList());
@@ -348,7 +348,7 @@ public class AdminController {
             String msg = "There is no watchlist with this id.";
             log.warn(msg);
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
         adminService.changeStateWatchlist(id);
