@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="52be2cbe-5358-42bf-b7ca-2e7303308aeb" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/TfgApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/config/APIDocs/ApiConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/config/Application/ApplicationConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/config/Security/JWTAuthFIlter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/config/Security/SecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/controllers/AuthController/AuthController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/controllers/EntitiesControllers/AdminController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/controllers/EntitiesControllers/AthleteController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/controllers/EntitiesControllers/InscriptionController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/controllers/EntitiesControllers/OrganizerController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/controllers/EntitiesControllers/Sports_typeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/controllers/EntitiesControllers/TournamentController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/controllers/EntitiesControllers/WatchlistController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/DTO/Auth/AuthRegisterDTOs/AuthRegisterAdminDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/DTO/Auth/AuthRegisterDTOs/AuthRegisterAthleteDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/DTO/Auth/AuthRegisterDTOs/AuthRegisterOrganizerDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/DTO/Auth/AuthRequestDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/DTO/Auth/AuthResponseDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/DTO/Entities/AthleteDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/DTO/Entities/InscriptionDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/DTO/Entities/OrganizerDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/DTO/Entities/Sports_typeDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/DTO/Entities/TournamentDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/DTO/Entities/UserDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/DTO/Entities/WatchlistDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/Entities/Admin.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/Entities/Athlete.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/Entities/Inscription.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/Entities/Organizer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/Entities/Sports_type.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/Entities/Tournament.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/Entities/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/Entities/Watchlist.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/JWT_Token/Token.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/JWT_Token/TokenType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/Whitelist/Permission.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/model/Whitelist/Role.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/repository/EntitiesRepositories/AdminRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/repository/EntitiesRepositories/AthleteRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/repository/EntitiesRepositories/InscriptionRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/repository/EntitiesRepositories/OrganizerRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/repository/EntitiesRepositories/Sports_typeRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/repository/EntitiesRepositories/TournamentRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/repository/EntitiesRepositories/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/repository/EntitiesRepositories/WatchlistRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/repository/TokenRepository/TokenRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/service/Auth/AuthService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/service/Auth/JWTService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/service/Auth/LogoutService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/service/EntitiesServices/AdminService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/service/EntitiesServices/AthleteService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/service/EntitiesServices/InscriptionService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/service/EntitiesServices/OrganizerService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/service/EntitiesServices/Sports_typeService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/service/EntitiesServices/TournamentService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/service/EntitiesServices/UserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ruben/TFG/service/EntitiesServices/WatchlistService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ruben/TFG/TfgApplicationTests.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Use Maven wrapper" />
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2PqEIcG6yd0TeyKj0XpkwMb8E57" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "spring.configuration.checksum": "88fbdad14999a98dcfe583ae9fd8f25c",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TfgApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="SPM" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="ruben.SPM.TfgApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="52be2cbe-5358-42bf-b7ca-2e7303308aeb" name="Changes" comment="" />
+      <created>1684176133983</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1684176133983</updated>
+      <workItem from="1684176136376" duration="91000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
