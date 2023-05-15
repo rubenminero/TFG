@@ -1,0 +1,38 @@
+version: '3.9' # Por tener docker v19.03.0 o superior
+
+services:
+    back:
+        image: rubenminero/back_spm:version1.0
+        container_name: back_spm
+        restart: always
+        environment:
+            SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/SPM
+            SPRING_DATASOURCE_USERNAME: postgres
+            SPRING_DATASOURCE_PASSWORD: admin
+            SPRING_JPA_HIBERNATE_DDL_AUTO: update
+        ports:
+            - 8080:8080
+        networks:
+            - back
+        depends_on:
+            - db
+    db:
+        image: postgres:15.3-alpine3.18
+        container_name: postgres_spm
+        restart: always
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: admin
+            POSTGRES_DB: SPM
+            POSTGRES_ROOT_PASSWORD: root
+        volumes:
+            - /tmp/database:/var/lib/postgresql/data
+            - ./database/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
+        ports:  
+            - 5432:5432
+        networks:
+            - back
+
+networks:
+    back:
+        driver: bridge
