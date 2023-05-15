@@ -2,7 +2,7 @@ version: '3.9' # Por tener docker v19.03.0 o superior
 
 services:
     back:
-        image: rubenminero/back_spm:version1.0
+        image: rubenminero/back_spm:version1.1
         container_name: back_spm
         restart: always
         environment:
