@@ -61,7 +61,7 @@ public class JWTAuthFIlter extends OncePerRequestFilter {
         try {
 
 
-            if (auth_whitelist.contains(request.getServletPath()) || request.getServletPath().startsWith("v3/api-docs/")|| request.getServletPath().startsWith("/swagger-ui/")){
+            if (auth_whitelist.contains(request.getServletPath())){
                 filterChain.doFilter(request, response);
                 return;
             }

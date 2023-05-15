@@ -9,6 +9,7 @@ import ruben.TFG.model.Whitelist.Role;
 import ruben.TFG.repository.EntitiesRepositories.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service for user class.
@@ -72,4 +73,14 @@ public class UserService {
         return user;
     }
 
+
+    public boolean validUsername(String username){
+        User username_check = this.getUserByUsername(username);
+        if (username_check != null){
+            return true;
+        }else{
+            return false;
+        }
     }
+
+}
