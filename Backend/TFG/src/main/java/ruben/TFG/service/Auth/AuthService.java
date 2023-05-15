@@ -26,7 +26,9 @@ import ruben.TFG.repository.EntitiesRepositories.AthleteRepository;
 import ruben.TFG.repository.EntitiesRepositories.OrganizerRepository;
 import ruben.TFG.repository.EntitiesRepositories.UserRepository;
 import ruben.TFG.repository.TokenRepository.TokenRepository;
+import ruben.TFG.service.EntitiesServices.AdminService;
 import ruben.TFG.service.EntitiesServices.AthleteService;
+import ruben.TFG.service.EntitiesServices.OrganizerService;
 
 import java.io.IOException;
 
@@ -35,9 +37,9 @@ import java.io.IOException;
 
 public class AuthService {
     private final UserRepository userrepository;
-    private final OrganizerRepository organizerRepository;
-    private final AdminRepository adminRepository;
-    private final AthleteRepository athleteRepository;
+    private final OrganizerService organizerService;
+    private final AdminService adminService;
+    private final AthleteService athleteService;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JWTService jwtService;
@@ -57,7 +59,7 @@ public class AuthService {
         Organizer organizer = new Organizer(user,request.getCompany_name(),request.getAddress());
 
 
-        var saveUser = organizerRepository.save(organizer);
+        var saveUser = organizerService.saveOrganizer(organizer);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(saveUser, jwtToken);
@@ -81,7 +83,7 @@ public class AuthService {
         Athlete athlete = new Athlete(user,request.getPhone_number());
 
 
-        var saveUser = athleteRepository.save(athlete);
+        var saveUser = athleteService.saveAthlete(athlete);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(saveUser, jwtToken);
@@ -105,7 +107,7 @@ public class AuthService {
         Admin admin = new Admin(user,request.getValid_from());
 
 
-        var saveUser = adminRepository.save(admin);
+        var saveUser = adminService.saveAdmin(admin);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(saveUser, jwtToken);

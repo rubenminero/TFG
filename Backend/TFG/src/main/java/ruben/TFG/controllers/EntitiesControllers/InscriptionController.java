@@ -150,6 +150,7 @@ public class InscriptionController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
+
         Tournament tournament = tournamentService.getTournament(inscriptionDTO.getTournament());
         Athlete athlete = athleteService.getAthlete(inscriptionDTO.getAthlete());
         Inscription inscription = InscriptionDTO.toInscription(inscriptionDTO,tournament,athlete);

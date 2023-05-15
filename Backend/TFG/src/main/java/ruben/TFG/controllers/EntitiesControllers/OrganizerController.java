@@ -41,6 +41,7 @@ public class OrganizerController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
+
         List<Organizer> organizers = organizerService.getEnabledOrganizers();
         if (organizers.size() == 0 || organizers == null) {
             String msg = "There is no athletes.";
@@ -108,6 +109,14 @@ public class OrganizerController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
+        Boolean username_check = userService.validUsername(organizer.getUsername());
+        if (username_check){
+            String msg = "This username is already taken.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(msg);
+        }
         if (!id.equals(organizer.getId())) {
             String msg = "Bad request ,the id given in the path doesnt match with the id on the organizer.";
             log.warn(msg);
@@ -135,6 +144,14 @@ public class OrganizerController {
 
         if (user == null){
             String msg = "This user cant do that operation.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(msg);
+        }
+        Boolean username_check = userService.validUsername(organizer.getUsername());
+        if (username_check){
+            String msg = "This username is already taken.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)

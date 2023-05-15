@@ -42,18 +42,16 @@ public class AthleteController {
     @GetMapping("")
     @PreAuthorize("hasAuthority('athlete:read')")
     @Operation(summary = "Return all the enabled athletes in the database.")
-    public ResponseEntity getAllAthletes() {
+    public ResponseEntity<?> getAllAthletes() {
         User user = userService.isAuthorized();
 
         if (user == null){
             String msg = "This user cant do that operation.";
             log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(msg);
         }
         List<Athlete> athletes = athleteService.getEnabledAthletes();
-        if (athletes.size() == 0 || athletes == null) {
+        if (athletes.size() == 0 ) {
             String msg = "There is no athletes.";
             log.warn(msg);
             return ResponseEntity
@@ -62,7 +60,9 @@ public class AthleteController {
         }
         List<AthleteDTO> athleteDTOS = athletes.stream().map(AthleteDTO::new).collect(Collectors.toList());
         log.info("The athletes has successfully been retrieved.");
-        return ResponseEntity.ok(athleteDTOS);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(athleteDTOS);
     }
 
     @GetMapping("/{id}")
@@ -116,6 +116,14 @@ public class AthleteController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
+        Boolean username_check = userService.validUsername(athlete.getUsername());
+        if (username_check){
+            String msg = "This username is already taken.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(msg);
+        }
         if (!id.equals(athlete.getId())) {
             String msg = "The id that you give doesnt match with the id of the user.";
             log.warn(msg);
@@ -143,6 +151,14 @@ public class AthleteController {
 
         if (user == null){
             String msg = "This user cant do that operation.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(msg);
+        }
+        Boolean username_check = userService.validUsername(athlete.getUsername());
+        if (username_check){
+            String msg = "This username is already taken.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)

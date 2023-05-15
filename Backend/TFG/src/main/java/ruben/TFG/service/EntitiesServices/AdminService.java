@@ -7,6 +7,8 @@ import ruben.TFG.model.Entities.*;
 import ruben.TFG.model.Whitelist.Role;
 import ruben.TFG.repository.EntitiesRepositories.AdminRepository;
 import ruben.TFG.repository.EntitiesRepositories.AthleteRepository;
+import ruben.TFG.repository.EntitiesRepositories.OrganizerRepository;
+import ruben.TFG.repository.EntitiesRepositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Date;
