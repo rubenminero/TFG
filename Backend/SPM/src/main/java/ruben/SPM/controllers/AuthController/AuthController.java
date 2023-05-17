@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.web.bind.annotation.*;
 import ruben.SPM.model.DTO.Auth.AuthRegisterDTOs.AuthRegisterAdminDTO;
 import ruben.SPM.model.DTO.Auth.AuthRegisterDTOs.AuthRegisterAthleteDTO;
@@ -80,15 +81,7 @@ public class AuthController {
     @PostMapping("/authenticate")
     @Operation(summary = "Authenticate the user for authenticated operations.Returning the token for that user ")
     public ResponseEntity<?> authenticate(@Parameter(name = "The DTO that contains the login data") @RequestBody AuthRequestDTO request) {
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        final User user = userService.getUserByUsername(request.getUsername());
-        return ResponseEntity.ok(service.authenticate(user));
+        return service.authenticate(request);
     }
 
     @PostMapping("/refresh-token")

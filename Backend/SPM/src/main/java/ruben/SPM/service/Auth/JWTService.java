@@ -8,6 +8,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import ruben.SPM.model.Entities.User;
 
 import java.security.Key;
 import java.util.Date;
@@ -33,26 +34,26 @@ public class JWTService {
             return claimsResolver.apply(claims);
         }
 
-        public String generateToken(UserDetails userDetails) {
+        public String generateToken(User userDetails) {
             return generateToken(new HashMap<>(), userDetails);
         }
 
         public String generateToken(
                 Map<String, Object> extraClaims,
-                UserDetails userDetails
+                User userDetails
         ) {
             return buildToken(extraClaims, userDetails, jwtExpiration);
         }
 
         public String generateRefreshToken(
-                UserDetails userDetails
+                User userDetails
         ) {
             return buildToken(new HashMap<>(), userDetails, refreshExpiration);
         }
 
         private String buildToken(
                 Map<String, Object> extraClaims,
-                UserDetails userDetails,
+                User userDetails,
                 long expiration
         ) {
             return Jwts

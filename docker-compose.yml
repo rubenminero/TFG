@@ -2,7 +2,7 @@ version: '3.9' # Por tener docker v19.03.0 o superior
 
 services:
     back:
-        image: rubenminero/back_spm:version1.3
+        image: rubenminero/back_spm:version1.4
         container_name: back_spm
         restart: always
         environment:
@@ -28,7 +28,7 @@ services:
         volumes:
             - /tmp/database:/var/lib/postgresql/data
             - ./database/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
-        ports:  
+        ports:
             - 5432:5432
         networks:
             - back

@@ -24,7 +24,7 @@ import static ruben.SPM.model.Whitelist.Role.*;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final JWTAuthFIlter jwtAuthFilter;
+    private final JWTAuthFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
 
@@ -108,7 +108,6 @@ public class SecurityConfig {
                         .anyRequest()
                         .authenticated())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .httpBasic(Customizer.withDefaults())
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout()

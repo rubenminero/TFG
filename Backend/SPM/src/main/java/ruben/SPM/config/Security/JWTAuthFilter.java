@@ -1,6 +1,7 @@
 package ruben.SPM.config.Security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,39 +19,18 @@ import ruben.SPM.repository.TokenRepository.TokenRepository;
 import ruben.SPM.service.Auth.JWTService;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class JWTAuthFIlter extends OncePerRequestFilter {
+public class JWTAuthFilter extends OncePerRequestFilter {
 
     private final JWTService jwtService;
     private final UserDetailsService userDetailsService;
     private final TokenRepository tokenRepository;
     private final ObjectMapper objectMapper;
 
-    private final ArrayList<String> auth_whitelist =new ArrayList<String>(List.of(
-                "/v2/api-docs",
-                "/v3/api-docs",
-                "/v3/api-docs/**",
-                "/swagger-resources",
-                "/swagger-resources/**",
-                "/configuration/ui",
-                "/configuration/security",
-                "/swagger-ui/**",
-                "/webjars/**",
-                "/swagger-ui.html",
-                "/swagger-ui/index.html",
-                "/api/auth/register-organizer",
-                "/api/auth/register-admin",
-                "/api/auth/register-athlete",
-                "/api/auth/authenticate",
-                "/api/auth/refresh-token",
-                "/error/**"
-    ));
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -60,7 +40,7 @@ public class JWTAuthFIlter extends OncePerRequestFilter {
         try {
 
 
-            if (auth_whitelist.contains(request.getServletPath())){
+            if (!request.getServletPath().startsWith("/api") || request.getServletPath().startsWith("/api/auth")){
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -102,6 +82,17 @@ public class JWTAuthFIlter extends OncePerRequestFilter {
             }
 
             filterChain.doFilter(request, response);
+        } catch (ExpiredJwtException jwt) {
+            log.error(jwt.getMessage(), jwt);
+            String errorPayload = objectMapper.writeValueAsString(Map.of(
+                    "type", "JWT_Expired",
+                    "title", "JWT",
+                    "status", HttpServletResponse.SC_UNAUTHORIZED,
+                    "detail", "This token is already expired."
+            ));
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/problem+json");
+            response.getWriter().write(errorPayload);
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
             String errorPayload = objectMapper.writeValueAsString(Map.of(

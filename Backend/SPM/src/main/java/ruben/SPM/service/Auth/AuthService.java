@@ -4,9 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import ruben.SPM.model.DTO.Auth.AuthRegisterDTOs.AuthRegisterAdminDTO;
 import ruben.SPM.model.DTO.Auth.AuthRegisterDTOs.AuthRegisterAthleteDTO;
 import ruben.SPM.model.Entities.Admin;
@@ -28,17 +33,17 @@ import ruben.SPM.service.EntitiesServices.OrganizerService;
 import ruben.SPM.service.EntitiesServices.UserService;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 @Service
 @RequiredArgsConstructor
-
+@Slf4j
 public class AuthService {
     private final UserService userService;
     private final OrganizerService organizerService;
     private final AdminService adminService;
     private final AthleteService athleteService;
     private final TokenRepository tokenRepository;
-    private final PasswordEncoder passwordEncoder;
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
 
@@ -48,7 +53,7 @@ public class AuthService {
                 .first_name(request.getFirst_name())
                 .last_name(request.getLast_name())
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .password(request.getPassword())
                 .nif(request.getNif())
                 .role(request.getRole())
                 .build();
@@ -57,7 +62,10 @@ public class AuthService {
 
 
         var saveUser = organizerService.saveOrganizer(organizer);
-        var jwtToken = jwtService.generateToken(user);
+        var extraclaims = new HashMap<String,Object>();
+        extraclaims.put("id",saveUser.getId());
+        extraclaims.put("role",saveUser.getRole());
+        var jwtToken = jwtService.generateToken(extraclaims,user);
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(saveUser, jwtToken);
 
@@ -72,7 +80,7 @@ public class AuthService {
                 .first_name(request.getFirst_name())
                 .last_name(request.getLast_name())
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .password(request.getPassword())
                 .nif(request.getNif())
                 .role(request.getRole())
                 .build();
@@ -81,7 +89,10 @@ public class AuthService {
 
 
         var saveUser = athleteService.saveAthlete(athlete);
-        var jwtToken = jwtService.generateToken(user);
+        var extraclaims = new HashMap<String,Object>();
+        extraclaims.put("id",saveUser.getId());
+        extraclaims.put("role",saveUser.getRole());
+        var jwtToken = jwtService.generateToken(extraclaims,user);
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(saveUser, jwtToken);
 
@@ -96,7 +107,7 @@ public class AuthService {
                 .first_name(request.getFirst_name())
                 .last_name(request.getLast_name())
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .password(request.getPassword())
                 .nif(request.getNif())
                 .role(request.getRole())
                 .build();
@@ -105,7 +116,10 @@ public class AuthService {
 
 
         var saveUser = adminService.saveAdmin(admin);
-        var jwtToken = jwtService.generateToken(user);
+        var extraclaims = new HashMap<String,Object>();
+        extraclaims.put("id",saveUser.getId());
+        extraclaims.put("role",saveUser.getRole());
+        var jwtToken = jwtService.generateToken(extraclaims,user);
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(saveUser, jwtToken);
 
@@ -115,15 +129,44 @@ public class AuthService {
                 .build();
     }
 
-    public AuthResponseDTO authenticate(User user) {
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
-        return AuthResponseDTO.builder()
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
-                .build();
+    public ResponseEntity<?> authenticate(AuthRequestDTO request) {
+        try{
+            Boolean username_check = userService.validUsername(request.getUsername());
+            if (!username_check){
+                String msg = "This username doesnt exist.";
+                log.warn(msg);
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .body(msg);
+            }else{
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword());
+                authenticationManager.authenticate(auth);
+                var user = userService.getUserByUsername(request.getUsername());
+                var extraclaims = new HashMap<String,Object>();
+                extraclaims.put("id",user.getId());
+                extraclaims.put("role",user.getRole());
+                var jwtToken = jwtService.generateToken(extraclaims,user);
+                var refreshToken = jwtService.generateRefreshToken(user);
+                revokeAllUserTokens(user);
+                saveUserToken(user, jwtToken);
+                String msg = "The user is logged.";
+                log.info(msg);
+                return ResponseEntity
+                        .status(HttpStatus.OK)
+                        .body(AuthResponseDTO.builder()
+                                .accessToken(jwtToken)
+                                .refreshToken(refreshToken)
+                                .build());
+            }
+        }catch (BadCredentialsException auth){
+            String msg = "Wrong credentials.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(msg);
+        }
     }
 
     private void saveUserToken(User user, String jwtToken) {
@@ -163,7 +206,10 @@ public class AuthService {
         if (username != null) {
             var user = this.userService.getUserByUsername(username);
             if (jwtService.isTokenValid(refreshToken, user)) {
-                var accessToken = jwtService.generateToken(user);
+                var extraclaims = new HashMap<String,Object>();
+                extraclaims.put("id",user.getId());
+                extraclaims.put("role",user.getRole());
+                var accessToken = jwtService.generateToken(extraclaims,user);
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
                 var authResponse = AuthResponseDTO.builder()
