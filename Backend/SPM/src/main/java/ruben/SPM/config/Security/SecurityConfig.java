@@ -50,6 +50,8 @@ public class SecurityConfig {
         http
                 .csrf()
                 .disable()
+                .cors()
+                .disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_WHITELIST)
                         .permitAll()
