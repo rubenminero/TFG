@@ -16,6 +16,7 @@ import { LoginFormComponent } from './components/forms/login-form/login-form.com
 import { RegisterAthleteComponent } from './components/forms/register-athlete/register-athlete.component';
 import { PopUpRegisterComponent } from './components/pop-ups/pop-up-register/pop-up-register.component';
 import { RegisterOrganizerComponent } from './components/forms/register-organizer/register-organizer.component';
+import { AboutusPageComponent } from './pages/aboutus-page/aboutus-page.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { RegisterOrganizerComponent } from './components/forms/register-organize
     RegisterAthleteComponent,
     PopUpRegisterComponent,
     RegisterOrganizerComponent,
+    AboutusPageComponent,
   ],
   imports: [
     BrowserModule,

@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { AthleteRegisterComponent } from './pages/athlete-register/athlete-register.component';
 import { OrganizerRegisterComponent } from './pages/organizer-register/organizer-register.component';
+import { AboutusPageComponent } from './pages/aboutus-page/aboutus-page.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path: 'register-organizer',
     component: OrganizerRegisterComponent,
+  },
+  {
+    path: 'about-us',
+    component: AboutusPageComponent,
   },
 ];
 

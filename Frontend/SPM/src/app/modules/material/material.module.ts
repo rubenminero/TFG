@@ -9,14 +9,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatIconModule } from '@angular/material/icon';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
+import { MatIconModule } from '@angular/material/icon';
 @NgModule({
   declarations: [],
   imports: [CommonModule],
@@ -29,7 +28,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatTableModule,
     MatGridListModule,
     MatMenuModule,
-    MatIconModule,
     LayoutModule,
     MatSidenavModule,
     MatListModule,
@@ -37,6 +35,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatDialogModule,
     MatPaginatorModule,
     MatTableModule,
+    MatIconModule,
   ],
 })
 export class MaterialModule {}
