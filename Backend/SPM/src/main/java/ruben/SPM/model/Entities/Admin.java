@@ -5,11 +5,12 @@ import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import ruben.SPM.model.Whitelist.Role;
 
 import java.util.Date;
 
 @Entity
-@Table(name= "admins")
+@Table(name = "admins")
 @Inheritance(strategy = InheritanceType.JOINED)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,14 +29,16 @@ public class Admin extends User {
     @Transient
     @Email
     private String email;
+    @Transient
+    private Role role;
 
     private Long id;
     private Date valid_from;
     private Date valid_to;
 
-
-    public Admin( User user, Date valid_from) {
-        super(user.getId(), user.getUsername(),user.getPassword(),user.getFirst_name(),user.getLast_name(),user.getNif(),user.getEmail(),user.getRole(),user.getTokens());
+    public Admin(User user, Date valid_from) {
+        super(user.getId(), user.getUsername(), user.getPassword(), user.getFirst_name(), user.getLast_name(),
+                user.getNif(), user.getEmail(), user.getRole(), user.getTokens());
         this.valid_from = valid_from;
         this.valid_to = null;
     }
@@ -44,6 +47,7 @@ public class Admin extends User {
 
     /**
      * Get the id of the admin.
+     * 
      * @return the id of the admin.
      */
     @Id
@@ -55,6 +59,7 @@ public class Admin extends User {
 
     /**
      * Get the valid_from of the admin.
+     * 
      * @return the valid_from of the admin.
      */
     @Column(name = "valid_from")
@@ -64,17 +69,18 @@ public class Admin extends User {
 
     /**
      * Get the valid_to of the admin.
+     * 
      * @return the valid_toC of the admin.
      */
     public Date getValid_to() {
         return valid_to;
     }
 
-
     // Setters of this model
 
     /**
      * Set the id of the admin, which cannot be repeated.
+     * 
      * @param id the new id for this admin.
      */
     public void setId(Long id) {
@@ -83,14 +89,16 @@ public class Admin extends User {
 
     /**
      * Set the valid_from of the admin.
+     * 
      * @param valid_from the new valid_from of the admin.
      */
     public void setValidFrom(Date valid_from) {
-         this.valid_from = valid_from;
+        this.valid_from = valid_from;
     }
 
     /**
      * Set the valid_to of the admin.
+     * 
      * @param valid_to the new valid_to of the admin.
      */
     public void setValid_to(Date valid_to) {

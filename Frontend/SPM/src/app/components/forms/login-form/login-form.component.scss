@@ -1,11 +1,16 @@
 .login{
-  font-size : 20px;
+  font-size : 30px;
   display: flex;
   justify-content: center;
   margin: 0 auto;
   margin-top: 400px;
 }
 
-button {
-  width: 100%;
+.button {
+  justify-content: center;
+}
+
+.field {
+  margin-left: 10px;
+  margin-right: 0px;
 }

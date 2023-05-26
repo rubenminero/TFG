@@ -14,6 +14,12 @@ export class AuthService {
       Authorization: 'Bearer ' + this.getAccessToken(),
     },
   };
+  httpOptionsForRefresh = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.getRefreshToken(),
+    },
+  };
   constructor(private http: HttpClient, private envService: EnvService) {}
 
   login(username: string, password: string): Observable<any> {
@@ -80,5 +86,20 @@ export class AuthService {
       subject = decodedToken.sub;
     }
     return subject;
+  }
+
+  getPathHome(): String {
+    let path = '';
+    let role = this.getRole();
+    if (role === 'athlete') {
+      path = '/home-athlete';
+    } else if (role === 'organizer') {
+      path = '/home-organizer';
+    } else if (role === 'admin') {
+      path = '/home-admin';
+    } else {
+      path = '/role-error';
+    }
+    return path;
   }
 }

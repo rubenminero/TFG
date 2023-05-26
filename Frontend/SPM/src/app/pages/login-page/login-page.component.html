@@ -8,19 +8,28 @@
     </app-login-form>
     <div class="flex-column">
       <p>No estas registrado?</p>
-      <button
-        mat-raised-button
-        color="primary"
-        routerLink="/register-organizer"
-      >
-        Regístrate como organizador
-      </button>
-      <button mat-raised-button color="primary" routerLink="/register-athlete">
-        Regístrate como deportista
-      </button>
+    </div>
+    <div class="flex-column">
+      <div class="button">
+        <button
+          mat-raised-button
+          color="primary"
+          routerLink="/register-organizer"
+        >
+          Regístrate como organizador
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          routerLink="/register-athlete"
+        >
+          Regístrate como deportista
+        </button>
+      </div>
     </div>
   </div>
-  <div *ngIf="this.loading">
+
+  <div *ngIf="this.loading" class="spinner">
     <mat-spinner></mat-spinner>
   </div>
 </div>

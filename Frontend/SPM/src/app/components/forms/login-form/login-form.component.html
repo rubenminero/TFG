@@ -20,7 +20,7 @@
             Nombre de usuario obligatorio
           </mat-error>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field class="field">
           <input
             matInput
             placeholder="Contraseña"
@@ -33,19 +33,19 @@
             Contraseña obligatoria
           </mat-error>
         </mat-form-field>
-
-        <button
-          mat-raised-button
-          color="primary"
-          type="submit"
-          [disabled]="!form.valid"
-        >
-          Iniciar sesion
-        </button>
-
         <mat-error *ngIf="error">
           {{ error }}
         </mat-error>
+        <mat-card-actions class="button">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!form.valid"
+          >
+            Iniciar sesion
+          </button>
+        </mat-card-actions>
       </form>
     </mat-card-content>
   </mat-card>
