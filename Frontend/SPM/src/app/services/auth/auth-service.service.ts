@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -20,7 +21,11 @@ export class AuthService {
       Authorization: 'Bearer ' + this.getRefreshToken(),
     },
   };
-  constructor(private http: HttpClient, private envService: EnvService) {}
+  constructor(
+    private http: HttpClient,
+    private envService: EnvService,
+    private router: Router
+  ) {}
 
   login(username: string, password: string): Observable<any> {
     let body = {
@@ -91,15 +96,34 @@ export class AuthService {
   getPathHome(): String {
     let path = '';
     let role = this.getRole();
-    if (role === 'athlete') {
-      path = '/home-athlete';
-    } else if (role === 'organizer') {
-      path = '/home-organizer';
-    } else if (role === 'admin') {
-      path = '/home-admin';
+
+    if (role === 'ATHLETE') {
+      path = '/athletes-menu';
+    } else if (role === 'ORGANIZER') {
+      path = '/organizers-menu';
+    } else if (role === 'ROLE_ADMIN') {
+      path = '/admins-menu';
     } else {
-      path = '/role-error';
+      path = '';
     }
+    console.log(path);
+    console.log(role);
     return path;
+  }
+
+  getPath(): void {
+    let path = '';
+    let role = this.getRole();
+    console.log(path);
+    console.log(role);
+    if (role === 'ATHLETE') {
+      this.router.navigate(['/athletes-menu']);
+    } else if (role === 'ORGANIZER') {
+      this.router.navigate(['/organizers-menu']);
+    } else if (role === 'ROLE_ADMIN') {
+      this.router.navigate(['/admins-menu']);
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 }

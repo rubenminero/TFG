@@ -1,0 +1,41 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+  >
+    <mat-toolbar class="header">
+      <a mat-list-item [routerLink]="['/athletes-menu/welcome']">
+        <h3 style="color: rgb(255, 255, 255)">Menú de usuario</h3>
+      </a>
+    </mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item [routerLink]="['/athletes-menu/watchlist']">
+        <h3 style="color: rgb(255, 255, 255)">Tu lista de seguimiento</h3>
+      </a>
+      <a mat-list-item [routerLink]="['/athletes-menu/inscriptions']">
+        <h3 style="color: rgb(255, 255, 255)">
+          Torneos a los que estas inscrito
+        </h3>
+      </a>
+      <a mat-list-item [routerLink]="['/athletes-menu/tournaments']">
+        <h3 style="color: rgb(255, 255, 255)">Torneos disponibles</h3>
+      </a>
+      <a mat-list-item [routerLink]="['/athletes-menu/events']">
+        <h3 style="color: rgb(255, 255, 255)">Eventos disponibles</h3>
+      </a>
+      <a mat-list-item [routerLink]="['/athletes-menu/profile']">
+        <h3 style="color: rgb(255, 255, 255)">Ver tus datos</h3>
+      </a>
+      <a mat-list-item (click)="logout()">
+        <h3 style="color: rgb(255, 255, 255)">Cerrar sesión</h3>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

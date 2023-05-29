@@ -1,78 +1,78 @@
 import { Component } from '@angular/core';
-import { RegisterOrganizer } from 'src/app/interfaces/organizer/register-organizer';
-import { OrganizerServiceService } from 'src/app/services/organizer/organizer-service.service';
 import { Router } from '@angular/router';
+import { AthleteServiceService } from 'src/app/services/athlete/athlete-service.service';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { RegisterAthlete } from 'src/app/interfaces/athelete/RegisterAthlete';
 import { MatDialog } from '@angular/material/dialog';
 import { PopUpRegisterComponent } from '../../pop-ups/pop-up-register/pop-up-register.component';
 
 @Component({
-  selector: 'app-register-organizer',
-  templateUrl: './register-organizer.component.html',
-  styleUrls: ['./register-organizer.component.scss'],
+  selector: 'app-register-athlete',
+  templateUrl: './register-athlete.component.html',
+  styleUrls: ['./register-athlete.component.scss'],
 })
-export class RegisterOrganizerComponent {
-  organizer: RegisterOrganizer = {
+export class RegisterAthleteComponent {
+  athlete: RegisterAthlete = {
     username: '',
     password: '',
     nif: '',
     email: '',
     first_name: '',
     last_name: '',
-    company_name: '',
-    address: '',
+    phone_number: '',
   };
   form: FormGroup = new FormGroup({});
 
   constructor(
     private dialog: MatDialog,
     private router: Router,
-    private organizerService: OrganizerServiceService,
+    private athleteService: AthleteServiceService,
     private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
-    let organizer_path = this.organizerService.getOrganizerPath();
-    if (organizer_path === '/home-organizer') {
-      this.router.navigate(['/home-organizer']);
-    } else if (organizer_path === '/home-athlete') {
-      this.router.navigate(['/home-athlete']);
-    } else if (organizer_path === '/home-admin') {
-      this.router.navigate(['/home-admin']);
+    let athelete_path = this.athleteService.getAthletePath();
+    if (athelete_path === '/athletes-menu') {
+      this.router.navigate(['/athletes-menu']);
+    } else if (athelete_path === '/organizers-menu') {
+      this.router.navigate(['/organizers-menu']);
+    } else if (athelete_path === '/admins-menu') {
+      this.router.navigate(['/admins-menu']);
     } else {
-      this.router.navigate(['/role-error']);
+      this.form = this.fb.group({
+        username: new FormControl('', [Validators.required]),
+        password: new FormControl('', [
+          Validators.required,
+          Validators.minLength(6),
+        ]),
+        passwordConfirm: new FormControl('', [
+          Validators.required,
+          Validators.minLength(6),
+        ]),
+        nif: new FormControl('', [
+          Validators.required,
+          Validators.pattern('[0-9]{8}-[A-Z]{1}'),
+        ]),
+        email: new FormControl('', [Validators.required, Validators.email]),
+        first_name: new FormControl('', [
+          Validators.pattern('[a-zA-Z ]*'),
+          Validators.required,
+        ]),
+        last_name: new FormControl('', [
+          Validators.pattern('[a-zA-Z ]*'),
+          Validators.required,
+        ]),
+        phone_number: new FormControl('', [
+          Validators.pattern('[- +()0-9]{15,15}'),
+          Validators.required,
+        ]),
+      });
     }
-    this.form = this.fb.group({
-      username: new FormControl('', [Validators.required]),
-      password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(6),
-      ]),
-      passwordConfirm: new FormControl('', [
-        Validators.required,
-        Validators.minLength(6),
-      ]),
-      nif: new FormControl('', [
-        Validators.required,
-        Validators.pattern('[0-9]{8}-[A-Z]{1}'),
-      ]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      first_name: new FormControl('', [
-        Validators.pattern('[a-zA-Z ]*'),
-        Validators.required,
-      ]),
-      last_name: new FormControl('', [
-        Validators.pattern('[a-zA-Z ]*'),
-        Validators.required,
-      ]),
-      company_name: new FormControl('', [Validators.required]),
-      address: new FormControl('', [Validators.required]),
-    });
   }
 
   get username() {
@@ -103,12 +103,8 @@ export class RegisterOrganizerComponent {
     return this.form.get('last_name');
   }
 
-  get company_name() {
-    return this.form.get('company_name');
-  }
-
-  get address() {
-    return this.form.get('address');
+  get phone_number() {
+    return this.form.get('phone_number');
   }
 
   clearForm() {
@@ -125,17 +121,16 @@ export class RegisterOrganizerComponent {
           },
         });
       } else {
-        this.organizer = {
+        this.athlete = {
           username: this.form.value.username,
           password: this.form.value.password,
           nif: this.form.value.nif,
           email: this.form.value.email,
           first_name: this.form.value.first_name,
           last_name: this.form.value.first_name,
-          company_name: this.form.value.company_name,
-          address: this.form.value.address,
+          phone_number: this.form.value.phone_number,
         };
-        this.organizerService.registerOrganizer(this.organizer).subscribe(
+        this.athleteService.registerAthlete(this.athlete).subscribe(
           (response) => {
             if (response.status == 500) {
               this.dialog.open(PopUpRegisterComponent, {
