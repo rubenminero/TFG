@@ -1,4 +1,4 @@
-import { Athlete } from './interfaces/athelete/Athlete';
+import { Athlete } from './interfaces/athlete/Athlete';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 // Shared Components
@@ -17,6 +17,8 @@ import { ProfileComponent } from './components/athletes/profile/profile.componen
 //Guards
 import { AuthGuard } from './guards/auth/auth.guard';
 import { AthleteGuard } from './guards/athlete/athlete.guard';
+import { AthleteCardComponent } from './components/shared/models-cards/athlete-card/athlete-card.component';
+import { EventCardComponent } from './components/shared/models-cards/event-card/event-card.component';
 
 const routes: Routes = [
   {
@@ -72,8 +74,13 @@ const routes: Routes = [
       },
       {
         path: 'profile',
-        component: ProfileComponent,
+        component: AthleteCardComponent,
         canActivate: [AuthGuard, AthleteGuard],
+      },
+      {
+        path: 'event-card',
+        component: EventCardComponent,
+        canActivate: [AuthGuard],
       },
       {
         path: '',

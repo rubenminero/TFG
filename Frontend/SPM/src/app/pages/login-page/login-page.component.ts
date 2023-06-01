@@ -16,7 +16,7 @@ export class LoginPageComponent {
   ngOnInit(): void {
     let token = sessionStorage.getItem('token');
     if (token) {
-      this.router.navigate(['/home']);
+      this.authService.getPath();
     }
   }
 

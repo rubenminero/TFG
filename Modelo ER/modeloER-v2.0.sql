@@ -14,9 +14,9 @@
 -- Database creation must be performed outside a multi lined SQL file. 
 -- These commands were put in this file only as a convenience.
 -- 
--- object: tfg | type: DATABASE --
--- DROP DATABASE IF EXISTS tfg;
-CREATE DATABASE tfg
+-- object: SPM | type: DATABASE --
+-- DROP DATABASE IF EXISTS SPM;
+CREATE DATABASE SPM
 	ENCODING = 'UTF8'
 	LC_COLLATE = 'Spanish_Spain.1252'
 	LC_CTYPE = 'Spanish_Spain.1252'
@@ -186,6 +186,8 @@ CREATE TABLE public.tournaments (
 	id bigint NOT NULL DEFAULT nextval('public.tournaments_id_seq'::regclass),
 	address character varying(255),
 	description character varying(255),
+	inscription boolean,
+	capacity integer,
 	enabled boolean,
 	location character varying(255),
 	name character varying(255),

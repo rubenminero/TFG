@@ -23,6 +23,7 @@ public class TournamentDTO {
     private String description;
     private Boolean enabled;
     private Boolean inscription;
+    private int capacity;
     private Long organizer;
     private Long sport_type;
 
@@ -33,7 +34,8 @@ public class TournamentDTO {
         this.address = tournament.getAddress();
         this.description = tournament.getDescription();
         this.enabled = tournament.isEnabled();
-        this.inscription = tournament.allows_Inscriptions();
+        this.inscription = tournament.getInscription();
+        this.capacity = tournament.getCapacity();
         this.organizer = tournament.getOrganizer().getId();
         this.sport_type = tournament.getSport_type().getId();
     }

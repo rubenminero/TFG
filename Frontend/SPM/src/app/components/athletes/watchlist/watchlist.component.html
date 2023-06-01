@@ -1,1 +1,68 @@
-<p>watchlist works!</p>
+<ng-container *ngIf="!watchlist_show; else watchlist_data">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="header">
+          <p>Torneos o eventos en tu lista de deseados</p>
+        </div>
+        <mat-paginator
+          [length]="watchlists_saved.length"
+          [pageSize]="3"
+          [pageSizeOptions]="[3, 6, 9, 12]"
+          [showFirstLastButtons]="true"
+        >
+        </mat-paginator>
+        <mat-card class="event-card" *ngFor="let watchlist of obs | async">
+          <mat-card-content class="event">
+            <div class="row">
+              <div class="block">
+                <mat-label class="title">Nombre</mat-label>
+                <p class="text">{{ watchlist.tournament_name }}</p>
+              </div>
+            </div>
+            <mat-card-actions>
+              <button
+                class="button"
+                mat-raised-button
+                color="primary"
+                (click)="deleteWatchlist(watchlist)"
+              >
+                Sacar de la lista
+              </button>
+              <button
+                class="button"
+                mat-raised-button
+                color="primary"
+                (click)="openTournament(watchlist)"
+              >
+                Ver mas
+              </button>
+            </mat-card-actions>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-template #watchlist_data>
+  <mat-card *ngIf="this.tournament_show">
+    <mat-card-header class="header">
+      <mat-card-title>
+        <div class="header-text">
+          <p>Datos del torneo</p>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+    <app-tournament-card [tournament]="this.tournament"></app-tournament-card>
+  </mat-card>
+  <mat-card *ngIf="this.event_show">
+    <mat-card-header class="header">
+      <mat-card-title>
+        <div class="header-text">
+          <p>Datos del evento</p>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+    <app-event-card [event]="this.event"></app-event-card>
+  </mat-card>
+</ng-template>

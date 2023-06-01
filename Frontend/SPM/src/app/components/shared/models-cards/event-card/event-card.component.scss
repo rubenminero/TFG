@@ -1,0 +1,22 @@
+:host {
+  flex: layout;
+  flex-direction: row;
+  align-items: center;
+}
+.form{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 2%;
+  margin-left: 35%;
+  font-size: 30px;
+}
+
+.button{
+  align-items: center;
+  justify-content: center;
+}
+
+.errors{
+  color: red;
+}

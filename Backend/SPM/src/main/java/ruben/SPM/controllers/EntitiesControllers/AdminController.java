@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @PreAuthorize("hasRole('ADMIN')")
 @Tag(name="Admins")
 @AllArgsConstructor
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class AdminController {
 
     private final AdminService adminService;

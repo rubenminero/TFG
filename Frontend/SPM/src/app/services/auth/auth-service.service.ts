@@ -9,18 +9,6 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root',
 })
 export class AuthService {
-  httpOptions = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + this.getAccessToken(),
-    },
-  };
-  httpOptionsForRefresh = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + this.getRefreshToken(),
-    },
-  };
   constructor(
     private http: HttpClient,
     private envService: EnvService,
@@ -38,18 +26,45 @@ export class AuthService {
     );
   }
   logout(): Observable<any> {
+    const httpOptions = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.getAccessToken(),
+      },
+    };
     let access_token = sessionStorage.getItem('access_token');
     let refresh_token = sessionStorage.getItem('refresh_token');
     sessionStorage.removeItem('access_token');
     sessionStorage.removeItem('refresh_token');
     return this.http.post(
       this.envService.getApiUrl() + '/api/auth/logout',
-      access_token
+      httpOptions
     );
   }
 
-  getHeaders(): any {
-    return this.httpOptions;
+  changePassword(
+    oldpassword: string,
+    password: string,
+    confirmpassword: string
+  ): Observable<any> {
+    let body = {
+      oldpassword: oldpassword,
+      password: password,
+      confirmpassword: confirmpassword,
+    };
+
+    const httpOptions = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.getAccessToken(),
+      },
+    };
+    console.log(body);
+    return this.http.put(
+      this.envService.getApiUrl() + '/api/auth/password/' + this.getId(),
+      body,
+      httpOptions
+    );
   }
 
   getAccessToken(): String {

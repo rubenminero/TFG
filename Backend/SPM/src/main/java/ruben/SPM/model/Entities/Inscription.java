@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import ruben.SPM.model.DTO.Entities.InscriptionDTO;
+import ruben.SPM.model.DTO.Front.InscriptionFrontDTO;
 
 @Entity
 @Table(name= "inscription")
@@ -18,6 +19,13 @@ public class Inscription {
 
 
     public Inscription(InscriptionDTO inscriptionDTO,Tournament tournament, Athlete athlete) {
+        this.id = inscriptionDTO.getId();
+        this.tournament = tournament;
+        this.athlete = athlete;
+        this.enabled = inscriptionDTO.getEnabled();
+    }
+
+    public Inscription(InscriptionFrontDTO inscriptionDTO, Tournament tournament, Athlete athlete) {
         this.id = inscriptionDTO.getId();
         this.tournament = tournament;
         this.athlete = athlete;

@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/services/auth/auth-service.service';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -14,7 +15,8 @@ export class PopUpRegisterComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private router: Router
+    private router: Router,
+    private AuthService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -23,10 +25,6 @@ export class PopUpRegisterComponent {
   }
 
   back() {
-    if (this.register) {
-      this.router.navigate(['/login']);
-    } else {
-      this.router.navigate(['/register-athlete']);
-    }
+    this.AuthService.getPath();
   }
 }

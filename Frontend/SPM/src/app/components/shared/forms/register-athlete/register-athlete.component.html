@@ -3,7 +3,7 @@
     <mat-card-title>Darse de alta como deportista</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <form [formGroup]="form" (ngSubmit)="ngOnSubmit()">
+    <form [formGroup]="form">
       <mat-form-field class="form">
         <mat-label>Nombre de usuario</mat-label>
         <input matInput formControlName="username" />
@@ -113,7 +113,7 @@
           mat-raised-button
           color="primary"
           type="submit"
-          [routerLink]="['/login']"
+          (click)="back()"
         >
           Volver al login
         </button>

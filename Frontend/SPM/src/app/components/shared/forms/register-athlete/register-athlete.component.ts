@@ -7,7 +7,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { RegisterAthlete } from 'src/app/interfaces/athelete/RegisterAthlete';
+import { RegisterAthlete } from 'src/app/interfaces/athlete/RegisterAthlete';
 import { MatDialog } from '@angular/material/dialog';
 import { PopUpRegisterComponent } from '../../pop-ups/pop-up-register/pop-up-register.component';
 
@@ -105,6 +105,10 @@ export class RegisterAthleteComponent {
 
   get phone_number() {
     return this.form.get('phone_number');
+  }
+
+  back(): void {
+    window.history.back();
   }
 
   clearForm() {

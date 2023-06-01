@@ -7,15 +7,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import ruben.SPM.model.DTO.Auth.AuthResponseDTO;
 import ruben.SPM.model.DTO.Entities.InscriptionDTO;
 import ruben.SPM.model.DTO.Entities.AthleteDTO;
 import ruben.SPM.model.DTO.Entities.WatchlistDTO;
+import ruben.SPM.model.DTO.Front.InscriptionFrontDTO;
+import ruben.SPM.model.DTO.Front.WatchlistFrontDTO;
 import ruben.SPM.model.Entities.Athlete;
 import ruben.SPM.model.Entities.Inscription;
 import ruben.SPM.model.Entities.User;
 import ruben.SPM.model.Entities.Watchlist;
+import ruben.SPM.service.Auth.AuthService;
 import ruben.SPM.service.EntitiesServices.InscriptionService;
 import ruben.SPM.service.EntitiesServices.AthleteService;
 
@@ -23,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 import ruben.SPM.service.EntitiesServices.UserService;
 import ruben.SPM.service.EntitiesServices.WatchlistService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +39,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/athletes")
 @AllArgsConstructor
 @Tag(name="Athletes")
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class AthleteController {
 
     private final AthleteService athleteService;
@@ -38,6 +47,7 @@ public class AthleteController {
     private final InscriptionService inscriptionService;
     private final WatchlistService watchlistService;
     private final UserService userService;
+    private final AuthService authService;
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('athlete:read')")
@@ -58,6 +68,7 @@ public class AthleteController {
                     .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
+
         List<AthleteDTO> athleteDTOS = athletes.stream().map(AthleteDTO::new).collect(Collectors.toList());
         log.info("The athletes has successfully been retrieved.");
         return ResponseEntity
@@ -108,7 +119,7 @@ public class AthleteController {
     @Operation(summary = "Update a athlete with the data provided.")
     public ResponseEntity updateAthlete(@PathVariable Long id, @RequestBody Athlete athlete) {
         User user = userService.isAuthorized();
-
+        Athlete athlete_saved = this.athleteService.getAthlete(id);
         if (user == null){
             String msg = "This user cant do that operation.";
             log.warn(msg);
@@ -116,31 +127,43 @@ public class AthleteController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
-        Boolean username_check = userService.validUsername(athlete.getUsername());
-        if (username_check){
-            String msg = "This username is already taken.";
+        if (athlete_saved == null){
+            String msg = "There is no user with that data.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
-        if (!id.equals(athlete.getId())) {
-            String msg = "The id that you give doesnt match with the id of the user.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(msg);
-        }
+        Boolean username_check = userService.validUsername(athlete.getUsername());
+        if (athlete_saved.getUsername().equals(athlete.getUsername()) && athlete.getId() == athlete_saved.getId()){
+            log.info("The athlete has successfully been updated.");
+            return ResponseEntity.ok(AthleteDTO.fromUser(athleteService.updateAthlete(athlete,athlete_saved)));
+        }else {
+            if (username_check){
+                String msg = "This username is already taken.";
+                log.warn(msg);
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .body(msg);
+            }
+            if (!id.equals(athlete.getId())) {
+                String msg = "The id that you give doesnt match with the id of the user.";
+                log.warn(msg);
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(msg);
+            }
 
-        if (athleteService.getAthlete(id) == null) {
-            String msg = "Bad request ,there is no athlete for that id.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(msg);
+            if (athleteService.getAthlete(id) == null) {
+                String msg = "Bad request ,there is no athlete for that id.";
+                log.warn(msg);
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(msg);
+            }
+            log.info("The athlete has successfully been updated.");
+            return ResponseEntity.ok(AthleteDTO.fromUser(athleteService.updateAthlete(athlete,athlete_saved)));
         }
-        log.info("The athlete has successfully been updated.");
-        return ResponseEntity.ok(AthleteDTO.fromUser(athleteService.saveAthlete(athlete)));
     }
 
     @PostMapping("")
@@ -199,7 +222,7 @@ public class AthleteController {
             }
         }
         else {
-            List<InscriptionDTO> inscriptionDTOS = inscriptions.stream().map(InscriptionDTO::new).collect(Collectors.toList());
+            List<InscriptionFrontDTO> inscriptionDTOS = inscriptions.stream().map(InscriptionFrontDTO::new).collect(Collectors.toList());
             log.info("The inscriptions for that athlete has successfully been retrieved.");
             return ResponseEntity.ok(inscriptionDTOS);
         }
@@ -236,7 +259,7 @@ public class AthleteController {
             }
         }
         else {
-            List<WatchlistDTO> watchlistDTOs = watchlists.stream().map(WatchlistDTO::new).collect(Collectors.toList());
+            List<WatchlistFrontDTO> watchlistDTOs = watchlists.stream().map(WatchlistFrontDTO::new).collect(Collectors.toList());
             log.info("The watchlists for that athlete has successfully been retrieved.");
             return ResponseEntity.ok(watchlistDTOs);
         }

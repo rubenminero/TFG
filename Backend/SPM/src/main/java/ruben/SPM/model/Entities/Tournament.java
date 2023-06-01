@@ -3,6 +3,8 @@ package ruben.SPM.model.Entities;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import ruben.SPM.model.DTO.Entities.TournamentDTO;
+import ruben.SPM.model.DTO.Front.EventFrontDTO;
+import ruben.SPM.model.DTO.Front.TournamentFrontDTO;
 
 @Entity
 @Table(name= "tournaments")
@@ -10,7 +12,8 @@ import ruben.SPM.model.DTO.Entities.TournamentDTO;
 public class Tournament {
     private Long id;
     private String name;
-    private boolean inscription;
+    private Boolean inscription;
+    private int capacity;
     private String location;
     private String address;
     private String description;
@@ -29,10 +32,35 @@ public class Tournament {
         this.description = tournament.getDescription();
         this.enabled = tournament.getEnabled();
         this.inscription = tournament.getInscription();
+        this.capacity = tournament.getCapacity();
+        this.organizer = organizer;
+        this.sport_type = sportsType;
+    }
+    public Tournament(TournamentFrontDTO tournament, Organizer organizer, Sports_type sportsType) {
+        this.id = tournament.getId();
+        this.name = tournament.getName();
+        this.location = tournament.getLocation();
+        this.address = tournament.getAddress();
+        this.description = tournament.getDescription();
+        this.enabled = tournament.getEnabled();
+        this.inscription = tournament.getInscription();
+        this.capacity = tournament.getCapacity();
         this.organizer = organizer;
         this.sport_type = sportsType;
     }
 
+    public Tournament(EventFrontDTO tournament, Organizer organizer, Sports_type sportsType) {
+        this.id = tournament.getId();
+        this.name = tournament.getName();
+        this.location = tournament.getLocation();
+        this.address = tournament.getAddress();
+        this.description = tournament.getDescription();
+        this.enabled = tournament.getEnabled();
+        this.inscription = false;
+        this.capacity = -1;
+        this.organizer = organizer;
+        this.sport_type = sportsType;
+    }
     // Getters of this model
 
     /**
@@ -95,7 +123,16 @@ public class Tournament {
      * @return the inscription of the tournament.
      */
     @Column(name = "inscription")
-    public Boolean allows_Inscriptions() { return inscription; }
+    public Boolean getInscription() { return inscription; }
+
+    /**
+     * Get the capacity of the tournament.
+     * @return the capacity of the tournament.
+     */
+    @Column(name = "capacity")
+    public int getCapacity() {
+        return capacity;
+    }
 
     /**
      * Get the id of the organizer.
@@ -165,6 +202,14 @@ public class Tournament {
      */
     public void setInscription(Boolean inscription) {
         this.inscription = inscription;
+    }
+
+    /**
+     * Set the capacity of the tournament.
+     * @param capacity the new capacity for this tournament.
+     */
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
     /**

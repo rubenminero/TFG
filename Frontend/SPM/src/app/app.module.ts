@@ -15,6 +15,8 @@ import { RegisterAthleteComponent } from './components/shared/forms/register-ath
 import { PopUpRegisterComponent } from './components/shared/pop-ups/pop-up-register/pop-up-register.component';
 import { RegisterOrganizerComponent } from './components/shared/forms/register-organizer/register-organizer.component';
 import { WelcomeComponent } from './components/shared/welcome/welcome.component';
+import { AthleteCardComponent } from './components/shared/models-cards/athlete-card/athlete-card.component';
+import { PopUpPasswordComponent } from './components/shared/pop-ups/pop-up-password/pop-up-password.component';
 //Pages imports
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { OrganizerRegisterComponent } from './pages/organizer-register/organizer-register.component';
@@ -28,6 +30,9 @@ import { TournamentsComponent } from './components/athletes/tournaments/tourname
 import { EventsComponent } from './components/athletes/events/events.component';
 import { ProfileComponent } from './components/athletes/profile/profile.component';
 import { AthletesMenuComponent } from './pages/athletes-menu/athletes-menu.component';
+import { TournamentCardComponent } from './components/shared/models-cards/tournament-card/tournament-card.component';
+import { EventCardComponent } from './components/shared/models-cards/event-card/event-card.component';
+import { PopUpMsgComponent } from './components/shared/pop-ups/pop-up-msg/pop-up-msg.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +54,11 @@ import { AthletesMenuComponent } from './pages/athletes-menu/athletes-menu.compo
     EventsComponent,
     ProfileComponent,
     AthletesMenuComponent,
+    AthleteCardComponent,
+    PopUpPasswordComponent,
+    TournamentCardComponent,
+    EventCardComponent,
+    PopUpMsgComponent,
   ],
   imports: [
     BrowserModule,

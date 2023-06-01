@@ -114,6 +114,10 @@ export class RegisterOrganizerComponent {
     this.form.reset();
   }
 
+  back(): void {
+    window.history.back();
+  }
+
   ngOnSubmit(): void {
     if (this.form.valid) {
       if (this.form.value.password != this.form.value.passwordConfirm) {

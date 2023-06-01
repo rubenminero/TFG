@@ -3,6 +3,7 @@ package ruben.SPM.model.Entities;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import ruben.SPM.model.DTO.Entities.WatchlistDTO;
+import ruben.SPM.model.DTO.Front.WatchlistFrontDTO;
 
 @Entity
 @Table(name= "watchlist")
@@ -12,6 +13,13 @@ public class Watchlist {
     private Tournament tournament;
     private Athlete athlete;
     private Boolean enabled = Boolean.TRUE;
+
+    public Watchlist(WatchlistFrontDTO watchlist, Tournament tournament, Athlete athlete) {
+        this.id = watchlist.getId();
+        this.tournament = tournament;
+        this.athlete = athlete;
+        this.enabled = watchlist.getEnabled();
+    }
 
     public Watchlist(WatchlistDTO watchlist,Tournament tournament, Athlete athlete) {
         this.id = watchlist.getId();
