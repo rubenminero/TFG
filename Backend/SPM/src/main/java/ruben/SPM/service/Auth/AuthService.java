@@ -33,7 +33,9 @@ import ruben.SPM.service.EntitiesServices.OrganizerService;
 import ruben.SPM.service.EntitiesServices.UserService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -180,17 +182,21 @@ public class AuthService {
         tokenRepository.save(token);
     }
 
-    private void revokeAllUserTokens(User user) {
-        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
-        if (validUserTokens.isEmpty())
-            return;
+    public void revokeAllUserTokens(User user) {
+        List<Token> tokens = tokenRepository.findAll();
+        List<Token> validUserTokens = new ArrayList<Token>();
+
+        for (Token t : tokens){
+            if (!t.isRevoked() && !t.isExpired() && t.getUser().getId() == user.getId()){
+                validUserTokens.add(t);
+            }
+        }
         validUserTokens.forEach(token -> {
             token.setExpired(true);
             token.setRevoked(true);
         });
         tokenRepository.saveAll(validUserTokens);
     }
-
     public void refreshToken(
             HttpServletRequest request,
             HttpServletResponse response
@@ -221,5 +227,20 @@ public class AuthService {
         }
     }
 
+
+    /**
+     * Changes the password of a user.
+     * @param user User whose password is being changed.
+     * @param oldPassword Old password of the user.
+     * @param newPassword New password of the user.
+     */
+    public boolean changePassword(User user, String oldPassword, String newPassword) {
+        if (user.getPassword().equals(oldPassword)) {
+            user.setPassword(newPassword);
+            userService.saveUser(user);
+            return true;
+        }
+        return false;
+    }
 
 }

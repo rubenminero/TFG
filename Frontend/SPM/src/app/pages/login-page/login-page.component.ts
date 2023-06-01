@@ -16,7 +16,7 @@ export class LoginPageComponent {
   ngOnInit(): void {
     let token = sessionStorage.getItem('token');
     if (token) {
-      this.router.navigate(['/home']);
+      this.authService.getPath();
     }
   }
 
@@ -30,8 +30,7 @@ export class LoginPageComponent {
         if (response.access_token && response.refresh_token) {
           sessionStorage.setItem('access_token', response.access_token);
           sessionStorage.setItem('refresh_token', response.refresh_token);
-          let path = this.authService.getPathHome();
-          this.router.navigate([path]);
+          this.authService.getPath();
         }
       },
       (error) => {

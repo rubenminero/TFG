@@ -1,8 +1,16 @@
 version: '3.9' # Por tener docker v19.03.0 o superior
 
 services:
+    front:
+        image: rubenminero/front_spm:version1.0
+        container_name: front_spm
+        restart: always
+        ports:
+            - 4200:4200
+        networks:
+            - back
     back:
-        image: rubenminero/back_spm:version1.5
+        image: rubenminero/back_spm:version1.6
         container_name: back_spm
         restart: always
         environment:

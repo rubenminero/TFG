@@ -21,7 +21,7 @@ public class WatchlistDTO {
     private Long id;
     private Long tournament;
     private Long athlete;
-    private Boolean enabled;
+    private Boolean enabled = Boolean.TRUE;
 
     public WatchlistDTO(Watchlist watchlist) {
         this.id = watchlist.getId();

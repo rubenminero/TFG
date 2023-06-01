@@ -7,12 +7,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
+import ruben.SPM.model.Entities.User;
 import ruben.SPM.repository.TokenRepository.TokenRepository;
+import ruben.SPM.service.EntitiesServices.UserService;
 
 @Service
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
-    private final TokenRepository repository;
+    private final UserService userService;
+    private final AuthService authService;
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -24,15 +27,9 @@ public class LogoutService implements LogoutHandler {
             return;
         }
 
+        User user = this.userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         jwt = authHeader.substring(7);
-        var token = repository.findByToken(jwt)
-                .orElse(null);
-
-        if (token !=null){
-            token.setExpired(true);
-            token.setRevoked(true);
-            repository.save(token);
-            SecurityContextHolder.clearContext();
-        }
+        authService.revokeAllUserTokens(user);
+        SecurityContextHolder.clearContext();
     }
 }

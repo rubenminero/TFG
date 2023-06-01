@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ruben.SPM.model.DTO.Entities.TournamentDTO;
+import ruben.SPM.model.DTO.Front.EventFrontDTO;
+import ruben.SPM.model.DTO.Front.TournamentFrontDTO;
 import ruben.SPM.model.Entities.Organizer;
 import ruben.SPM.model.Entities.Sports_type;
 import ruben.SPM.model.Entities.Tournament;
@@ -18,14 +20,15 @@ import ruben.SPM.service.EntitiesServices.Sports_typeService;
 import ruben.SPM.service.EntitiesServices.TournamentService;
 import ruben.SPM.service.EntitiesServices.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
-@RequestMapping("/api/tournaments")
 @AllArgsConstructor
 @Tag(name="Tournaments")
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class TournamentController {
 
     private final TournamentService tournamentService;
@@ -33,7 +36,7 @@ public class TournamentController {
     private final Sports_typeService sportsTypeService;
     private final UserService userService;
 
-    @GetMapping("")
+    @GetMapping("/api/tournaments")
     @PreAuthorize("hasAuthority('athlete:read')")
     @Operation(summary = "Return the enabled tournaments.")
     public ResponseEntity getAllTournaments() {
@@ -54,13 +57,46 @@ public class TournamentController {
                     .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
-
-        List<TournamentDTO> tournamentDTOs = tournaments.stream().map(TournamentDTO::new).collect(Collectors.toList());
+        List<TournamentFrontDTO> tournamentFrontDTOS = new ArrayList<TournamentFrontDTO>();
+        for (Tournament t : tournaments) {
+            TournamentFrontDTO tournamentFrontDTO = new TournamentFrontDTO(t);
+            tournamentFrontDTOS.add(tournamentFrontDTO);
+        }
         log.info("The tournaments has successfully been retrieved.");
-        return ResponseEntity.ok(tournamentDTOs);
+        return ResponseEntity.ok(tournamentFrontDTOS);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/api/events")
+    @PreAuthorize("hasAuthority('athlete:read')")
+    @Operation(summary = "Return the enabled events.")
+    public ResponseEntity getAllEvents() {
+        User user = userService.isAuthorized();
+
+        if (user == null){
+            String msg = "This user cant do that operation.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(msg);
+        }
+        List<Tournament> tournaments = tournamentService.getEnabledEvents();
+        if (tournaments.size() == 0 || tournaments == null) {
+            String msg = "There is no events.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(msg);
+        }
+        List<EventFrontDTO> events = new ArrayList<EventFrontDTO>();
+        for (Tournament t : tournaments) {
+            EventFrontDTO event = new EventFrontDTO(t);
+            events.add(event);
+        }
+        log.info("The events has successfully been retrieved.");
+        return ResponseEntity.ok(events);
+    }
+
+    @GetMapping("/api/tournaments/{id}")
     @PreAuthorize("hasAuthority('athlete:read')")
     @Operation(summary = "Return a tournament with the id provided.")
     public ResponseEntity getTournamentById(@PathVariable(name = "id") Long id) {
@@ -77,8 +113,13 @@ public class TournamentController {
         Tournament tournament = tournamentService.getTournament(id);
         if (tournament != null) {
             if (tournament.isEnabled()){
-                log.info("The tournament has been found");
-                return ResponseEntity.ok(new TournamentDTO(tournament));
+                if (tournament.getInscription()){
+                    log.info("The tournament has been found");
+                    return ResponseEntity.ok(new TournamentFrontDTO(tournament));
+                }else{
+                    log.info("The event has been found");
+                    return ResponseEntity.ok(new EventFrontDTO(tournament));
+                }
             }else {
                 String msg = "The tournament that you asked is disabled.";
                 log.warn(msg);
@@ -96,8 +137,7 @@ public class TournamentController {
         }
     }
 
-
-    @PutMapping("/{id}")
+    @PutMapping("/api/tournaments/{id}")
     @PreAuthorize("hasAuthority('organizer:update')")
     @Operation(summary = "Update a tournament with the data provided.")
     public ResponseEntity updateTournament(@PathVariable Long id, @RequestBody TournamentDTO tournamentDTO) {
@@ -161,13 +201,13 @@ public class TournamentController {
                 }
             }else{
                 log.info("The tournament has successfully been updated.");
-                return ResponseEntity.ok(TournamentDTO.fromTournament(tournamentService.saveTournament(tournament)));
+                return ResponseEntity.ok(TournamentDTO.fromTournament(tournamentService.updateTournament(tournament)));
             }
         }
 
     }
 
-    @PostMapping("")
+    @PostMapping("/api/tournaments")
     @PreAuthorize("hasAuthority('organizer:create')")
     @Operation(summary = "Create a tournament with the data provided.")
     public ResponseEntity createTournament(@RequestBody TournamentDTO tournamentDTO ) {
@@ -215,7 +255,9 @@ public class TournamentController {
                 }
             }else{
                 log.info("The tournament has successfully been saved.");
-                return ResponseEntity.ok(TournamentDTO.fromTournament(tournamentService.saveTournament(tournament)));
+                TournamentDTO tournamentDTO1 = TournamentDTO.fromTournament(tournamentService.saveTournament(tournament));
+                log.info(Boolean.toString(tournamentDTO1.getInscription()));
+                return ResponseEntity.ok(tournamentDTO1);
             }
         }
 

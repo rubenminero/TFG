@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/organizers")
 @AllArgsConstructor
 @Tag(name="Organizers")
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class OrganizerController {
 
     private final OrganizerService organizerService;
@@ -100,6 +101,7 @@ public class OrganizerController {
     @Operation(summary = "Update a organizer with the data provided.")
     public ResponseEntity updateOrganizer(@PathVariable Long id, @RequestBody Organizer organizer) {
         User user = userService.isAuthorized();
+        Organizer organizer_saved = this.organizerService.getOrganizer(id);
 
         if (user == null){
             String msg = "This user cant do that operation.";
@@ -109,7 +111,7 @@ public class OrganizerController {
                     .body(msg);
         }
         Boolean username_check = userService.validUsername(organizer.getUsername());
-        if (username_check){
+        if (username_check && !organizer_saved.getUsername().equals(organizer.getUsername())){
             String msg = "This username is already taken.";
             log.warn(msg);
             return ResponseEntity
@@ -132,7 +134,7 @@ public class OrganizerController {
                     .body(msg);
         }
         log.info("Organizer updated successfully");
-        return ResponseEntity.ok(OrganizerDTO.fromOrganizer(organizerService.saveOrganizer(organizer)));
+        return ResponseEntity.ok(OrganizerDTO.fromOrganizer(organizerService.updateOrganizer(organizer,organizer_saved)));
     }
 
     @PostMapping("")

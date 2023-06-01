@@ -1,5 +1,7 @@
 package ruben.SPM.service.EntitiesServices;
 
+import jakarta.persistence.Transient;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -8,6 +10,7 @@ import ruben.SPM.model.Whitelist.Role;
 import ruben.SPM.repository.EntitiesRepositories.AthleteRepository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,59 +28,125 @@ public class AthleteService {
 
     /**
      * Recover a athlete from the database.
+     * 
      * @param id the id of the athlete.
      * @return athlete the athlete with the id.
      */
-    public Athlete getAthlete(Long id){
+    public Athlete getAthlete(Long id) {
 
         return athleteRepository.findById(id).orElse(null);
     }
 
     /**
      * Save a athlete in the database.
+     * 
      * @param athlete the athlete to be saved.
      */
-    public Athlete saveAthlete(Athlete athlete){
+    public Athlete saveAthlete(Athlete athlete) {
         athlete.setPassword(passwordEncoder.encode(athlete.getPassword()));
         athlete.setRole(Role.ATHLETE);
         return athleteRepository.save(athlete);
     }
 
     /**
+     * Update a athlete in the database.
+     * 
+     * @param athlete the athlete to be updated.
+     * @return athlete the athlete updated.
+     */
+    public Athlete updateAthlete(Athlete athlete) {
+        athleteRepository.update(athlete.getId(),
+                athlete.getUsername(),
+                athlete.getPassword(),
+                athlete.getFirst_name(),
+                athlete.getLast_name(),
+                athlete.getNif(),
+                athlete.getEmail(),
+                athlete.getRole(),
+                athlete.getDisabled_at(),
+                athlete.isEnabled(),
+                athlete.getPhone_number());
+        return athlete;
+    }
+
+    /**
+     * Update a athlete in the database.
+     * 
+     * @param athlete       the athlete to be updated.
+     * @param athlete_saved the athlete stored in the db before the update.
+     * @return athlete the athlete updated.
+     */
+    public Athlete updateAthlete(Athlete athlete, Athlete athlete_saved) {
+        athlete.setEnabled(athlete_saved.isEnabled());
+        athlete.setDisabled_at(athlete_saved.getDisabled_at());
+        athlete.setRole(athlete_saved.getRole());
+        athlete.setPassword(athlete_saved.getPassword());
+        athleteRepository.update(athlete.getId(),
+                athlete.getUsername(),
+                athlete.getPassword(),
+                athlete.getFirst_name(),
+                athlete.getLast_name(),
+                athlete.getNif(),
+                athlete.getEmail(),
+                athlete.getRole(),
+                athlete.getDisabled_at(),
+                athlete.isEnabled(),
+                athlete.getPhone_number());
+        return athlete;
+    }
+
+    /**
+     * Return the athlete with the password hashed.
+     * 
+     * @param athlete the athlete to be updated.
+     * @return athlete the athlete with the password updated.
+     */
+    public Athlete setPasswordHashed(Athlete athlete, String password) {
+        athlete.setPassword(passwordEncoder.encode(password));
+        return athlete;
+    }
+
+    /**
      * Disable or enable a athlete in the database,depends on the last state.
+     * 
      * @param id the id of the athlete to be changed.
      */
-    public void changeStateAthlete(Long id){
+    public void changeStateAthlete(Long id) {
         Athlete athlete = this.getAthlete(id);
         athlete.setEnabled(!athlete.isEnabled());
-        athleteRepository.save(athlete);
+        this.updateAthlete(athlete);
     }
 
     /**
      * Gets all the athletes from the database.
      * Only for admins.
+     * 
      * @return A list with all the athletes.
      */
     public List<Athlete> getAllAthletes() {
 
         return athleteRepository.findAll();
     }
+
     /**
      * Gets all the enabled athletes from the database.
+     * 
      * @return A list with all the athletes.
      */
     public List<Athlete> getEnabledAthletes() {
         List<Athlete> athletes_enabled = new ArrayList<Athlete>();
         List<Athlete> athletes = athleteRepository.findAll();
         for (Athlete u : athletes) {
-            if (u.isEnabled()){
+            if (u.isEnabled()) {
                 athletes_enabled.add(u);
             }
         }
         return athletes_enabled;
     }
+
     /**
      * Recover a athlete from the database.
+     * 
      * @param username the username of the athlete.
      * @return athlete the athlete with the username.
      */
@@ -86,4 +155,4 @@ public class AthleteService {
         return athleteRepository.findByUsername(username).orElse(null);
     }
 
-    }
+}

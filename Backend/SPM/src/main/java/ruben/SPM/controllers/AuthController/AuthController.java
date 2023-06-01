@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,8 +22,16 @@ import ruben.SPM.model.DTO.Auth.AuthRegisterDTOs.AuthRegisterAdminDTO;
 import ruben.SPM.model.DTO.Auth.AuthRegisterDTOs.AuthRegisterAthleteDTO;
 import ruben.SPM.model.DTO.Auth.AuthRegisterDTOs.AuthRegisterOrganizerDTO;
 import ruben.SPM.model.DTO.Auth.AuthRequestDTO;
+import ruben.SPM.model.DTO.Auth.PasswordChangeDTO;
+import ruben.SPM.model.Entities.Admin;
+import ruben.SPM.model.Entities.Athlete;
+import ruben.SPM.model.Entities.Organizer;
 import ruben.SPM.model.Entities.User;
+import ruben.SPM.model.Whitelist.Role;
 import ruben.SPM.service.Auth.AuthService;
+import ruben.SPM.service.EntitiesServices.AdminService;
+import ruben.SPM.service.EntitiesServices.AthleteService;
+import ruben.SPM.service.EntitiesServices.OrganizerService;
 import ruben.SPM.service.EntitiesServices.UserService;
 
 import java.io.IOException;
@@ -32,10 +41,13 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Tag(name="Authentication")
 @Slf4j
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class AuthController {
     private final AuthService service;
     private final UserService userService;
-    private final AuthenticationManager authenticationManager;
+    private final AthleteService athleteService;
+    private final OrganizerService organizerService;
+    private final AdminService adminService;
 
     @PostMapping("/register-organizer")
     @Operation(summary = "Register a organizer in the database. Returning the token for that user.")
@@ -86,10 +98,66 @@ public class AuthController {
 
     @PostMapping("/refresh-token")
     @Operation(summary = "Refresh the token from a user, generating a new token pair.")
+    @PreAuthorize("hasAuthority('athlete:read')")
     public void refreshToken(@Parameter(name = "Servlet request")HttpServletRequest request, @Parameter(name = "Servlet response")HttpServletResponse response
     ) throws IOException {
         service.refreshToken(request, response);
     }
+
+
+    @PutMapping("/password/{id}")
+    @PreAuthorize("hasAuthority('athlete:update')")
+    @Operation(summary = "Changes the password for the user")
+    public ResponseEntity changePassword(@PathVariable Long id,@RequestBody PasswordChangeDTO passwordChangeDTO){
+        User user = this.userService.getUser(id);
+        if (user != null ){
+            if (passwordChangeDTO.getPassword().equals(passwordChangeDTO.getOldpassword()) && passwordChangeDTO.getPassword().equals(passwordChangeDTO.getConfirmpassword())){
+                Athlete athlete = null;
+                Organizer organizer = null;
+                Admin admin = null;
+                if (user.getRole().equals(Role.ATHLETE)){
+                    athlete = this.athleteService.getAthlete(id);
+                    athlete = this.athleteService.setPasswordHashed(athlete, passwordChangeDTO.getPassword());
+                    this.athleteService.updateAthlete(athlete);
+                }else if (user.getRole().equals(Role.ORGANIZER)){
+                    organizer= this.organizerService.getOrganizer(id);
+                    organizer = this.organizerService.setPasswordHashed(organizer, passwordChangeDTO.getPassword());
+                    organizer = this.organizerService.updateOrganizer(organizer);
+                }else if (user.getRole().equals(Role.ADMIN)){
+                    admin = this.adminService.getAdmin(id);
+                    admin = this.adminService.setPasswordHashed(admin, passwordChangeDTO.getPassword());
+                    admin = this.adminService.updateAdmin(admin);
+                }
+
+                if (athlete != null || organizer != null  || admin !=null ){
+                    String msg = "The password has been changed.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.OK)
+                            .body(msg);
+                }else{
+                    String msg = "The password has not been changed.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.OK)
+                            .body(msg);
+                }
+            }else{
+                String msg = "The passwords provided doesnt match.";
+                log.warn(msg);
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(msg);
+            }
+        }else {
+            String msg = "The user with the id provided doesnt exist.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(msg);
+        }
+    }
+
 
 
 }

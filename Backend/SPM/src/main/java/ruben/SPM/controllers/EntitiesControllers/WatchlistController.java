@@ -7,8 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ruben.SPM.model.DTO.Entities.WatchlistDTO;
+import ruben.SPM.model.DTO.Front.WatchlistFrontDTO;
 import ruben.SPM.model.Entities.*;
 import ruben.SPM.service.EntitiesServices.TournamentService;
 import ruben.SPM.service.EntitiesServices.AthleteService;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/watchlists")
 @AllArgsConstructor
 @Tag(name="Watchlists")
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class WatchlistController {
 
     private final WatchlistService watchlistService;
@@ -49,7 +52,7 @@ public class WatchlistController {
         if (watchlist != null) {
             if (watchlist.isEnabled()){
                 log.info("The watchlist has been found");
-                return ResponseEntity.ok(new WatchlistDTO(watchlist));
+                return ResponseEntity.ok(new WatchlistFrontDTO(watchlist));
             }else {
                 String msg = "The watchlist that you asked is disabled.";
                 log.warn(msg);
@@ -128,8 +131,16 @@ public class WatchlistController {
                             .body(msg);
                 }
             }else{
-                log.info("The watchlist has successfully been updated.");
-                return ResponseEntity.ok(WatchlistDTO.fromWatchlist(watchlistService.saveWatchlist(watchlist)));
+                if (!watchlistService.isValid(watchlist)){
+                    String msg = "The tournament is already on your whitelist.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.BAD_REQUEST)
+                            .body(msg);
+                }else{
+                    log.info("The watchlist has successfully been updated.");
+                    return ResponseEntity.ok(WatchlistDTO.fromWatchlist(watchlistService.updateWatchlist(watchlist)));
+                }
             }
         }
     }
@@ -181,8 +192,16 @@ public class WatchlistController {
                             .body(msg);
                 }
             }else{
-                log.info("The watchlist has successfully been saved.");
-                return ResponseEntity.ok(WatchlistDTO.fromWatchlist(watchlistService.saveWatchlist(watchlist)));
+                if (!watchlistService.isValid(watchlist)){
+                    String msg = "The tournament is already on your whitelist.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.BAD_REQUEST)
+                            .body(msg);
+                }else{
+                    log.info("The watchlist has successfully been saved.");
+                    return ResponseEntity.ok(WatchlistDTO.fromWatchlist(watchlistService.saveWatchlist(watchlist)));
+                }
             }
         }
     }
@@ -209,9 +228,49 @@ public class WatchlistController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
-        List<WatchlistDTO> watchlistDTOS = watchlists.stream().map(WatchlistDTO::new).collect(Collectors.toList());
+        List<WatchlistFrontDTO> watchlistDTOS = watchlists.stream().map(WatchlistFrontDTO::new).collect(Collectors.toList());
         log.info("The watchlists has been retrieved.");
         return ResponseEntity.ok(watchlistDTOS);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('athlete:delete')")
+    @Operation(summary = "Deletes the watchlist with the id provided.")
+    public ResponseEntity deleteWatchlist(@PathVariable Long id) {
+        User user = userService.isAuthorized();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (user == null){
+            String msg = "This user cant do that operation.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(msg);
+        }
+
+        user = userService.getUserByUsername(username);
+        Watchlist watchlist = watchlistService.getWatchList(id);
+        if (watchlist == null) {
+            String msg = "There is no watchlist with this id.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(msg);
+        }
+
+        if (user.getId() != watchlist.getAthlete().getId()){
+            String msg = "The watchlist doesnt belong to your user.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(msg);
+        }
+
+        watchlistService.deleteWatchlist(watchlist);
+        String msg = "The watchlist has been deleted.";
+        log.warn(msg);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(msg);
     }
 
 
