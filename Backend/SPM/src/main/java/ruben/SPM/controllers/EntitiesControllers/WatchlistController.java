@@ -101,6 +101,13 @@ public class WatchlistController {
         Tournament tournament = tournamentService.getTournament(watchlistDTO.getTournament());
         Athlete athlete = athleteService.getAthlete(watchlistDTO.getAthlete());
         Watchlist watchlist = WatchlistDTO.toWatchlist(watchlistDTO,tournament,athlete);
+        if (watchlistService.validWatchlist(athlete,tournament)){
+            String msg = "You already have this tournament/event in your watchlists.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(msg);
+        }
         if (watchlist.getTournament() == null || watchlist.getAthlete() == null){
             if (watchlist.getTournament() == null ) {
                 String msg = "The tournament of the watchlist doesnt exist.";
@@ -162,6 +169,13 @@ public class WatchlistController {
         Athlete athlete = athleteService.getAthlete(watchlistDTO.getAthlete());
         Watchlist watchlist = WatchlistDTO.toWatchlist(watchlistDTO,tournament,athlete);
         watchlist.setEnabled(true);
+        if (watchlistService.validWatchlist(athlete,tournament)){
+            String msg = "You already have this tournament/event in your watchlists.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(msg);
+        }
         if (watchlist.getTournament() == null || watchlist.getAthlete() == null){
             if (watchlist.getTournament() == null ) {
                 String msg = "The tournament of the watchlist doesnt exist.";
@@ -265,7 +279,7 @@ public class WatchlistController {
                     .body(msg);
         }
 
-        watchlistService.deleteWatchlist(watchlist);
+        watchlistService.deleteWatchlist(watchlist.getId());
         String msg = "The watchlist has been deleted.";
         log.warn(msg);
         return ResponseEntity

@@ -25,7 +25,7 @@ public class AdminService {
     private final Sports_typeService sportsTypeService;
     private final InscriptionService inscriptionService;
     private final WatchlistService watchlistService;
-
+    private final DeleteService deleteService;
     private final PasswordEncoder passwordEncoder;
 
     /**
@@ -232,6 +232,29 @@ public class AdminService {
     /**
      * Update an admin in the database.
      * 
+     * @param admin       the admin to be updated.
+     * @param admin_saved the admin stored in the db before the update.
+     * @return admin the admin updated.
+     */
+    public Admin updateAdmin(Admin admin, Admin admin_saved) {
+        admin.setRole(admin_saved.getRole());
+        admin.setPassword(admin_saved.getPassword());
+        adminRepository.update(admin.getId(),
+                admin.getUsername(),
+                admin.getPassword(),
+                admin.getFirst_name(),
+                admin.getLast_name(),
+                admin.getNif(),
+                admin.getEmail(),
+                admin.getRole(),
+                admin.getValidFrom(),
+                admin.getValid_to());
+        return admin;
+    }
+
+    /**
+     * Update an admin in the database.
+     * 
      * @param admin the admin to be updated.
      * @return admin the admin updated.
      */
@@ -250,38 +273,66 @@ public class AdminService {
     }
 
     /**
-     * Update an admin in the database.
+     * Disable or enable an admin in the database,depends on the last state.
      * 
-     * @param admin       the admin to be updated.
-     * @param admin_saved the admin stored in the db before the update.
-     * @return admin the admin updated.
+     * @param id the id of the admin to be changed.
      */
-    public Admin updateAdmin(Admin admin, Admin admin_saved) {
-        admin.setValid_to(admin_saved.getValid_to());
-        admin.setValidFrom(admin_saved.getValidFrom());
-        admin.setPassword(admin_saved.getPassword());
-        adminRepository.update(admin.getId(),
-                admin.getUsername(),
-                admin.getPassword(),
-                admin.getFirst_name(),
-                admin.getLast_name(),
-                admin.getNif(),
-                admin.getEmail(),
-                admin.getRole(),
-                admin.getValidFrom(),
-                admin.getValid_to());
-        return admin;
+    public void changeStateAdmin(Long id) {
+        Admin admin = this.getAdmin(id);
+        if (admin.getValid_to() == null) {
+            admin.setValid_to(new Date());
+        } else {
+            admin.setValid_to(null);
+        }
+        adminRepository.save(admin);
+    }
+
+    /**
+     * Gets all the admins from the database.
+     * 
+     * @return A list with all the admins.
+     */
+    public List<Admin> getAllAdmins() {
+
+        return adminRepository.findAll();
+    }
+
+    /**
+     * Gets all the enabled admins from the database.
+     * 
+     * @return A list with all the admins.
+     */
+    public List<Admin> getEnabledAdmins() {
+        List<Admin> admins_enabled = new ArrayList<Admin>();
+        List<Admin> admins = adminRepository.findAll();
+        for (Admin a : admins) {
+            if (a.getValid_to() != null) {
+                admins_enabled.add(a);
+            }
+        }
+        return admins_enabled;
     }
 
     /**
      * Return the admin with the password hashed.
-     * 
+     *
      * @param admin the admin to be updated.
      * @return admin the admin with the password updated.
      */
     public Admin setPasswordHashed(Admin admin, String password) {
         admin.setPassword(passwordEncoder.encode(password));
         return admin;
+    }
+
+    /**
+     * Recover a admin from the database.
+     * 
+     * @param username the username of the admin.
+     * @return admin the admin with the username.
+     */
+    public Admin getAdminByUsername(String username) {
+
+        return adminRepository.findByUsername(username).orElse(null);
     }
 
 }

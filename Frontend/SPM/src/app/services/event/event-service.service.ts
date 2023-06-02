@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { EnvService } from '../env/env-service.service';
 import { Events } from 'src/app/interfaces/event/event';
+import { RegisterEvent } from 'src/app/interfaces/event/register-event';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,20 @@ export class EventServiceService {
     private authService: AuthService,
     private envService: EnvService
   ) {}
+
+  createEvent(event: RegisterEvent): Observable<any> {
+    const httpOptions = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.authService.getAccessToken(),
+      },
+    };
+    return this.http.post(
+      this.envService.getApiUrl() + '/api/events',
+      event,
+      httpOptions
+    );
+  }
 
   getEvents(): Observable<any> {
     const httpOptions = {
@@ -35,7 +50,7 @@ export class EventServiceService {
       },
     };
     return this.http.get(
-      this.envService.getApiUrl() + '/api/tournaments/' + id,
+      this.envService.getApiUrl() + '/api/events/' + id,
       httpOptions
     );
   }
@@ -48,8 +63,21 @@ export class EventServiceService {
       },
     };
     return this.http.put(
-      this.envService.getApiUrl() + '/api/tournaments/' + event.id,
+      this.envService.getApiUrl() + '/api/events/' + event.id,
       event,
+      httpOptions
+    );
+  }
+
+  deleteEvent(event: Events): Observable<any> {
+    const httpOptions = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.authService.getAccessToken(),
+      },
+    };
+    return this.http.delete(
+      this.envService.getApiUrl() + '/api/tournaments/' + event.id,
       httpOptions
     );
   }

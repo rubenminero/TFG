@@ -6,6 +6,7 @@
       </div>
     </mat-card-title>
   </mat-card-header>
+  <mat-divider></mat-divider>
   <form [formGroup]="form">
     <mat-form-field class="form">
       <mat-label>Nombre de usuario</mat-label>
@@ -82,6 +83,9 @@
       </button>
       <button mat-raised-button color="primary" (click)="changePassword()">
         Cambiar contraseña
+      </button>
+      <button mat-raised-button color="primary" (click)="unsubscribe()">
+        Darse de baja
       </button>
       <button mat-raised-button color="primary" type="submit" (click)="back()">
         Volver

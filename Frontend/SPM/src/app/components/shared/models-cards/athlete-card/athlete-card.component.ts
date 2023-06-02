@@ -10,9 +10,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { PopUpRegisterComponent } from '../../pop-ups/pop-up-register/pop-up-register.component';
 import { PopUpPasswordComponent } from '../../pop-ups/pop-up-password/pop-up-password.component';
-import { Input } from '@angular/core';
+import { PopUpMsgComponent } from '../../pop-ups/pop-up-msg/pop-up-msg.component';
 
 @Component({
   selector: 'app-athlete-card',
@@ -114,11 +113,37 @@ export class AthleteCardComponent {
   }
 
   changePassword() {
-    this.dialog.open(PopUpPasswordComponent, { data: true });
+    this.dialog
+      .open(PopUpPasswordComponent, { data: true })
+      .afterClosed()
+      .subscribe((result) => {
+        this.dialog.open(PopUpMsgComponent, {
+          data: {
+            msg: 'La contraseña se ha cambiado correctamente, por favor, vuelva a iniciar sesión.',
+          },
+        });
+        this.logout();
+      });
   }
 
   back(): void {
-    window.history.back();
+    this.AuthService.getPath();
+  }
+
+  logout(): void {
+    this.AuthService.logout();
+  }
+
+  unsubscribe(): void {
+    this.athleteService.deleteAthlete(this.athlete.id).subscribe(
+      (response) => {
+        this.logout();
+        this.back();
+      },
+      (error) => {
+        console.log('Atleta: ' + error);
+      }
+    );
   }
 
   ngOnSubmit(): void {
@@ -134,33 +159,24 @@ export class AthleteCardComponent {
 
     this.athleteService.updateAthlete(this.athlete).subscribe(
       (response) => {
-        if (response.status == 500) {
-          this.dialog.open(PopUpRegisterComponent, {
+        this.dialog.open(PopUpMsgComponent, {
+          data: {
+            register: true,
+            msg: 'Los datos han sido modificados, por favor, vuelva a iniciar sesión.',
+          },
+        });
+        this.logout();
+      },
+      (error) => {
+        console.log(error);
+        if (error.status == 403) {
+          this.dialog.open(PopUpMsgComponent, {
             data: {
               register: false,
               msg: 'Error al actualizar.',
             },
           });
         }
-      },
-      (error) => {
-        console.log(error);
-        if (error.status == 403) {
-          this.dialog.open(PopUpRegisterComponent, {
-            data: {
-              register: false,
-              msg: 'El nombre de usuario ya existe.',
-            },
-          });
-        }
-      },
-      () => {
-        this.dialog.open(PopUpRegisterComponent, {
-          data: {
-            register: true,
-            msg: 'Has actualizado tus datos  correctamente.',
-          },
-        });
       }
     );
   }

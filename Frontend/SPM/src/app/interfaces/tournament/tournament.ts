@@ -6,6 +6,6 @@ export interface Tournament {
   description: string;
   inscription: boolean;
   capacity: number;
-  organizer_name: string;
-  sport_type_name: string;
+  organizer: string;
+  sport_type: string;
 }

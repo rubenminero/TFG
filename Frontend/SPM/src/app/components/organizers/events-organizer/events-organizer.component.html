@@ -1,0 +1,76 @@
+<ng-container *ngIf="!event_show; else event_data">
+  <mat-card-header class="header">
+    <mat-card-title>
+      <div class="header-text">
+        <p>Tus eventos</p>
+      </div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-paginator
+    [length]="events_saved.length"
+    [pageSize]="3"
+    [pageSizeOptions]="[3, 6, 9, 12]"
+    [showFirstLastButtons]="true"
+  >
+  </mat-paginator>
+  <mat-card class="event-card" *ngFor="let event of obs | async">
+    <mat-card-content class="event">
+      <div class="row">
+        <div class="block">
+          <mat-label class="title">Nombre</mat-label>
+          <p class="text">{{ event.name }}</p>
+        </div>
+        <div class="block">
+          <mat-label class="title">Ubicacion</mat-label>
+          <p class="text">{{ event.location }}</p>
+        </div>
+        <div class="block">
+          <mat-label class="title">Direccion</mat-label>
+          <p class="text">{{ event.address }}</p>
+        </div>
+        <div class="block">
+          <mat-label class="title">Organizador</mat-label>
+          <p class="text">{{ event.organizer }}</p>
+        </div>
+        <div class="block">
+          <mat-label class="title">Deporte</mat-label>
+          <p class="text">{{ event.sport_type }}</p>
+        </div>
+      </div>
+      <mat-card-actions>
+        <button
+          class="button"
+          mat-raised-button
+          color="primary"
+          type="submit"
+          (click)="deleteEvent(event)"
+        >
+          Borrar evento
+        </button>
+        <button
+          class="button"
+          mat-raised-button
+          color="primary"
+          type="submit"
+          (click)="openEvent(event)"
+        >
+          Ver mas
+        </button>
+      </mat-card-actions>
+    </mat-card-content>
+  </mat-card>
+</ng-container>
+<ng-template #event_data>
+  <mat-card>
+    <mat-card-header class="header">
+      <mat-card-title>
+        <div class="header-text">
+          <p>Datos del evento</p>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <app-event-card [event]="this.event" [admin]="true"></app-event-card>
+  </mat-card>
+</ng-template>

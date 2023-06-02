@@ -40,7 +40,7 @@ public class TournamentDTO {
         this.sport_type = tournament.getSport_type().getId();
     }
 
-    public TournamentDTO(){
+    public TournamentDTO() {
 
     }
 

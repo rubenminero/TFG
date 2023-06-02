@@ -1,0 +1,57 @@
+<ng-container *ngIf="!inscription_show; else tournament_data">
+  <mat-card-header class="header">
+    <mat-card-title>
+      <div class="header-text">
+        <p>Torneos a los que estas inscrito</p>
+      </div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-paginator
+    [length]="inscriptions_saved.length"
+    [pageSize]="3"
+    [pageSizeOptions]="[3, 6, 9, 12]"
+    [showFirstLastButtons]="true"
+  >
+  </mat-paginator>
+  <mat-card class="event-card" *ngFor="let inscription of obs | async">
+    <mat-card-content class="event">
+      <div class="row">
+        <div class="block">
+          <mat-label class="title">Nombre del torneo</mat-label>
+          <p class="text">{{ inscription.tournament }}</p>
+        </div>
+      </div>
+      <mat-card-actions>
+        <button
+          class="button"
+          mat-raised-button
+          color="primary"
+          (click)="deleteInscription(inscription)"
+        >
+          Desinscribirse del torneo
+        </button>
+        <button
+          class="button"
+          mat-raised-button
+          color="primary"
+          (click)="openTournament(inscription)"
+        >
+          Ver mas
+        </button>
+      </mat-card-actions>
+    </mat-card-content>
+  </mat-card>
+</ng-container>
+<ng-template #tournament_data>
+  <mat-card>
+    <mat-card-header class="header">
+      <mat-card-title>
+        <div class="header-text">
+          <p>Datos del torneo</p>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+    <app-tournament-card [tournament]="this.tournament"></app-tournament-card>
+  </mat-card>
+</ng-template>

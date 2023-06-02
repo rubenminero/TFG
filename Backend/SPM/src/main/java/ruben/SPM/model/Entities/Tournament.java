@@ -7,23 +7,25 @@ import ruben.SPM.model.DTO.Front.EventFrontDTO;
 import ruben.SPM.model.DTO.Front.TournamentFrontDTO;
 
 @Entity
-@Table(name= "tournaments")
+@Table(name = "tournaments")
 @AllArgsConstructor
 public class Tournament {
     private Long id;
     private String name;
-    private Boolean inscription;
-    private int capacity;
+
     private String location;
     private String address;
     private String description;
+    private Boolean inscription;
+    private Integer capacity;
     private Boolean enabled = Boolean.TRUE;
     private Organizer organizer;
     private Sports_type sport_type;
 
-    public Tournament(){
+    public Tournament() {
 
     }
+
     public Tournament(TournamentDTO tournament, Organizer organizer, Sports_type sportsType) {
         this.id = tournament.getId();
         this.name = tournament.getName();
@@ -36,13 +38,14 @@ public class Tournament {
         this.organizer = organizer;
         this.sport_type = sportsType;
     }
+
     public Tournament(TournamentFrontDTO tournament, Organizer organizer, Sports_type sportsType) {
         this.id = tournament.getId();
         this.name = tournament.getName();
         this.location = tournament.getLocation();
         this.address = tournament.getAddress();
         this.description = tournament.getDescription();
-        this.enabled = tournament.getEnabled();
+        this.enabled = true;
         this.inscription = tournament.getInscription();
         this.capacity = tournament.getCapacity();
         this.organizer = organizer;
@@ -55,7 +58,7 @@ public class Tournament {
         this.location = tournament.getLocation();
         this.address = tournament.getAddress();
         this.description = tournament.getDescription();
-        this.enabled = tournament.getEnabled();
+        this.enabled = true;
         this.inscription = false;
         this.capacity = -1;
         this.organizer = organizer;
@@ -65,6 +68,7 @@ public class Tournament {
 
     /**
      * Get the id of the tournament.
+     * 
      * @return the id of the tournament.
      */
 
@@ -77,6 +81,7 @@ public class Tournament {
 
     /**
      * Get the name of the tournament.
+     * 
      * @return the name of the tournament.
      */
     @Column(name = "name")
@@ -86,6 +91,7 @@ public class Tournament {
 
     /**
      * Get the location of the tournament.
+     * 
      * @return the location of the tournament.
      */
     @Column(name = "location")
@@ -95,6 +101,7 @@ public class Tournament {
 
     /**
      * Get the address of the tournament.
+     * 
      * @return the address of the tournament.
      */
     @Column(name = "address")
@@ -104,6 +111,7 @@ public class Tournament {
 
     /**
      * Get the location of the tournament.
+     * 
      * @return the location of the tournament.
      */
     @Column(name = "description")
@@ -113,29 +121,37 @@ public class Tournament {
 
     /**
      * Get the enabled of the tournament.
+     * 
      * @return the enabled of the tournament.
      */
     @Column(name = "enabled")
-    public Boolean isEnabled() { return enabled; }
+    public Boolean isEnabled() {
+        return enabled;
+    }
 
     /**
      * Get the inscription of the tournament.
+     * 
      * @return the inscription of the tournament.
      */
     @Column(name = "inscription")
-    public Boolean getInscription() { return inscription; }
+    public Boolean getInscription() {
+        return inscription;
+    }
 
     /**
      * Get the capacity of the tournament.
+     * 
      * @return the capacity of the tournament.
      */
     @Column(name = "capacity")
-    public int getCapacity() {
+    public Integer getCapacity() {
         return capacity;
     }
 
     /**
      * Get the id of the organizer.
+     * 
      * @return the id of the organizer.
      */
     @JoinColumn(name = "id_organizers")
@@ -146,6 +162,7 @@ public class Tournament {
 
     /**
      * Get the id of the sport type.
+     * 
      * @return the id of the sport type.
      */
     @JoinColumn(name = "id_sports_type")
@@ -158,6 +175,7 @@ public class Tournament {
 
     /**
      * Set the id of the tournament, which cannot be repeated.
+     * 
      * @param id the new id for this tournament.
      */
     public void setId(Long id) {
@@ -166,6 +184,7 @@ public class Tournament {
 
     /**
      * Set the name of the tournament.
+     * 
      * @param name the new name for this tournament.
      */
     public void setName(String name) {
@@ -174,6 +193,7 @@ public class Tournament {
 
     /**
      * Set the location of the tournament.
+     * 
      * @param location the new location for this tournament.
      */
     public void setLocation(String location) {
@@ -182,14 +202,16 @@ public class Tournament {
 
     /**
      * Set the address of the tournament.
-     * @param address the new address  for this tournament.
+     * 
+     * @param address the new address for this tournament.
      */
-    public void setAddress(String address ) {
-        this.address  = address ;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     /**
      * Set the description of the tournament.
+     * 
      * @param description the description for this tournament.
      */
     public void setDescription(String description) {
@@ -198,6 +220,7 @@ public class Tournament {
 
     /**
      * Set the inscription of the tournament.
+     * 
      * @param inscription the new inscription for this tournament.
      */
     public void setInscription(Boolean inscription) {
@@ -206,14 +229,16 @@ public class Tournament {
 
     /**
      * Set the capacity of the tournament.
-     * @param capacity the new capacity for this tournament.
+     * 
+     * @param capacity the capacity of the tournament.
      */
-    public void setCapacity(int capacity) {
+    public void setCapacity(Integer capacity) {
         this.capacity = capacity;
     }
 
     /**
      * Set the enabled of the tournament.
+     * 
      * @param enabled the new enabled for this tournament.
      */
     public void setEnabled(Boolean enabled) {
@@ -222,6 +247,7 @@ public class Tournament {
 
     /**
      * Set the organizer of the tournament.
+     * 
      * @param organizer the new organizer for this tournament.
      */
     public void setOrganizer(Organizer organizer) {
@@ -230,6 +256,7 @@ public class Tournament {
 
     /**
      * Set the sport type of the tournament.
+     * 
      * @param sport_type the new sport_type for this tournament.
      */
     public void setSport_type(Sports_type sport_type) {

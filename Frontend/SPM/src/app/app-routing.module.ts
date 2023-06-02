@@ -1,7 +1,6 @@
-import { Athlete } from './interfaces/athlete/Athlete';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-// Shared Components
+
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { AthleteRegisterComponent } from './pages/athlete-register/athlete-register.component';
 import { OrganizerRegisterComponent } from './pages/organizer-register/organizer-register.component';
@@ -9,16 +8,24 @@ import { AboutusPageComponent } from './pages/aboutus-page/aboutus-page.componen
 import { WelcomeComponent } from './components/shared/welcome/welcome.component';
 // Athlete Components
 import { AthletesMenuComponent } from './pages/athletes-menu/athletes-menu.component';
-import { WatchlistComponent } from './components/athletes/watchlist/watchlist.component';
-import { InscriptionsComponent } from './components/athletes/inscriptions/inscriptions.component';
-import { TournamentsComponent } from './components/athletes/tournaments/tournaments.component';
-import { EventsComponent } from './components/athletes/events/events.component';
-import { ProfileComponent } from './components/athletes/profile/profile.component';
+import { WatchlistAthleteComponent } from './components/athletes/watchlist-athlete/watchlist-athlete.component';
+import { InscriptionsAthleteComponent } from './components/athletes/inscriptions-athlete/inscriptions-athlete.component';
+import { TournamentsAthleteComponent } from './components/athletes/tournaments-athlete/tournaments-athlete.component';
+import { EventsAthleteComponent } from './components/athletes/events-athlete/events-athlete.component';
+import { ProfileAthleteComponent } from './components/athletes/profile-athlete/profile-athlete.component';
+// Organizer Components
+import { ProfileOrganizerComponent } from './components/organizers/profile-organizer/profile-organizer.component';
 //Guards
 import { AuthGuard } from './guards/auth/auth.guard';
 import { AthleteGuard } from './guards/athlete/athlete.guard';
 import { AthleteCardComponent } from './components/shared/models-cards/athlete-card/athlete-card.component';
 import { EventCardComponent } from './components/shared/models-cards/event-card/event-card.component';
+import { OrganizersMenuComponent } from './pages/organizers-menu/organizers-menu.component';
+import { OrganizerGuard } from './guards/organizer/organizer.guard';
+import { EventsOrganizerComponent } from './components/organizers/events-organizer/events-organizer.component';
+import { TournamentsOrganizerComponent } from './components/organizers/tournaments-organizer/tournaments-organizer.component';
+import { RegisterTournamentOrganizerComponent } from './components/organizers/register-tournament-organizer/register-tournament-organizer.component';
+import { RegisterEventOrganizerComponent } from './components/organizers/register-event-organizer/register-event-organizer.component';
 
 const routes: Routes = [
   {
@@ -54,33 +61,70 @@ const routes: Routes = [
       },
       {
         path: 'watchlist',
-        component: WatchlistComponent,
+        component: WatchlistAthleteComponent,
         canActivate: [AuthGuard, AthleteGuard],
       },
       {
         path: 'inscriptions',
-        component: InscriptionsComponent,
+        component: InscriptionsAthleteComponent,
         canActivate: [AuthGuard, AthleteGuard],
       },
       {
         path: 'tournaments',
-        component: TournamentsComponent,
+        component: TournamentsAthleteComponent,
         canActivate: [AuthGuard, AthleteGuard],
       },
       {
         path: 'events',
-        component: EventsComponent,
+        component: EventsAthleteComponent,
         canActivate: [AuthGuard, AthleteGuard],
       },
       {
         path: 'profile',
-        component: AthleteCardComponent,
+        component: ProfileAthleteComponent,
         canActivate: [AuthGuard, AthleteGuard],
       },
       {
-        path: 'event-card',
-        component: EventCardComponent,
-        canActivate: [AuthGuard],
+        path: '',
+        redirectTo: 'welcome',
+        pathMatch: 'full',
+      },
+    ],
+  },
+  {
+    path: 'organizers-menu',
+    component: OrganizersMenuComponent,
+    canActivate: [AuthGuard, OrganizerGuard],
+    children: [
+      {
+        path: 'welcome',
+        component: WelcomeComponent,
+        canActivate: [AuthGuard, OrganizerGuard],
+      },
+      {
+        path: 'profile',
+        component: ProfileOrganizerComponent,
+        canActivate: [AuthGuard, OrganizerGuard],
+      },
+      {
+        path: 'events',
+        component: EventsOrganizerComponent,
+        canActivate: [AuthGuard, OrganizerGuard],
+      },
+      {
+        path: 'tournaments',
+        component: TournamentsOrganizerComponent,
+        canActivate: [AuthGuard, OrganizerGuard],
+      },
+      {
+        path: 'register-tournament',
+        component: RegisterTournamentOrganizerComponent,
+        canActivate: [AuthGuard, OrganizerGuard],
+      },
+      {
+        path: 'register-event',
+        component: RegisterEventOrganizerComponent,
+        canActivate: [AuthGuard, OrganizerGuard],
       },
       {
         path: '',

@@ -58,6 +58,9 @@
         <mat-error *ngIf="form.controls['email'].hasError('required')">
           <p class="errors">Este campo es obligatorio</p>
         </mat-error>
+        <mat-error *ngIf="form.controls['email'].hasError('email')">
+          <p class="errors">El formato del correo es incorrecto</p>
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field class="form">
@@ -86,12 +89,10 @@
         <mat-label>Nombre de la compañia</mat-label>
         <input
           matInput
-          formControlName="company_name"
+          formControlName="company"
           placeholder="Nombre de la compañia"
         />
-        <mat-error
-          *ngIf="form.controls['company_name'].hasError('company_name')"
-        >
+        <mat-error *ngIf="form.controls['company'].hasError('company')">
           <p class="errors">Este campo es obligatorio</p>
         </mat-error>
       </mat-form-field>

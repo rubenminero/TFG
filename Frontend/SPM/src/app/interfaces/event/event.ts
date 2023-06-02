@@ -4,6 +4,6 @@ export interface Events {
   location: string;
   address: string;
   description: string;
-  organizer_name: string;
-  sport_type_name: string;
+  organizer: string;
+  sport_type: string;
 }

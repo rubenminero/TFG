@@ -73,7 +73,7 @@ public class Sports_typeController {
                     .body(msg);
         }
         log.info("Sport type updated successfully");
-        return ResponseEntity.ok(Sports_typeDTO.fromSport_type(sportsTypeService.updateSport_type(sport_type)));
+        return ResponseEntity.ok(Sports_typeDTO.fromSport_type(sportsTypeService.saveSport_type(sport_type)));
     }
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('athlete:read')")
@@ -111,7 +111,7 @@ public class Sports_typeController {
     }
 
     @GetMapping("")
-    @PreAuthorize("hasAuthority('athlete:read')")
+    @PreAuthorize("hasAuthority('organizer:read')")
     @Operation(summary = "Return all the enabled sports types.")
     public ResponseEntity getAllSports_types() {
         User user = userService.isAuthorized();

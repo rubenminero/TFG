@@ -10,18 +10,19 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import ruben.SPM.model.DTO.Auth.AuthResponseDTO;
+import ruben.SPM.model.DTO.Auth.PasswordChangeDTO;
 import ruben.SPM.model.DTO.Entities.InscriptionDTO;
 import ruben.SPM.model.DTO.Entities.AthleteDTO;
+import ruben.SPM.model.DTO.Entities.OrganizerDTO;
 import ruben.SPM.model.DTO.Entities.WatchlistDTO;
 import ruben.SPM.model.DTO.Front.InscriptionFrontDTO;
 import ruben.SPM.model.DTO.Front.WatchlistFrontDTO;
-import ruben.SPM.model.Entities.Athlete;
-import ruben.SPM.model.Entities.Inscription;
-import ruben.SPM.model.Entities.User;
-import ruben.SPM.model.Entities.Watchlist;
+import ruben.SPM.model.Entities.*;
+import ruben.SPM.model.Whitelist.Role;
 import ruben.SPM.service.Auth.AuthService;
 import ruben.SPM.service.EntitiesServices.InscriptionService;
 import ruben.SPM.service.EntitiesServices.AthleteService;
@@ -48,6 +49,7 @@ public class AthleteController {
     private final WatchlistService watchlistService;
     private final UserService userService;
     private final AuthService authService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('athlete:read')")
@@ -265,6 +267,77 @@ public class AthleteController {
         }
     }
 
+    @PutMapping("/password")
+    @Operation(summary = "Changes the password for the athlete")
+    @PreAuthorize("hasAuthority('athlete:update')")
+    public ResponseEntity changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO){
+        Athlete athlete = this.athleteService.getAthlete(passwordChangeDTO.getId_user());
 
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Athlete athlete_logged = this.athleteService.getAthleteByUsername(username);
+
+        if (athlete != null && athlete_logged.getId() == athlete.getId() ){
+            if (passwordChangeDTO.getPassword().equals(passwordChangeDTO.getConfirmpassword())){
+                athlete = this.athleteService.setPasswordHashed(athlete, passwordChangeDTO.getPassword());
+                this.athleteService.updateAthlete(athlete);
+                if (athlete != null ){
+                    String msg = "The password has been changed.";
+                    log.info(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.OK)
+                            .body(msg);
+                }else{
+                    String msg = "The password has not been changed.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.BAD_REQUEST)
+                            .body(msg);
+                }
+            }else{
+                String msg = "The passwords provided doesnt match.";
+                log.warn(msg);
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(msg);
+            }
+        }else {
+            String msg = "The user with the id provided doesnt exist or doesnt match with the user logged.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(msg);
+        }
+    }
+
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('athlete:delete')")
+    @Operation(summary = "Delete the athlete with the id provided.")
+    public ResponseEntity deleteAthlete(@PathVariable Long id) {
+        Athlete athlete = athleteService.getAthlete(id);
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (athlete == null){
+            String msg = "This user cant do that operation.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(msg);
+        }
+
+        if (athlete.getId() != userService.getUserByUsername(username).getId()){
+            String msg = "The id provided doesnt doesnt belong to your user.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(msg);
+        }
+        athleteService.deleteAthlete(athlete);
+        String msg = "The user has been deleted.";
+        log.info(msg);
+        AthleteDTO athleteDTO = new AthleteDTO(athlete);
+        return ResponseEntity.ok(athleteDTO);
+    }
 
 }

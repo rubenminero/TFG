@@ -31,4 +31,5 @@ public interface TournamentRepository extends JpaRepository<Tournament, Long> {
                 String name,
                 Organizer organizers,
                 Sports_type sportsType);
+
 }

@@ -20,6 +20,7 @@ export class TournamentServiceService {
     const httpOptions = {
       headers: {
         'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.authService.getAccessToken(),
       },
     };
     return this.http.post(
@@ -64,6 +65,33 @@ export class TournamentServiceService {
     return this.http.put(
       this.envService.getApiUrl() + '/api/tournaments/' + tournament.id,
       tournament,
+      httpOptions
+    );
+  }
+
+  deleteTournament(tournament: Tournament): Observable<any> {
+    const httpOptions = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.authService.getAccessToken(),
+      },
+    };
+    return this.http.delete(
+      this.envService.getApiUrl() + '/api/tournaments/' + tournament.id,
+      httpOptions
+    );
+  }
+  getInscriptionsTournament(tournament: Tournament): Observable<any> {
+    const httpOptions = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.authService.getAccessToken(),
+      },
+    };
+    return this.http.get(
+      this.envService.getApiUrl() +
+        '/api/tournaments/inscriptions/' +
+        tournament.id,
       httpOptions
     );
   }

@@ -1,5 +1,6 @@
 package ruben.SPM.service.EntitiesServices;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ruben.SPM.model.Entities.Tournament;
 import ruben.SPM.repository.EntitiesRepositories.TournamentRepository;
@@ -11,6 +12,7 @@ import java.util.List;
  * Service for Tournament class.
  */
 @Service
+@AllArgsConstructor
 public class TournamentService {
 
     /**
@@ -18,10 +20,7 @@ public class TournamentService {
      */
     private final TournamentRepository tournamentRepository;
 
-    public TournamentService(TournamentRepository tournamentRepository) {
-
-        this.tournamentRepository = tournamentRepository;
-    }
+    private final DeleteService deleteService;
 
     /**
      * Recover a tournament from the database.
@@ -64,7 +63,17 @@ public class TournamentService {
     }
 
     /**
+     * Delete a tournament from the database.
+     * 
+     * @param id the id of the tournament.
+     */
+    public void deleteTournament(Long id) {
+        this.deleteService.deleteTournament(this.getTournament(id));
+    }
+
+    /**
      * Updates a tournament,adding one to the capacity
+     * 
      * @param tournament the tournament to be updated.
      */
     public void moreCapacity(Tournament tournament) {
@@ -74,10 +83,11 @@ public class TournamentService {
 
     /**
      * Updates a tournament, subtracting one from the capacity
+     * 
      * @param tournament the tournament to be updated.
      */
     public void lessCapacity(Tournament tournament) {
-        tournament.setCapacity(tournament.getCapacity() -1);
+        tournament.setCapacity(tournament.getCapacity() - 1);
         this.updateTournament(tournament);
     }
 
@@ -89,7 +99,7 @@ public class TournamentService {
     public void changeStateTournament(Long id) {
         Tournament tournament = this.getTournament(id);
         tournament.setEnabled(!tournament.isEnabled());
-        this.updateTournament(tournament);
+        tournamentRepository.save(tournament);
     }
 
     /**
@@ -101,7 +111,7 @@ public class TournamentService {
     public void changeInscriptionTournament(Long id) {
         Tournament tournament = this.getTournament(id);
         tournament.setInscription(!tournament.getInscription());
-        this.updateTournament(tournament);
+        tournamentRepository.save(tournament);
     }
 
     /**
@@ -124,7 +134,7 @@ public class TournamentService {
         List<Tournament> tournaments_enabled = new ArrayList<Tournament>();
         List<Tournament> tournaments = this.getAllTournaments();
         for (Tournament t : tournaments) {
-            if (t.isEnabled() && t.getInscription() && t.getCapacity() > 0) {
+            if (t.isEnabled() && t.getInscription()) {
                 tournaments_enabled.add(t);
             }
         }

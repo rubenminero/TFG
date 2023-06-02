@@ -1,7 +1,10 @@
 package ruben.SPM.service.EntitiesServices;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ruben.SPM.model.Entities.Athlete;
 import ruben.SPM.model.Entities.Inscription;
+import ruben.SPM.model.Entities.Tournament;
 import ruben.SPM.model.Entities.Watchlist;
 import ruben.SPM.repository.EntitiesRepositories.WatchlistRepository;
 
@@ -12,6 +15,7 @@ import java.util.List;
  * Service for Watchlist class.
  */
 @Service
+@AllArgsConstructor
 public class WatchlistService {
 
     /**
@@ -19,10 +23,7 @@ public class WatchlistService {
      */
     private final WatchlistRepository watchlistRepository;
 
-    public WatchlistService(WatchlistRepository watchlistRepository) {
-
-        this.watchlistRepository = watchlistRepository;
-    }
+    private final DeleteService deleteService;
 
     /**
      * Recover a watchlist from the database.
@@ -59,6 +60,15 @@ public class WatchlistService {
     }
 
     /**
+     * Delete a watchlist from the database.
+     * 
+     * @param id the id of the watchlist.
+     */
+    public void deleteWatchlist(Long id) {
+        this.watchlistRepository.delete(this.getWatchList(id));
+    }
+
+    /**
      * Disable or enable a watchlist in the database,depends on the last state.
      * 
      * @param id the id of the watchlist to be changed.
@@ -66,7 +76,7 @@ public class WatchlistService {
     public void changeStateWatchlist(Long id) {
         Watchlist watchlist = this.getWatchList(id);
         watchlist.setEnabled(!watchlist.isEnabled());
-        this.updateWatchlist(watchlist);
+        watchlistRepository.save(watchlist);
     }
 
     /**
@@ -98,11 +108,12 @@ public class WatchlistService {
     }
 
     /**
-     * Delete a watchlist from the database.
-     * @param watchlist the watchlist to be deleted.
+     * Delete watchlists from the database.
+     * 
+     * @param id the id of the user for delete.
      */
-    public void deleteWatchlist(Watchlist watchlist) {
-        watchlistRepository.delete(watchlist);
+    public void deleteWatchlistsUser(Long id) {
+        this.deleteService.deleteWatchlistsUser(id);
     }
 
     /**
@@ -122,4 +133,17 @@ public class WatchlistService {
         return true;
     }
 
+    /**
+     * Checks if the watchlist is valid to be saved.
+     * @return true if is valid, false otherwise.
+     */
+    public Boolean validWatchlist(Athlete athlete, Tournament tournament) {
+        List<Watchlist> watchlists = this.getAllWatchlists();
+        for (Watchlist w : watchlists) {
+            if (athlete.getId() == w.getAthlete().getId() && tournament.getId() == w.getTournament().getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

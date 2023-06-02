@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { RegisterAthlete } from 'src/app/interfaces/athlete/RegisterAthlete';
 import { MatDialog } from '@angular/material/dialog';
-import { PopUpRegisterComponent } from '../../pop-ups/pop-up-register/pop-up-register.component';
+import { PopUpMsgComponent } from '../../pop-ups/pop-up-msg/pop-up-msg.component';
 
 @Component({
   selector: 'app-register-athlete',
@@ -118,7 +118,7 @@ export class RegisterAthleteComponent {
   ngOnSubmit(): void {
     if (this.form.valid) {
       if (this.form.value.password != this.form.value.passwordConfirm) {
-        this.dialog.open(PopUpRegisterComponent, {
+        this.dialog.open(PopUpMsgComponent, {
           data: {
             register: false,
             msg: 'Las contraseñas no coinciden.',
@@ -137,7 +137,7 @@ export class RegisterAthleteComponent {
         this.athleteService.registerAthlete(this.athlete).subscribe(
           (response) => {
             if (response.status == 500) {
-              this.dialog.open(PopUpRegisterComponent, {
+              this.dialog.open(PopUpMsgComponent, {
                 data: {
                   register: false,
                   msg: 'Error en el registro.',
@@ -147,7 +147,7 @@ export class RegisterAthleteComponent {
           },
           (error) => {
             if (error.status == 403) {
-              this.dialog.open(PopUpRegisterComponent, {
+              this.dialog.open(PopUpMsgComponent, {
                 data: {
                   register: false,
                   msg: 'El nombre de usuario ya existe.',
@@ -156,7 +156,7 @@ export class RegisterAthleteComponent {
             }
           },
           () => {
-            this.dialog.open(PopUpRegisterComponent, {
+            this.dialog.open(PopUpMsgComponent, {
               data: {
                 register: true,
                 msg: 'Te has registrado correctamente.',

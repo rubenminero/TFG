@@ -3,8 +3,8 @@ package ruben.SPM.service.EntitiesServices;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ruben.SPM.model.Entities.Athlete;
 import ruben.SPM.model.Entities.Organizer;
+import ruben.SPM.model.Entities.Tournament;
 import ruben.SPM.model.Whitelist.Role;
 import ruben.SPM.repository.EntitiesRepositories.OrganizerRepository;
 
@@ -20,7 +20,9 @@ import java.util.List;
 public class OrganizerService {
     private final OrganizerRepository organizerRepository;
 
+    private final TournamentService tournamentService;
     private final PasswordEncoder passwordEncoder;
+    private final DeleteService deleteService;
 
     /**
      * Recover an organizer from the database.
@@ -52,10 +54,10 @@ public class OrganizerService {
      * @return organizer the organizer updated.
      */
     public Organizer updateOrganizer(Organizer organizer, Organizer organizer_saved) {
-        organizer.setEnabled(organizer.isEnabled());
-        organizer.setDisabled_at(organizer.getDisabled_at());
-        organizer.setRole(organizer.getRole());
-        organizer.setPassword(organizer.getPassword());
+        organizer.setEnabled(organizer_saved.isEnabled());
+        organizer.setDisabled_at(organizer_saved.getDisabled_at());
+        organizer.setRole(organizer_saved.getRole());
+        organizer.setPassword(organizer_saved.getPassword());
         organizerRepository.update(organizer.getId(),
                 organizer.getUsername(),
                 organizer.getPassword(),
@@ -65,7 +67,7 @@ public class OrganizerService {
                 organizer.getEmail(),
                 organizer.getRole(),
                 organizer.getAddress(),
-                organizer.getCompany_name(),
+                organizer.getCompany(),
                 organizer.getDisabled_at(),
                 organizer.isEnabled());
         return organizer;
@@ -87,11 +89,20 @@ public class OrganizerService {
                 organizer.getEmail(),
                 organizer.getRole(),
                 organizer.getAddress(),
-                organizer.getCompany_name(),
+                organizer.getCompany(),
                 organizer.getDisabled_at(),
                 organizer.isEnabled());
         return organizer;
 
+    }
+
+    /**
+     * Delete an organizer in the database.
+     * 
+     * @param organizer the organizer to be deleted.
+     */
+    public void deleteOrganizer(Organizer organizer) {
+        this.deleteService.deleteOrganizer(organizer);
     }
 
     /**
@@ -114,7 +125,7 @@ public class OrganizerService {
         Organizer organizer = this.getOrganizer(id);
         organizer.setEnabled(!organizer.isEnabled());
         organizer.setDisabled_at(new Date());
-        this.updateOrganizer(organizer);
+        organizerRepository.save(organizer);
     }
 
     /**
@@ -126,6 +137,38 @@ public class OrganizerService {
     public List<Organizer> getAllOrganizers() {
 
         return organizerRepository.findAll();
+    }
+
+    /**
+     * Gets all the tournaments for the organizer.
+     * 
+     * @return A list with all the tournaments.
+     */
+    public List<Tournament> getTournamentsOrganizer(Long id) {
+        List<Tournament> tournaments = this.tournamentService.getEnabledTournaments();
+        List<Tournament> tournaments_organizer = new ArrayList<Tournament>();
+        for (Tournament t : tournaments) {
+            if (t.getOrganizer().getId() == id) {
+                tournaments_organizer.add(t);
+            }
+        }
+        return tournaments_organizer;
+    }
+
+    /**
+     * Gets all the events for the organizer.
+     * 
+     * @return A list with all the events.
+     */
+    public List<Tournament> getEventsOrganizer(Long id) {
+        List<Tournament> events = this.tournamentService.getEnabledEvents();
+        List<Tournament> events_organizer = new ArrayList<Tournament>();
+        for (Tournament t : events) {
+            if (t.getOrganizer().getId() == id) {
+                events_organizer.add(t);
+            }
+        }
+        return events_organizer;
     }
 
     /**
@@ -146,7 +189,7 @@ public class OrganizerService {
 
     /**
      * Recover an organizer from the database.
-     * 
+     *
      * @param username the username of the organizer.
      * @return organizer the organizer with the username.
      */
@@ -156,6 +199,36 @@ public class OrganizerService {
             return null;
         } else {
             return organizer;
+        }
+    }
+
+    /**
+     * Recover an organizer from the database.
+     *
+     * @param company_name the company_name of the organizer.
+     * @return organizer the organizer with the company_name.
+     */
+    public Organizer getOrganizerByCompany_name(String company_name) {
+        Organizer organizer = organizerRepository.findByCompany(company_name);
+        if (organizer == null) {
+            return null;
+        } else {
+            return organizer;
+        }
+    }
+
+    /**
+     * Checks if the company name is valid.
+     * 
+     * @param company_name the company_name of the organizer.
+     * @return true if valid, false otherwise.
+     */
+    public boolean validCompany_name(String company_name) {
+        Organizer organizer = this.getOrganizerByCompany_name(company_name);
+        if (organizer != null) {
+            return true;
+        } else {
+            return false;
         }
     }
 

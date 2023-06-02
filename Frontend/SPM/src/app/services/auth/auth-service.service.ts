@@ -1,14 +1,26 @@
-import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { EnvService } from '../env/env-service.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  httpOptions = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.getAccessToken(),
+    },
+  };
+  httpOptionsForRefresh = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.getRefreshToken(),
+    },
+  };
   constructor(
     private http: HttpClient,
     private envService: EnvService,
@@ -26,28 +38,30 @@ export class AuthService {
     );
   }
   logout(): Observable<any> {
+    let access_token = sessionStorage.getItem('access_token');
+    let refresh_token = sessionStorage.getItem('refresh_token');
     const httpOptions = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + this.getAccessToken(),
+        Authorization: 'Bearer ' + access_token,
       },
     };
-    let access_token = sessionStorage.getItem('access_token');
-    let refresh_token = sessionStorage.getItem('refresh_token');
     sessionStorage.removeItem('access_token');
     sessionStorage.removeItem('refresh_token');
     return this.http.post(
       this.envService.getApiUrl() + '/api/auth/logout',
-      httpOptions
+      access_token
     );
   }
 
   changePassword(
+    id_user: Number,
     oldpassword: string,
     password: string,
     confirmpassword: string
   ): Observable<any> {
     let body = {
+      id_user: this.getId(),
       oldpassword: oldpassword,
       password: password,
       confirmpassword: confirmpassword,
@@ -60,8 +74,19 @@ export class AuthService {
       },
     };
     console.log(body);
+    let path = '';
+    const role = this.getRole();
+
+    if (role === 'ADMIN') {
+      path = '/admins';
+    } else if (role === 'ORGANIZER') {
+      path = '/organizers';
+    } else {
+      path = '/athletes';
+    }
+
     return this.http.put(
-      this.envService.getApiUrl() + '/api/auth/password/' + this.getId(),
+      this.envService.getApiUrl() + '/api' + path + '/password',
       body,
       httpOptions
     );
@@ -111,18 +136,15 @@ export class AuthService {
   getPathHome(): String {
     let path = '';
     let role = this.getRole();
-
-    if (role === 'ATHLETE') {
-      path = '/athletes-menu';
-    } else if (role === 'ORGANIZER') {
-      path = '/organizers-menu';
-    } else if (role === 'ROLE_ADMIN') {
-      path = '/admins-menu';
+    if (role === 'athlete') {
+      path = '/home-athlete';
+    } else if (role === 'organizer') {
+      path = '/home-organizer';
+    } else if (role === 'admin') {
+      path = '/home-admin';
     } else {
-      path = '';
+      path = '/role-error';
     }
-    console.log(path);
-    console.log(role);
     return path;
   }
 

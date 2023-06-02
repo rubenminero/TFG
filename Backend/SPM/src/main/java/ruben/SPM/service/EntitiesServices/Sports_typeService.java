@@ -1,5 +1,6 @@
 package ruben.SPM.service.EntitiesServices;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ruben.SPM.model.Entities.Sports_type;
 import ruben.SPM.repository.EntitiesRepositories.Sports_typeRepository;
@@ -11,21 +12,18 @@ import java.util.List;
  * Service for Sports_type class.
  */
 @Service
+@AllArgsConstructor
 public class Sports_typeService {
 
     /**
      * Access for Sports_type data.
      */
     private final Sports_typeRepository sportsTypeRepository;
-
-    public Sports_typeService(Sports_typeRepository sportsTypeRepository) {
-
-        this.sportsTypeRepository = sportsTypeRepository;
-    }
+    private final DeleteService deleteService;
 
     /**
      * Recover a sport type from the database.
-     * 
+     *
      * @param id the id of the sport type.
      * @return sport type the sport type with the id.
      */
@@ -56,6 +54,15 @@ public class Sports_typeService {
     }
 
     /**
+     * Delete a sport type from the database.
+     * 
+     * @param id the id of the sport type.
+     */
+    public void deleteSport_type(Long id) {
+        this.sportsTypeRepository.delete(this.getSport_type(id));
+    }
+
+    /**
      * Disable or enable a sport type in the database,depends on the last state.
      * 
      * @param id the id of the sport type to be changed.
@@ -63,7 +70,7 @@ public class Sports_typeService {
     public void changeStateSport_type(Long id) {
         Sports_type sport_type = this.getSport_type(id);
         sport_type.setEnabled(!sport_type.isEnabled());
-        this.updateSport_type(sport_type);
+        sportsTypeRepository.save(sport_type);
     }
 
     /**

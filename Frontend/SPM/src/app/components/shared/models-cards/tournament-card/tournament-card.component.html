@@ -54,15 +54,15 @@
 
     <mat-form-field class="form">
       <mat-label>Organizador</mat-label>
-      <input matInput formControlName="organizer_name" placeholder="La liga" />
-      <mat-error *ngIf="form.controls['organizer_name'].hasError('required')">
+      <input matInput formControlName="organizer" placeholder="La liga" />
+      <mat-error *ngIf="form.controls['organizer'].hasError('required')">
         <p class="errors">Este campo es obligatorio</p>
       </mat-error>
     </mat-form-field>
     <mat-form-field class="form">
       <mat-label>Deporte del evento</mat-label>
-      <input matInput formControlName="sport_type_name" placeholder="Futbol" />
-      <mat-error *ngIf="form.controls['sport_type_name'].hasError('required')">
+      <input matInput formControlName="sport_type" placeholder="Futbol" />
+      <mat-error *ngIf="form.controls['sport_type'].hasError('required')">
         <p class="errors">Este campo es obligatorio</p>
       </mat-error>
     </mat-form-field>

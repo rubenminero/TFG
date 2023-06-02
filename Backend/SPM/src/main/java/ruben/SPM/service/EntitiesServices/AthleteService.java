@@ -1,16 +1,16 @@
 package ruben.SPM.service.EntitiesServices;
 
-import jakarta.persistence.Transient;
-import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ruben.SPM.model.Entities.Athlete;
+import ruben.SPM.model.Entities.Inscription;
+import ruben.SPM.model.Entities.Organizer;
 import ruben.SPM.model.Whitelist.Role;
 import ruben.SPM.repository.EntitiesRepositories.AthleteRepository;
+import ruben.SPM.service.Auth.TokenService;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,7 +24,11 @@ public class AthleteService {
      * Access for Athlete data.
      */
     private final AthleteRepository athleteRepository;
+    private final InscriptionService inscriptionService;
+    private final WatchlistService watchlistService;
+    private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
+    private final DeleteService deleteService;
 
     /**
      * Recover a athlete from the database.
@@ -49,64 +53,6 @@ public class AthleteService {
     }
 
     /**
-     * Update a athlete in the database.
-     * 
-     * @param athlete the athlete to be updated.
-     * @return athlete the athlete updated.
-     */
-    public Athlete updateAthlete(Athlete athlete) {
-        athleteRepository.update(athlete.getId(),
-                athlete.getUsername(),
-                athlete.getPassword(),
-                athlete.getFirst_name(),
-                athlete.getLast_name(),
-                athlete.getNif(),
-                athlete.getEmail(),
-                athlete.getRole(),
-                athlete.getDisabled_at(),
-                athlete.isEnabled(),
-                athlete.getPhone_number());
-        return athlete;
-    }
-
-    /**
-     * Update a athlete in the database.
-     * 
-     * @param athlete       the athlete to be updated.
-     * @param athlete_saved the athlete stored in the db before the update.
-     * @return athlete the athlete updated.
-     */
-    public Athlete updateAthlete(Athlete athlete, Athlete athlete_saved) {
-        athlete.setEnabled(athlete_saved.isEnabled());
-        athlete.setDisabled_at(athlete_saved.getDisabled_at());
-        athlete.setRole(athlete_saved.getRole());
-        athlete.setPassword(athlete_saved.getPassword());
-        athleteRepository.update(athlete.getId(),
-                athlete.getUsername(),
-                athlete.getPassword(),
-                athlete.getFirst_name(),
-                athlete.getLast_name(),
-                athlete.getNif(),
-                athlete.getEmail(),
-                athlete.getRole(),
-                athlete.getDisabled_at(),
-                athlete.isEnabled(),
-                athlete.getPhone_number());
-        return athlete;
-    }
-
-    /**
-     * Return the athlete with the password hashed.
-     * 
-     * @param athlete the athlete to be updated.
-     * @return athlete the athlete with the password updated.
-     */
-    public Athlete setPasswordHashed(Athlete athlete, String password) {
-        athlete.setPassword(passwordEncoder.encode(password));
-        return athlete;
-    }
-
-    /**
      * Disable or enable a athlete in the database,depends on the last state.
      * 
      * @param id the id of the athlete to be changed.
@@ -114,7 +60,27 @@ public class AthleteService {
     public void changeStateAthlete(Long id) {
         Athlete athlete = this.getAthlete(id);
         athlete.setEnabled(!athlete.isEnabled());
-        this.updateAthlete(athlete);
+        athleteRepository.save(athlete);
+    }
+
+    /**
+     * Delete a user from the database.
+     * 
+     * @param athlete the user to be deleted.
+     */
+    public void deleteAthlete(Athlete athlete) {
+        this.deleteService.deleteAthlete(athlete);
+    }
+
+    /**
+     * Return the athlete with the password hashed.
+     *
+     * @param athlete the athlete to be updated.
+     * @return athlete the athlete with the password updated.
+     */
+    public Athlete setPasswordHashed(Athlete athlete, String password) {
+        athlete.setPassword(passwordEncoder.encode(password));
+        return athlete;
     }
 
     /**
@@ -155,4 +121,53 @@ public class AthleteService {
         return athleteRepository.findByUsername(username).orElse(null);
     }
 
+    /**
+     * Update an athlete in the database.
+     * 
+     * @param athlete       the athlete to be updated.
+     * @param athlete_saved the athlete stored in the db before the update.
+     * @return athlete the athlete updated.
+     */
+    public Athlete updateAthlete(Athlete athlete, Athlete athlete_saved) {
+        athlete.setEnabled(athlete_saved.isEnabled());
+        athlete.setDisabled_at(athlete_saved.getDisabled_at());
+        athlete.setRole(athlete_saved.getRole());
+        athlete.setPassword(athlete_saved.getPassword());
+        athleteRepository.update(
+                athlete.getId(),
+                athlete.getUsername(),
+                athlete.getPassword(),
+                athlete.getFirst_name(),
+                athlete.getLast_name(),
+                athlete.getNif(),
+                athlete.getEmail(),
+                athlete.getRole(),
+                athlete.getDisabled_at(),
+                athlete.isEnabled(),
+                athlete.getPhone_number());
+        return athlete;
+    }
+
+    /**
+     * Update an athlete in the database.
+     * 
+     * @param athlete the athlete to be updated.
+     * @return athlete the athlete updated.
+     */
+    public Athlete updateAthlete(Athlete athlete) {
+        athleteRepository.update(
+                athlete.getId(),
+                athlete.getUsername(),
+                athlete.getPassword(),
+                athlete.getFirst_name(),
+                athlete.getLast_name(),
+                athlete.getNif(),
+                athlete.getEmail(),
+                athlete.getRole(),
+                athlete.getDisabled_at(),
+                athlete.isEnabled(),
+                athlete.getPhone_number());
+        return athlete;
+
+    }
 }

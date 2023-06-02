@@ -5,8 +5,6 @@ import lombok.Data;
 import ruben.SPM.model.Entities.Organizer;
 import ruben.SPM.model.Entities.Sports_type;
 import ruben.SPM.model.Entities.Tournament;
-import ruben.SPM.service.EntitiesServices.OrganizerService;
-import ruben.SPM.service.EntitiesServices.Sports_typeService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +28,7 @@ public class EventFrontDTO {
             this.address = tournament.getAddress();
             this.description = tournament.getDescription();
             this.enabled = tournament.isEnabled();
-            this.organizer = tournament.getOrganizer().getCompany_name();
+            this.organizer = tournament.getOrganizer().getCompany();
             this.sport_type = tournament.getSport_type().getName();
         }
 

@@ -9,7 +9,6 @@ import {
   FormControl,
 } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { PopUpRegisterComponent } from '../../pop-ups/pop-up-register/pop-up-register.component';
 import { AuthService } from 'src/app/services/auth/auth-service.service';
 import { PopUpMsgComponent } from '../../pop-ups/pop-up-msg/pop-up-msg.component';
 
@@ -28,8 +27,8 @@ export class TournamentCardComponent {
     description: '',
     inscription: false,
     capacity: -1,
-    organizer_name: '',
-    sport_type_name: '',
+    organizer: '',
+    sport_type: '',
   };
   form: FormGroup = new FormGroup({});
 
@@ -56,14 +55,8 @@ export class TournamentCardComponent {
       description: [{ value: '', disabled: !this.admin }, Validators.required],
       inscription: [{ value: '', disabled: !this.admin }, Validators.required],
       capacity: [{ value: '', disabled: !this.admin }, Validators.required],
-      organizer_name: [
-        { value: '', disabled: !this.admin },
-        Validators.required,
-      ],
-      sport_type_name: [
-        { value: '', disabled: !this.admin },
-        Validators.required,
-      ],
+      organizer: [{ value: '', disabled: !this.admin }, Validators.required],
+      sport_type: [{ value: '', disabled: !this.admin }, Validators.required],
     });
 
     this.form.setValue({
@@ -73,8 +66,8 @@ export class TournamentCardComponent {
       description: this.tournament.description,
       inscription: this.tournament.inscription,
       capacity: this.tournament.capacity,
-      organizer_name: this.tournament.organizer_name,
-      sport_type_name: this.tournament.sport_type_name,
+      organizer: this.tournament.organizer,
+      sport_type: this.tournament.sport_type,
     });
   }
 
@@ -102,12 +95,12 @@ export class TournamentCardComponent {
     return this.form.get('capacity');
   }
 
-  get organizer_name() {
-    return this.form.get('organizer_name');
+  get organizer() {
+    return this.form.get('organizer');
   }
 
-  get sport_type_name() {
-    return this.form.get('sport_type_name');
+  get sport_type() {
+    return this.form.get('sport_type');
   }
 
   back(): void {
@@ -116,45 +109,35 @@ export class TournamentCardComponent {
 
   ngOnSubmit(): void {
     this.tournament = {
-      id: this.form.value.id,
+      id: this.tournament.id,
       name: this.form.value.name,
       location: this.form.value.location,
       address: this.form.value.address,
       description: this.form.value.description,
       inscription: this.form.value.inscription,
       capacity: this.form.value.capacity,
-      organizer_name: this.form.value.organizer_name,
-      sport_type_name: this.form.value.sport_type_name,
+      organizer: this.form.value.organizer,
+      sport_type: this.form.value.sport_type,
     };
     this.tournamentService.updateTournament(this.tournament).subscribe(
       (response) => {
-        if (response.status == 500) {
-          this.dialog.open(PopUpRegisterComponent, {
+        this.dialog.open(PopUpMsgComponent, {
+          data: {
+            register: true,
+            msg: 'Datos del torneo actualizados correctamente.',
+          },
+        });
+      },
+      (error) => {
+        console.log(error);
+        if (error.status == 403) {
+          this.dialog.open(PopUpMsgComponent, {
             data: {
               register: false,
               msg: 'Error al actualizar.',
             },
           });
         }
-      },
-      (error) => {
-        console.log(error);
-        if (error.status == 403) {
-          this.dialog.open(PopUpRegisterComponent, {
-            data: {
-              register: false,
-              msg: 'El nombre de usuario ya existe.',
-            },
-          });
-        }
-      },
-      () => {
-        this.dialog.open(PopUpRegisterComponent, {
-          data: {
-            register: true,
-            msg: 'Has actualizado tus datos  correctamente.',
-          },
-        });
       }
     );
   }

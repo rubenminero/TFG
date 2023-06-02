@@ -33,14 +33,14 @@ public class Organizer extends User {
     @Transient
     private Role role;
     private Long id;
-    private String company_name;
+    private String company;
     private String address;
     private Boolean enabled = Boolean.TRUE;
     private Date disabled_at = null;
 
-    public Organizer( User user, String company_name, String address) {
+    public Organizer(User user, String company, String address) {
         super(user.getId(), user.getUsername(),user.getPassword(),user.getFirst_name(),user.getLast_name(),user.getNif(),user.getEmail(),user.getRole(),user.getTokens());
-        this.company_name = company_name;
+        this.company = company;
         this.address = address;
     }
 
@@ -53,7 +53,7 @@ public class Organizer extends User {
         this.password = organizerDTO.getPassword();
         this.nif = organizerDTO.getNif();
         this.email = organizerDTO.getEmail();
-        this.company_name = organizerDTO.getCompany_name();
+        this.company = organizerDTO.getCompany();
         this.address = organizerDTO.getAddress();
         this.disabled_at = organizerDTO.getDisabled_at();
         this.enabled = organizerDTO.getEnabled();
@@ -78,8 +78,8 @@ public class Organizer extends User {
      * @return the name of the company of the organiser.
      */
     @Column(name = "company_name")
-    public String getCompany_name() {
-        return company_name;
+    public String getCompany() {
+        return company;
     }
 
     /**
@@ -122,8 +122,8 @@ public class Organizer extends User {
      * Set the name of the company of the organiser.
      * @param company_name the new name of the company of the organiser.
      */
-    public void setCompany_name(String company_name) {
-        this.company_name = company_name;
+    public void setCompany(String company_name) {
+        this.company = company_name;
     }
 
     /**
