@@ -2,6 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthService } from 'src/app/services/auth/auth-service.service';
+import { MatDialog } from '@angular/material/dialog';
+import { PopUpMsgComponent } from '../pop-up-msg/pop-up-msg.component';
 
 @Component({
   selector: 'app-pop-up-password',
@@ -15,7 +17,8 @@ export class PopUpPasswordComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: boolean,
     private fb: FormBuilder,
     private authService: AuthService,
-    private dialogRef: MatDialogRef<any>
+    private dialogRef: MatDialogRef<any>,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -49,12 +52,13 @@ export class PopUpPasswordComponent implements OnInit {
       if (this.data) {
         this.authService
           .changePassword(
+            this.authService.getId(),
             this.form.value.oldpassword,
             this.form.value.password,
             this.form.value.confirmpassword
           )
           .subscribe((response) => {
-            console.log(response);
+            this.dialogRef.close();
           });
       }
     }

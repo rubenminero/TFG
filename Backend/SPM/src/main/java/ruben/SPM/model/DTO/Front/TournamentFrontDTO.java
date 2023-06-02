@@ -32,7 +32,7 @@ public class TournamentFrontDTO {
             this.enabled = tournament.isEnabled();
             this.inscription = tournament.getInscription();
             this.capacity = tournament.getCapacity();
-            this.organizer = tournament.getOrganizer().getCompany_name();
+            this.organizer = tournament.getOrganizer().getCompany();
             this.sport_type = tournament.getSport_type().getName();
         }
         public TournamentFrontDTO(){

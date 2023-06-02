@@ -22,7 +22,7 @@ public class OrganizerDTO {
     private String nif;
     private String email;
     private Long id;
-    private String company_name;
+    private String company;
     private String address;
     private Boolean enabled = Boolean.TRUE;
     private Date disabled_at = null;
@@ -35,7 +35,7 @@ public class OrganizerDTO {
         this.password = organizer.getPassword();
         this.nif = organizer.getNif();
         this.email = organizer.getEmail();
-        this.company_name = organizer.getCompany_name();
+        this.company = organizer.getCompany();
         this.address = organizer.getAddress();
         this.disabled_at = organizer.getDisabled_at();
         this.enabled = organizer.isEnabled();

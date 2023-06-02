@@ -7,7 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import ruben.SPM.model.DTO.Auth.PasswordChangeDTO;
 import ruben.SPM.model.DTO.Entities.*;
 import ruben.SPM.model.DTO.Entities.WatchlistDTO;
 import ruben.SPM.model.Entities.*;
@@ -23,7 +25,6 @@ import java.util.stream.Collectors;
 @PreAuthorize("hasRole('ADMIN')")
 @Tag(name="Admins")
 @AllArgsConstructor
-@CrossOrigin(origins = {"http://localhost:4200"})
 public class AdminController {
 
     private final AdminService adminService;
@@ -360,4 +361,47 @@ public class AdminController {
                 .body(msg);
     }
 
+
+    @PutMapping("/password")
+    @Operation(summary = "Changes the password for the admin")
+    @PreAuthorize("hasAuthority('admin:update')")
+    public ResponseEntity changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO){
+        Admin admin = this.adminService.getAdmin(passwordChangeDTO.getId_user());
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Admin admin_logged = this.adminService.getAdminByUsername(username);
+
+        if (admin != null && admin_logged.getId() == admin.getId() ){
+            System.out.println(passwordChangeDTO.toString());
+            if (passwordChangeDTO.getPassword().equals(passwordChangeDTO.getConfirmpassword())){
+                admin = this.adminService.setPasswordHashed(admin, passwordChangeDTO.getPassword());
+                this.adminService.updateAdmin(admin);
+                if (admin != null ){
+                    String msg = "The password has been changed.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.OK)
+                            .body(msg);
+                }else{
+                    String msg = "The password has not been changed.";
+                    log.warn(msg);
+                    return ResponseEntity
+                            .status(HttpStatus.BAD_REQUEST)
+                            .body(msg);
+                }
+            }else{
+                String msg = "The passwords provided doesnt match.";
+                log.warn(msg);
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(msg);
+            }
+        }else {
+            String msg = "The admin with the id provided doesnt exist or doesnt match with the user logged.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(msg);
+        }
+    }
 }

@@ -3,7 +3,17 @@
   flex-direction: row;
   align-items: center;
 }
-
+.header{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 2%;
+  margin-left: 44%;
+}
+.header-text{
+  font-size: 50px;
+  font-weight: bold;
+}
 .form{
   display: flex;
   flex-direction: row;

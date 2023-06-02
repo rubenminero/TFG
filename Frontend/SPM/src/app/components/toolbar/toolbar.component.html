@@ -1,0 +1,27 @@
+<p class="toolbar">
+  <mat-toolbar class="fondo">
+    <a class="texto" [routerLink]="['/login']">SPM</a>
+    <span class="espaciado"></span>
+    <mat-menu #menu="matMenu" id="menu">
+      <button mat-menu-item routerLink="/about-us">
+        <mat-icon>info</mat-icon>
+        <span>Sobre nosotros</span>
+      </button>
+      <button *ngIf="!isLoggedIn" mat-menu-item routerLink="/login">
+        <mat-icon>login</mat-icon>
+        <span>Acceder</span>
+      </button>
+      <button
+        *ngIf="isLoggedIn"
+        mat-menu-item
+        routerLink="/login"
+        (click)="logout()"
+      >
+        <mat-icon>logout</mat-icon>
+        <span>Salir</span>
+      </button>
+    </mat-menu>
+
+    <img [matMenuTriggerFor]="menu" src="favicon.ico" />
+  </mat-toolbar>
+</p>

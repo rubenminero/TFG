@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { Events } from 'src/app/interfaces/event/event';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { PopUpRegisterComponent } from '../../pop-ups/pop-up-register/pop-up-register.component';
 import { PopUpMsgComponent } from '../../pop-ups/pop-up-msg/pop-up-msg.component';
 
 @Component({
@@ -21,8 +20,8 @@ export class EventCardComponent {
     location: '',
     address: '',
     description: '',
-    organizer_name: '',
-    sport_type_name: '',
+    organizer: '',
+    sport_type: '',
   };
   form: FormGroup = new FormGroup({});
 
@@ -47,14 +46,8 @@ export class EventCardComponent {
       location: [{ value: '', disabled: !this.admin }, Validators.required],
       address: [{ value: '', disabled: !this.admin }, Validators.required],
       description: [{ value: '', disabled: !this.admin }, Validators.required],
-      organizer_name: [
-        { value: '', disabled: !this.admin },
-        Validators.required,
-      ],
-      sport_type_name: [
-        { value: '', disabled: !this.admin },
-        Validators.required,
-      ],
+      organizer: [{ value: '', disabled: !this.admin }, Validators.required],
+      sport_type: [{ value: '', disabled: !this.admin }, Validators.required],
     });
 
     this.form.setValue({
@@ -62,8 +55,8 @@ export class EventCardComponent {
       location: this.event.location,
       address: this.event.address,
       description: this.event.description,
-      organizer_name: this.event.organizer_name,
-      sport_type_name: this.event.sport_type_name,
+      organizer: this.event.organizer,
+      sport_type: this.event.sport_type,
     });
   }
 
@@ -83,12 +76,12 @@ export class EventCardComponent {
     return this.form.get('description');
   }
 
-  get organizer_name() {
-    return this.form.get('organizer_name');
+  get organizer() {
+    return this.form.get('organizer');
   }
 
-  get sport_type_name() {
-    return this.form.get('sport_type_name');
+  get sport_type() {
+    return this.form.get('sport_type');
   }
 
   back(): void {
@@ -97,41 +90,26 @@ export class EventCardComponent {
 
   ngOnSubmit(): void {
     this.event = {
-      id: this.form.value.id,
+      id: this.event.id,
       name: this.form.value.name,
       location: this.form.value.location,
       address: this.form.value.address,
       description: this.form.value.description,
-      organizer_name: this.form.value.organizer_name,
-      sport_type_name: this.form.value.sport_type_name,
+      organizer: this.form.value.organizer,
+      sport_type: this.form.value.sport_type,
     };
     this.eventService.updateEvent(this.event).subscribe(
       (response) => {
-        if (response.status == 500) {
-          this.dialog.open(PopUpRegisterComponent, {
-            data: {
-              register: false,
-              msg: 'Error al actualizar.',
-            },
-          });
-        }
+        this.dialog.open(PopUpMsgComponent, {
+          data: {
+            msg: 'Datos del evento actualizados.',
+          },
+        });
       },
       (error) => {
-        console.log(error);
-        if (error.status == 403) {
-          this.dialog.open(PopUpRegisterComponent, {
-            data: {
-              register: false,
-              msg: 'El nombre de usuario ya existe.',
-            },
-          });
-        }
-      },
-      () => {
-        this.dialog.open(PopUpRegisterComponent, {
+        this.dialog.open(PopUpMsgComponent, {
           data: {
-            register: true,
-            msg: 'Has actualizado tus datos  correctamente.',
+            msg: 'Error al actualizar.',
           },
         });
       }

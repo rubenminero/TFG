@@ -7,12 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import ruben.SPM.model.DTO.Entities.AthleteDTO;
 import ruben.SPM.model.DTO.Entities.InscriptionDTO;
-import ruben.SPM.model.DTO.Entities.WatchlistDTO;
-import ruben.SPM.model.DTO.Front.InscriptionFrontDTO;
-import ruben.SPM.model.DTO.Front.WatchlistFrontDTO;
 import ruben.SPM.model.Entities.*;
 import ruben.SPM.service.EntitiesServices.AthleteService;
 import ruben.SPM.service.EntitiesServices.InscriptionService;
@@ -27,7 +24,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/inscriptions")
 @AllArgsConstructor
 @Tag(name="Inscriptions")
-@CrossOrigin(origins = {"http://localhost:4200"})
 public class InscriptionController {
 
     private final InscriptionService inscriptionService;
@@ -61,7 +57,7 @@ public class InscriptionController {
                         .body(msg);
             }else {
                 log.info("The inscription has successfully been retrieved.");
-                return ResponseEntity.ok(new InscriptionFrontDTO(inscription));
+                return ResponseEntity.ok(inscription);
             }
         }
         else {
@@ -135,16 +131,8 @@ public class InscriptionController {
                             .body(msg);
                 }
             }else{
-                if (!inscriptionService.isValid(inscription)){
-                    String msg = "The tournament is already on your inscriptions.";
-                    log.warn(msg);
-                    return ResponseEntity
-                            .status(HttpStatus.BAD_REQUEST)
-                            .body(msg);
-                }else{
-                    log.info("The inscription has successfully been updated.");
-                    return ResponseEntity.ok(InscriptionDTO.fromInscription(inscriptionService.updateInscription(inscription)));
-                }
+                log.info("The inscription has successfully been updated.");
+                return ResponseEntity.ok(InscriptionDTO.fromInscription(inscriptionService.saveInscription(inscription)));
             }
         }
 
@@ -153,7 +141,7 @@ public class InscriptionController {
     @PostMapping("")
     @PreAuthorize("hasAuthority('athlete:create')")
     @Operation(summary = "Create a inscription with the data provided.")
-    public ResponseEntity createInscription(@RequestBody InscriptionDTO inscriptionDTO) {
+        public ResponseEntity createInscription(@RequestBody InscriptionFrontDTO inscriptionFrontDTO) {
         User user = userService.isAuthorized();
 
         if (user == null){
@@ -164,9 +152,9 @@ public class InscriptionController {
                     .body(msg);
         }
 
-        Tournament tournament = tournamentService.getTournament(inscriptionDTO.getTournament());
-        Athlete athlete = athleteService.getAthlete(inscriptionDTO.getAthlete());
-        Inscription inscription = InscriptionDTO.toInscription(inscriptionDTO,tournament,athlete);
+        Tournament tournament = tournamentService.getTournament(inscriptionFrontDTO.getTournament_id());
+        Athlete athlete = athleteService.getAthlete(inscriptionFrontDTO.getAthlete_id());
+        Inscription inscription = InscriptionFrontDTO.toInscription(inscriptionFrontDTO,tournament,athlete);
         inscription.setEnabled(true);
         if (inscription.getTournament() == null || inscription.getAthlete() == null){
             if (inscription.getTournament() == null ) {
@@ -198,17 +186,8 @@ public class InscriptionController {
                             .body(msg);
                 }
             }else{
-                if (!inscriptionService.isValid(inscription)){
-                    String msg = "The tournament is already on your inscriptions.";
-                    log.warn(msg);
-                    return ResponseEntity
-                            .status(HttpStatus.BAD_REQUEST)
-                            .body(msg);
-                }else{
-                    tournamentService.lessCapacity(tournament);
-                    log.info("The inscription has successfully been saved.");
-                    return ResponseEntity.ok(InscriptionDTO.fromInscription(inscriptionService.saveInscription(inscription)));
-                }
+                log.info("The inscription has successfully been saved.");
+                return ResponseEntity.ok(InscriptionDTO.fromInscription(inscriptionService.saveInscription(inscription)));
             }
         }
 
@@ -237,11 +216,15 @@ public class InscriptionController {
         }
 
         // Convert the list of sport types to a list of Sports_typeDTOs
-        List<InscriptionFrontDTO> inscriptionDTOS = inscriptions.stream().map(InscriptionFrontDTO::new).collect(Collectors.toList());
+        List<InscriptionDTO> inscriptionDTOS = inscriptions.stream().map(InscriptionDTO::new).collect(Collectors.toList());
         log.info("The inscriptions has been retrieved.");
         return ResponseEntity.ok(inscriptionDTOS);
     }
 
+<<<<<<< Updated upstream
+
+
+=======
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('athlete:delete')")
     @Operation(summary = "Disable/enable the inscription with the id provided.")
@@ -268,23 +251,20 @@ public class InscriptionController {
                     .body(msg);
         }
 
-        if (user.getId() != inscription.getAthlete().getId()){
+        if (user.getId() == inscription.getAthlete().getId() || inscription.getTournament().getOrganizer().getId() == user.getId()){
+            inscriptionService.deleteInscription(inscription);
+            tournamentService.moreCapacity(tournament);
+            String msg = "The inscription has been deleted.";
+            log.info(msg);
+            InscriptionFrontDTO inscriptionFrontDTO = new InscriptionFrontDTO(inscription);
+            return ResponseEntity.ok(inscriptionFrontDTO);
+        }else{
             String msg = "The inscription doesnt belong to your user.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(msg);
         }
-
-        inscriptionService.deleteInscription(inscription);
-        tournamentService.moreCapacity(tournament);
-        String msg = "The inscription has been deleted.";
-        log.warn(msg);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(msg);
     }
-
-
-
+>>>>>>> Stashed changes
 }

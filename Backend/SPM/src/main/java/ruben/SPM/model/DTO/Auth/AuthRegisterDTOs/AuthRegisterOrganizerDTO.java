@@ -20,7 +20,7 @@ public class AuthRegisterOrganizerDTO {
     private String last_name;
     private String nif;
     private String email;
-    private String company_name;
+    private String company;
     private String address;
     private Boolean enabled = Boolean.TRUE;
     private Date disabled_at = null;

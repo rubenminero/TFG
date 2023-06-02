@@ -60,4 +60,19 @@ export class InscriptionServiceService {
       httpOptions
     );
   }
+
+  getInscriptionsFromTournament(id: number): Observable<any> {
+    const httpOptions = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.authService.getAccessToken(),
+      },
+    };
+    return this.http.get(
+      this.envService.getApiUrl() +
+        '/api/tournaments/inscriptions/' +
+        this.authService.getId(),
+      httpOptions
+    );
+  }
 }

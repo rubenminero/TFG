@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import ruben.SPM.model.DTO.Auth.AuthRegisterDTOs.AuthRegisterAdminDTO;
 import ruben.SPM.model.DTO.Auth.AuthRegisterDTOs.AuthRegisterAthleteDTO;
 import ruben.SPM.model.Entities.Admin;
@@ -33,9 +34,7 @@ import ruben.SPM.service.EntitiesServices.OrganizerService;
 import ruben.SPM.service.EntitiesServices.UserService;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +59,7 @@ public class AuthService {
                 .role(request.getRole())
                 .build();
 
-        Organizer organizer = new Organizer(user,request.getCompany_name(),request.getAddress());
+        Organizer organizer = new Organizer(user,request.getCompany(),request.getAddress());
 
 
         var saveUser = organizerService.saveOrganizer(organizer);
@@ -149,6 +148,7 @@ public class AuthService {
                 var extraclaims = new HashMap<String,Object>();
                 extraclaims.put("id",user.getId());
                 extraclaims.put("role",user.getRole());
+                extraclaims.put("enabled", user.isEnabled());
                 var jwtToken = jwtService.generateToken(extraclaims,user);
                 var refreshToken = jwtService.generateRefreshToken(user);
                 revokeAllUserTokens(user);
@@ -171,6 +171,26 @@ public class AuthService {
         }
     }
 
+    public ResponseEntity<?> log_out() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = this.userService.getUserByUsername(username);
+        if (user != null){
+            this.revokeAllUserTokens(user);
+            SecurityContextHolder.clearContext();
+            String msg = "Logged out.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(msg);
+        }else{
+            String msg = "Not logged out, the user doesnt exist.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(msg);
+        }
+    }
+
     private void saveUserToken(User user, String jwtToken) {
         var token = Token.builder()
                 .user(user)
@@ -182,21 +202,17 @@ public class AuthService {
         tokenRepository.save(token);
     }
 
-    public void revokeAllUserTokens(User user) {
-        List<Token> tokens = tokenRepository.findAll();
-        List<Token> validUserTokens = new ArrayList<Token>();
-
-        for (Token t : tokens){
-            if (!t.isRevoked() && !t.isExpired() && t.getUser().getId() == user.getId()){
-                validUserTokens.add(t);
-            }
-        }
+    private void revokeAllUserTokens(User user) {
+        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+        if (validUserTokens.isEmpty())
+            return;
         validUserTokens.forEach(token -> {
             token.setExpired(true);
             token.setRevoked(true);
         });
         tokenRepository.saveAll(validUserTokens);
     }
+
     public void refreshToken(
             HttpServletRequest request,
             HttpServletResponse response
@@ -227,20 +243,5 @@ public class AuthService {
         }
     }
 
-
-    /**
-     * Changes the password of a user.
-     * @param user User whose password is being changed.
-     * @param oldPassword Old password of the user.
-     * @param newPassword New password of the user.
-     */
-    public boolean changePassword(User user, String oldPassword, String newPassword) {
-        if (user.getPassword().equals(oldPassword)) {
-            user.setPassword(newPassword);
-            userService.saveUser(user);
-            return true;
-        }
-        return false;
-    }
 
 }

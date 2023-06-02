@@ -1,4 +1,3 @@
-import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -9,11 +8,19 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(
-    private http: HttpClient,
-    private envService: EnvService,
-    private router: Router
-  ) {}
+  httpOptions = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.getAccessToken(),
+    },
+  };
+  httpOptionsForRefresh = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.getRefreshToken(),
+    },
+  };
+  constructor(private http: HttpClient, private envService: EnvService) {}
 
   login(username: string, password: string): Observable<any> {
     let body = {
@@ -26,28 +33,37 @@ export class AuthService {
     );
   }
   logout(): Observable<any> {
+    let access_token = sessionStorage.getItem('access_token');
+    let refresh_token = sessionStorage.getItem('refresh_token');
+<<<<<<< Updated upstream
+=======
     const httpOptions = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + this.getAccessToken(),
+        Authorization: 'Bearer ' + access_token,
       },
     };
-    let access_token = sessionStorage.getItem('access_token');
-    let refresh_token = sessionStorage.getItem('refresh_token');
+>>>>>>> Stashed changes
     sessionStorage.removeItem('access_token');
     sessionStorage.removeItem('refresh_token');
     return this.http.post(
       this.envService.getApiUrl() + '/api/auth/logout',
-      httpOptions
+      access_token
     );
   }
 
+<<<<<<< Updated upstream
+  getHeaders(): any {
+    return this.httpOptions;
+=======
   changePassword(
+    id_user: number,
     oldpassword: string,
     password: string,
     confirmpassword: string
   ): Observable<any> {
     let body = {
+      id_user: id_user,
       oldpassword: oldpassword,
       password: password,
       confirmpassword: confirmpassword,
@@ -60,11 +76,23 @@ export class AuthService {
       },
     };
     console.log(body);
+    let path = '';
+    const role = this.getRole();
+
+    if (role === 'ADMIN') {
+      path = '/admins';
+    } else if (role === 'ORGANIZER') {
+      path = '/organizers';
+    } else {
+      path = '/athletes';
+    }
+
     return this.http.put(
-      this.envService.getApiUrl() + '/api/auth/password/' + this.getId(),
+      this.envService.getApiUrl() + '/api' + path + '/password',
       body,
       httpOptions
     );
+>>>>>>> Stashed changes
   }
 
   getAccessToken(): String {
@@ -111,34 +139,15 @@ export class AuthService {
   getPathHome(): String {
     let path = '';
     let role = this.getRole();
-
-    if (role === 'ATHLETE') {
-      path = '/athletes-menu';
-    } else if (role === 'ORGANIZER') {
-      path = '/organizers-menu';
-    } else if (role === 'ROLE_ADMIN') {
-      path = '/admins-menu';
+    if (role === 'athlete') {
+      path = '/home-athlete';
+    } else if (role === 'organizer') {
+      path = '/home-organizer';
+    } else if (role === 'admin') {
+      path = '/home-admin';
     } else {
-      path = '';
+      path = '/role-error';
     }
-    console.log(path);
-    console.log(role);
     return path;
-  }
-
-  getPath(): void {
-    let path = '';
-    let role = this.getRole();
-    console.log(path);
-    console.log(role);
-    if (role === 'ATHLETE') {
-      this.router.navigate(['/athletes-menu']);
-    } else if (role === 'ORGANIZER') {
-      this.router.navigate(['/organizers-menu']);
-    } else if (role === 'ROLE_ADMIN') {
-      this.router.navigate(['/admins-menu']);
-    } else {
-      this.router.navigate(['/login']);
-    }
   }
 }

@@ -25,41 +25,35 @@ public class AdminService {
     private final Sports_typeService sportsTypeService;
     private final InscriptionService inscriptionService;
     private final WatchlistService watchlistService;
-
+    private final DeleteService deleteService;
     private final PasswordEncoder passwordEncoder;
 
     /**
      * Enable or disable a user in the database.
-     * 
      * @param id the id of the user to be changed.
      */
-    public void changeStateOrganizer(Long id) {
+    public void changeStateOrganizer(Long id){
         organizerService.changeStateOrganizer(id);
     }
 
     /**
      * Gets all the organizers from the database.
      * Only for admins.
-     * 
      * @return A list with all the organizers.
      */
     public List<Organizer> getAllOrganizers() {
         return organizerService.getAllOrganizers();
     }
-
     /**
      * Enable or disable a athlete in the database.
-     * 
      * @param id the id of the athlete to be changed.
      */
-    public void changeStateAthlete(Long id) {
+    public void changeStateAthlete(Long id){
         athleteService.changeStateAthlete(id);
     }
-
     /**
      * Gets all the athletes from the database.
      * Only for admins
-     * 
      * @return A list with all the athletes.
      */
     public List<Athlete> getAllAthletes() {
@@ -68,36 +62,33 @@ public class AdminService {
 
     /**
      * Enable or disable a sport type in the database.
-     * 
      * @param id the id of the sport type to be changed.
      */
-    public void changeStateSport_type(Long id) {
+    public void changeStateSport_type(Long id){
         sportsTypeService.changeStateSport_type(id);
     }
 
     /**
      * Gets all the sports types from the database.
      * Only for admins
-     * 
      * @return A list with all the sports types.
      */
     public List<Sports_type> getAllSports_types() {
         return sportsTypeService.getAllSports_types();
     }
 
+
     /**
      * Enable or disable a tournament in the database.
-     * 
      * @param id the id of the tournament to be changed.
      */
-    public void changeStateTournament(Long id) {
+    public void changeStateTournament(Long id){
         tournamentService.changeStateTournament(id);
     }
 
     /**
      * Gets all the tournaments from the database.
      * Only for admins
-     * 
      * @return A list with all the sports types.
      */
     public List<Tournament> getAllTournaments() {
@@ -106,36 +97,33 @@ public class AdminService {
 
     /**
      * Enable or disable an inscription in the database.
-     * 
      * @param id the id of the inscription to be changed.
      */
-    public void changeStateInscription(Long id) {
+    public void changeStateInscription(Long id){
         inscriptionService.changeStateInscription(id);
     }
 
     /**
      * Gets all the inscriptions from the database.
      * Only for admins
-     * 
      * @return A list with all the inscriptions.
      */
     public List<Inscription> getAllInscriptions() {
         return inscriptionService.getAllInscriptions();
     }
 
+
     /**
      * Enable or disable a watchlist in the database.
-     * 
      * @param id the id of the watchlist to be changed.
      */
-    public void changeStateWatchlist(Long id) {
+    public void changeStateWatchlist(Long id){
         watchlistService.changeStateWatchlist(id);
     }
 
     /**
      * Gets all the watchlists from the database.
      * Only for admins
-     * 
      * @return A list with all the watchlists.
      */
     public List<Watchlist> getAllWatchlists() {
@@ -144,144 +132,138 @@ public class AdminService {
 
     /**
      * Recover an organizer from the database.
-     * 
      * @param id the id of the organizer.
      * @return organizer the organizer with the id.
      */
-    public Organizer getOrganizer(Long id) {
+    public Organizer getOrganizer(Long id){
 
         return organizerService.getOrganizer(id);
     }
 
     /**
      * Recover a athlete from the database
-     * 
      * @param id the id of the athlete
      * @return athlete the athlete with the id
      */
-    public Athlete getAthlete(Long id) {
+    public Athlete getAthlete(Long id){
 
         return athleteService.getAthlete(id);
     }
 
     /**
      * Recover a tournament from the database.
-     * 
      * @param id the id of the tournament.
      * @return tournament the tournament with the id.
      */
-    public Tournament getTournament(Long id) {
+    public Tournament getTournament(Long id){
 
         return tournamentService.getTournament(id);
     }
 
     /**
      * Recover a tournament from the database.
-     * 
      * @param id the id of the tournament.
      * @return tournament the tournament with the id.
      */
-    public Sports_type getSport_type(Long id) {
+    public Sports_type getSport_type(Long id){
 
         return sportsTypeService.getSport_type(id);
     }
 
     /**
      * Recover an inscription from the database.
-     * 
      * @param id the id of the inscription.
      * @return inscription the inscription with the id.
      */
-    public Inscription getInscription(Long id) {
+    public Inscription getInscription(Long id){
 
         return inscriptionService.getInscription(id);
     }
-
     /**
      * Recover a watchlist from the database.
-     * 
      * @param id the id of the watchlist.
      * @return watchlist the watchlist with the id.
      */
-    public Watchlist getWatchlist(Long id) {
+    public Watchlist getWatchlist(Long id){
 
         return watchlistService.getWatchList(id);
     }
 
     /**
      * Recover an admin from the database.
-     * 
      * @param id the id of the admin.
      * @return admin the admin with the id.
      */
-    public Admin getAdmin(Long id) {
+    public Admin getAdmin(Long id){
         return adminRepository.findById(id).orElse(null);
     }
 
     /**
      * Save an admin in the database.
-     * 
      * @param admin the admin to be saved.
      */
-    public Admin saveAdmin(Admin admin) {
+    public Admin saveAdmin(Admin admin){
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         admin.setRole(Role.ADMIN);
         return adminRepository.save(admin);
     }
 
     /**
-     * Update an admin in the database.
-     * 
-     * @param admin the admin to be updated.
-     * @return admin the admin updated.
+     * Disable or enable an admin in the database,depends on the last state.
+     * @param id the id of the admin to be changed.
      */
-    public Admin updateAdmin(Admin admin) {
-        adminRepository.update(admin.getId(),
-                admin.getUsername(),
-                admin.getPassword(),
-                admin.getFirst_name(),
-                admin.getLast_name(),
-                admin.getNif(),
-                admin.getEmail(),
-                admin.getRole(),
-                admin.getValidFrom(),
-                admin.getValid_to());
-        return admin;
+    public void changeStateAdmin(Long id){
+        Admin admin = this.getAdmin(id);
+        if (admin.getValid_to() == null){
+            admin.setValid_to(new Date());
+        }else{
+            admin.setValid_to(null);
+        }
+        adminRepository.save(admin);
     }
 
     /**
-     * Update an admin in the database.
-     * 
-     * @param admin       the admin to be updated.
-     * @param admin_saved the admin stored in the db before the update.
-     * @return admin the admin updated.
+     * Gets all the admins from the database.
+     * @return A list with all the admins.
      */
-    public Admin updateAdmin(Admin admin, Admin admin_saved) {
-        admin.setValid_to(admin_saved.getValid_to());
-        admin.setValidFrom(admin_saved.getValidFrom());
-        admin.setPassword(admin_saved.getPassword());
-        adminRepository.update(admin.getId(),
-                admin.getUsername(),
-                admin.getPassword(),
-                admin.getFirst_name(),
-                admin.getLast_name(),
-                admin.getNif(),
-                admin.getEmail(),
-                admin.getRole(),
-                admin.getValidFrom(),
-                admin.getValid_to());
-        return admin;
-    }
+    public List<Admin> getAllAdmins() {
 
+        return adminRepository.findAll();
+    }
     /**
-     * Return the admin with the password hashed.
-     * 
-     * @param admin the admin to be updated.
-     * @return admin the admin with the password updated.
+     * Gets all the enabled admins from the database.
+     * @return A list with all the admins.
      */
-    public Admin setPasswordHashed(Admin admin, String password) {
-        admin.setPassword(passwordEncoder.encode(password));
-        return admin;
+    public List<Admin> getEnabledAdmins() {
+        List<Admin> admins_enabled = new ArrayList<Admin>();
+        List<Admin> admins = adminRepository.findAll();
+        for (Admin a : admins) {
+            if (a.getValid_to() != null){
+                admins_enabled.add(a);
+            }
+        }
+        return admins_enabled;
+    }
+    /**
+     * Recover a admin from the database.
+     * @param username the username of the admin.
+     * @return admin the admin with the username.
+     */
+    public Admin getAdminByUsername(String username) {
+
+<<<<<<< Updated upstream
+        return adminRepository.findByUsername(username).orElse(null);
+    }
+=======
+    /**
+     * Recover a admin from the database.
+     *
+     * @param username the username of the admin.
+     * @return admin the admin with the username.
+     */
+    public Admin getAdminByUsername(String username) {
+        return adminRepository.findByUsername(username).orElse(null);
     }
 
+>>>>>>> Stashed changes
 }
