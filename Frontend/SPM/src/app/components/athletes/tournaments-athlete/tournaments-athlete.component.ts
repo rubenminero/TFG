@@ -106,12 +106,19 @@ export class TournamentsAthleteComponent {
         });
       },
       (error) => {
-        console.log(error);
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Error al añadir.',
-          },
-        });
+        if (error.status == 400) {
+          this.dialog.open(PopUpMsgComponent, {
+            data: {
+              msg: 'Ya estas inscrito en este torneo.',
+            },
+          });
+        } else if (error.status == 404) {
+          this.dialog.open(PopUpMsgComponent, {
+            data: {
+              msg: 'Error al añadir.',
+            },
+          });
+        }
       }
     );
   }
@@ -131,12 +138,19 @@ export class TournamentsAthleteComponent {
         });
       },
       (error) => {
-        console.log(error);
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Error al añadir.',
-          },
-        });
+        if (error.status == 400) {
+          this.dialog.open(PopUpMsgComponent, {
+            data: {
+              msg: 'Ya tienes este evento en tu lista.',
+            },
+          });
+        } else if (error.status == 404) {
+          this.dialog.open(PopUpMsgComponent, {
+            data: {
+              msg: 'Error al añadir.',
+            },
+          });
+        }
       }
     );
   }

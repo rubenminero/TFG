@@ -5,8 +5,6 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { AthleteRegisterComponent } from './pages/athlete-register/athlete-register.component';
 import { OrganizerRegisterComponent } from './pages/organizer-register/organizer-register.component';
 import { AboutusPageComponent } from './pages/aboutus-page/aboutus-page.component';
-<<<<<<< Updated upstream
-=======
 import { WelcomeComponent } from './components/shared/welcome/welcome.component';
 // Athlete Components
 import { AthletesMenuComponent } from './pages/athletes-menu/athletes-menu.component';
@@ -28,7 +26,6 @@ import { EventsOrganizerComponent } from './components/organizers/events-organiz
 import { TournamentsOrganizerComponent } from './components/organizers/tournaments-organizer/tournaments-organizer.component';
 import { RegisterTournamentOrganizerComponent } from './components/organizers/register-tournament-organizer/register-tournament-organizer.component';
 import { RegisterEventOrganizerComponent } from './components/organizers/register-event-organizer/register-event-organizer.component';
->>>>>>> Stashed changes
 
 const routes: Routes = [
   {
@@ -52,8 +49,6 @@ const routes: Routes = [
     path: 'about-us',
     component: AboutusPageComponent,
   },
-<<<<<<< Updated upstream
-=======
   {
     path: 'athletes-menu',
     component: AthletesMenuComponent,
@@ -138,7 +133,6 @@ const routes: Routes = [
       },
     ],
   },
->>>>>>> Stashed changes
 ];
 
 @NgModule({

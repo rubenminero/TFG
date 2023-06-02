@@ -72,6 +72,7 @@ public class Admin extends User {
      * 
      * @return the valid_toC of the admin.
      */
+    @Column(name = "valid_to")
     public Date getValid_to() {
         return valid_to;
     }

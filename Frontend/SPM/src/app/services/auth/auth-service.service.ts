@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { EnvService } from '../env/env-service.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,11 @@ export class AuthService {
       Authorization: 'Bearer ' + this.getRefreshToken(),
     },
   };
-  constructor(private http: HttpClient, private envService: EnvService) {}
+  constructor(
+    private http: HttpClient,
+    private envService: EnvService,
+    private router: Router
+  ) {}
 
   login(username: string, password: string): Observable<any> {
     let body = {
@@ -35,15 +40,12 @@ export class AuthService {
   logout(): Observable<any> {
     let access_token = sessionStorage.getItem('access_token');
     let refresh_token = sessionStorage.getItem('refresh_token');
-<<<<<<< Updated upstream
-=======
     const httpOptions = {
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + access_token,
       },
     };
->>>>>>> Stashed changes
     sessionStorage.removeItem('access_token');
     sessionStorage.removeItem('refresh_token');
     return this.http.post(
@@ -52,18 +54,14 @@ export class AuthService {
     );
   }
 
-<<<<<<< Updated upstream
-  getHeaders(): any {
-    return this.httpOptions;
-=======
   changePassword(
-    id_user: number,
+    id_user: Number,
     oldpassword: string,
     password: string,
     confirmpassword: string
   ): Observable<any> {
     let body = {
-      id_user: id_user,
+      id_user: this.getId(),
       oldpassword: oldpassword,
       password: password,
       confirmpassword: confirmpassword,
@@ -92,7 +90,6 @@ export class AuthService {
       body,
       httpOptions
     );
->>>>>>> Stashed changes
   }
 
   getAccessToken(): String {
@@ -149,5 +146,21 @@ export class AuthService {
       path = '/role-error';
     }
     return path;
+  }
+
+  getPath(): void {
+    let path = '';
+    let role = this.getRole();
+    console.log(path);
+    console.log(role);
+    if (role === 'ATHLETE') {
+      this.router.navigate(['/athletes-menu']);
+    } else if (role === 'ORGANIZER') {
+      this.router.navigate(['/organizers-menu']);
+    } else if (role === 'ROLE_ADMIN') {
+      this.router.navigate(['/admins-menu']);
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 }

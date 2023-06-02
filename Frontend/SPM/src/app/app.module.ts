@@ -8,9 +8,6 @@ import { AppRoutingModule } from './app-routing.module';
 //Components imports
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-<<<<<<< Updated upstream
-import { ToolbarComponent } from './components/toolbar/toolbar.component';
-=======
 //Shared components imports
 import { ToolbarComponent } from './components/shared/toolbar/toolbar.component';
 import { LoginFormComponent } from './components/shared/forms/login-form/login-form.component';
@@ -20,17 +17,10 @@ import { WelcomeComponent } from './components/shared/welcome/welcome.component'
 import { AthleteCardComponent } from './components/shared/models-cards/athlete-card/athlete-card.component';
 import { PopUpPasswordComponent } from './components/shared/pop-ups/pop-up-password/pop-up-password.component';
 //Pages imports
->>>>>>> Stashed changes
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { OrganizerRegisterComponent } from './pages/organizer-register/organizer-register.component';
 import { AthleteRegisterComponent } from './pages/athlete-register/athlete-register.component';
-import { LoginFormComponent } from './components/forms/login-form/login-form.component';
-import { RegisterAthleteComponent } from './components/forms/register-athlete/register-athlete.component';
-import { PopUpRegisterComponent } from './components/pop-ups/pop-up-register/pop-up-register.component';
-import { RegisterOrganizerComponent } from './components/forms/register-organizer/register-organizer.component';
 import { AboutusPageComponent } from './pages/aboutus-page/aboutus-page.component';
-<<<<<<< Updated upstream
-=======
 //Athlete components imports
 import { NavbarAthleteComponent } from './components/athletes/navbar-athlete/navbar-athlete.component';
 import { WatchlistAthleteComponent } from './components/athletes/watchlist-athlete/watchlist-athlete.component';
@@ -51,7 +41,6 @@ import { TournamentsOrganizerComponent } from './components/organizers/tournamen
 import { RegisterTournamentOrganizerComponent } from './components/organizers/register-tournament-organizer/register-tournament-organizer.component';
 import { RegisterEventOrganizerComponent } from './components/organizers/register-event-organizer/register-event-organizer.component';
 import { InscriptionsOrganizerComponent } from './components/organizers/inscriptions-organizer/inscriptions-organizer.component';
->>>>>>> Stashed changes
 
 @NgModule({
   declarations: [
@@ -64,8 +53,6 @@ import { InscriptionsOrganizerComponent } from './components/organizers/inscript
     RegisterAthleteComponent,
     RegisterOrganizerComponent,
     AboutusPageComponent,
-<<<<<<< Updated upstream
-=======
     NavbarAthleteComponent,
     WelcomeComponent,
     WatchlistAthleteComponent,
@@ -88,7 +75,6 @@ import { InscriptionsOrganizerComponent } from './components/organizers/inscript
     RegisterTournamentOrganizerComponent,
     RegisterEventOrganizerComponent,
     InscriptionsOrganizerComponent,
->>>>>>> Stashed changes
   ],
   imports: [
     BrowserModule,

@@ -26,27 +26,27 @@ public class OrganizerService {
 
     /**
      * Recover an organizer from the database.
+     * 
      * @param id the id of the organizer.
      * @return organizer the organizer with the id.
      */
-    public Organizer getOrganizer(Long id){
+    public Organizer getOrganizer(Long id) {
 
         return organizerRepository.findById(id).orElse(null);
     }
 
     /**
      * Save an organizer in the database.
+     * 
      * @param organizer the organizer to be saved.
      */
-    public Organizer saveOrganizer(Organizer organizer){
+    public Organizer saveOrganizer(Organizer organizer) {
         organizer.setPassword(passwordEncoder.encode(organizer.getPassword()));
         organizer.setRole(Role.ORGANIZER);
         return organizerRepository.save(organizer);
     }
 
     /**
-<<<<<<< Updated upstream
-=======
      * Update an organizer in the database.
      * 
      * @param organizer       the organizer to be updated.
@@ -98,6 +98,7 @@ public class OrganizerService {
 
     /**
      * Delete an organizer in the database.
+     * 
      * @param organizer the organizer to be deleted.
      */
     public void deleteOrganizer(Organizer organizer) {
@@ -116,11 +117,11 @@ public class OrganizerService {
     }
 
     /**
->>>>>>> Stashed changes
      * Disable or enable a organizer in the database,depends on the last state.
+     * 
      * @param id the id of the organizer to be changed.
      */
-    public void changeStateOrganizer(Long id){
+    public void changeStateOrganizer(Long id) {
         Organizer organizer = this.getOrganizer(id);
         organizer.setEnabled(!organizer.isEnabled());
         organizer.setDisabled_at(new Date());
@@ -130,6 +131,7 @@ public class OrganizerService {
     /**
      * Gets all the organizers from the database.
      * Only for admins.
+     * 
      * @return A list with all the organizers.
      */
     public List<Organizer> getAllOrganizers() {
@@ -139,13 +141,14 @@ public class OrganizerService {
 
     /**
      * Gets all the tournaments for the organizer.
+     * 
      * @return A list with all the tournaments.
      */
-    public List<Tournament> getTournamentsOrganizer(Long id){
+    public List<Tournament> getTournamentsOrganizer(Long id) {
         List<Tournament> tournaments = this.tournamentService.getEnabledTournaments();
         List<Tournament> tournaments_organizer = new ArrayList<Tournament>();
         for (Tournament t : tournaments) {
-            if (t.getOrganizer().getId() == id){
+            if (t.getOrganizer().getId() == id) {
                 tournaments_organizer.add(t);
             }
         }
@@ -154,13 +157,14 @@ public class OrganizerService {
 
     /**
      * Gets all the events for the organizer.
+     * 
      * @return A list with all the events.
      */
-    public List<Tournament> getEventsOrganizer(Long id){
+    public List<Tournament> getEventsOrganizer(Long id) {
         List<Tournament> events = this.tournamentService.getEnabledEvents();
         List<Tournament> events_organizer = new ArrayList<Tournament>();
         for (Tournament t : events) {
-            if (t.getOrganizer().getId() == id){
+            if (t.getOrganizer().getId() == id) {
                 events_organizer.add(t);
             }
         }
@@ -169,39 +173,35 @@ public class OrganizerService {
 
     /**
      * Gets all the enabled organizers from the database.
+     * 
      * @return A list with all the organizers.
      */
     public List<Organizer> getEnabledOrganizers() {
         List<Organizer> organizers_enabled = new ArrayList<Organizer>();
         List<Organizer> organizers = organizerRepository.findAll();
         for (Organizer o : organizers) {
-            if (o.isEnabled()){
+            if (o.isEnabled()) {
                 organizers_enabled.add(o);
             }
         }
         return organizers_enabled;
     }
+
     /**
      * Recover an organizer from the database.
-<<<<<<< Updated upstream
-=======
      *
->>>>>>> Stashed changes
      * @param username the username of the organizer.
      * @return organizer the organizer with the username.
      */
     public Organizer getOrganizerByUsername(String username) {
         Organizer organizer = organizerRepository.findByUsername(username);
-        if (organizer == null){
+        if (organizer == null) {
             return null;
-        }else{
+        } else {
             return organizer;
         }
     }
 
-<<<<<<< Updated upstream
-    }
-=======
     /**
      * Recover an organizer from the database.
      *
@@ -217,9 +217,9 @@ public class OrganizerService {
         }
     }
 
-
     /**
      * Checks if the company name is valid.
+     * 
      * @param company_name the company_name of the organizer.
      * @return true if valid, false otherwise.
      */
@@ -233,4 +233,3 @@ public class OrganizerService {
     }
 
 }
->>>>>>> Stashed changes

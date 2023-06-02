@@ -7,9 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ruben.SPM.model.DTO.Entities.AthleteDTO;
 import ruben.SPM.model.DTO.Entities.InscriptionDTO;
+import ruben.SPM.model.DTO.Front.InscriptionFrontDTO;
 import ruben.SPM.model.Entities.*;
 import ruben.SPM.service.EntitiesServices.AthleteService;
 import ruben.SPM.service.EntitiesServices.InscriptionService;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/inscriptions")
 @AllArgsConstructor
 @Tag(name="Inscriptions")
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class InscriptionController {
 
     private final InscriptionService inscriptionService;
@@ -101,6 +104,15 @@ public class InscriptionController {
         Tournament tournament = tournamentService.getTournament(inscriptionDTO.getTournament());
         Athlete athlete = athleteService.getAthlete(inscriptionDTO.getAthlete());
         Inscription inscription = InscriptionDTO.toInscription(inscriptionDTO,tournament,athlete);
+
+        if (inscriptionService.validInscription(athlete,tournament)){
+            String msg = "You already have this tournament in your watchlists.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(msg);
+        }
+
         if (inscription.getTournament() == null || inscription.getAthlete() == null){
             if (inscription.getTournament() == null ) {
                 String msg = "The tournament of the inscription doesnt exist.";
@@ -156,6 +168,15 @@ public class InscriptionController {
         Athlete athlete = athleteService.getAthlete(inscriptionFrontDTO.getAthlete_id());
         Inscription inscription = InscriptionFrontDTO.toInscription(inscriptionFrontDTO,tournament,athlete);
         inscription.setEnabled(true);
+
+        if (inscriptionService.validInscription(athlete,tournament)){
+            String msg = "You already have this tournament in your watchlists.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(msg);
+        }
+
         if (inscription.getTournament() == null || inscription.getAthlete() == null){
             if (inscription.getTournament() == null ) {
                 String msg = "The tournament of the inscription doesnt exist.";
@@ -221,10 +242,7 @@ public class InscriptionController {
         return ResponseEntity.ok(inscriptionDTOS);
     }
 
-<<<<<<< Updated upstream
 
-
-=======
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('athlete:delete')")
     @Operation(summary = "Disable/enable the inscription with the id provided.")
@@ -266,5 +284,4 @@ public class InscriptionController {
                     .body(msg);
         }
     }
->>>>>>> Stashed changes
 }

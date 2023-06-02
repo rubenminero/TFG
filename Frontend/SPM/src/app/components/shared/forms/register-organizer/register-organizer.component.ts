@@ -9,7 +9,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { PopUpRegisterComponent } from '../../pop-ups/pop-up-register/pop-up-register.component';
+import { PopUpMsgComponent } from '../../pop-ups/pop-up-msg/pop-up-msg.component';
 
 @Component({
   selector: 'app-register-organizer',
@@ -24,7 +24,7 @@ export class RegisterOrganizerComponent {
     email: '',
     first_name: '',
     last_name: '',
-    company_name: '',
+    company: '',
     address: '',
   };
   form: FormGroup = new FormGroup({});
@@ -68,7 +68,7 @@ export class RegisterOrganizerComponent {
           Validators.pattern('[a-zA-Z ]*'),
           Validators.required,
         ]),
-        company_name: new FormControl('', [Validators.required]),
+        company: new FormControl('', [Validators.required]),
         address: new FormControl('', [Validators.required]),
       });
     }
@@ -102,8 +102,8 @@ export class RegisterOrganizerComponent {
     return this.form.get('last_name');
   }
 
-  get company_name() {
-    return this.form.get('company_name');
+  get company() {
+    return this.form.get('company');
   }
 
   get address() {
@@ -121,7 +121,7 @@ export class RegisterOrganizerComponent {
   ngOnSubmit(): void {
     if (this.form.valid) {
       if (this.form.value.password != this.form.value.passwordConfirm) {
-        this.dialog.open(PopUpRegisterComponent, {
+        this.dialog.open(PopUpMsgComponent, {
           data: {
             register: false,
             msg: 'Las contraseñas no coinciden.',
@@ -135,13 +135,13 @@ export class RegisterOrganizerComponent {
           email: this.form.value.email,
           first_name: this.form.value.first_name,
           last_name: this.form.value.first_name,
-          company_name: this.form.value.company_name,
+          company: this.form.value.company,
           address: this.form.value.address,
         };
         this.organizerService.registerOrganizer(this.organizer).subscribe(
           (response) => {
             if (response.status == 500) {
-              this.dialog.open(PopUpRegisterComponent, {
+              this.dialog.open(PopUpMsgComponent, {
                 data: {
                   register: false,
                   msg: 'Error en el registro.',
@@ -151,7 +151,7 @@ export class RegisterOrganizerComponent {
           },
           (error) => {
             if (error.status == 403) {
-              this.dialog.open(PopUpRegisterComponent, {
+              this.dialog.open(PopUpMsgComponent, {
                 data: {
                   register: false,
                   msg: 'El nombre de usuario ya existe.',
@@ -160,7 +160,7 @@ export class RegisterOrganizerComponent {
             }
           },
           () => {
-            this.dialog.open(PopUpRegisterComponent, {
+            this.dialog.open(PopUpMsgComponent, {
               data: {
                 register: true,
                 msg: 'Te has registrado correctamente.',

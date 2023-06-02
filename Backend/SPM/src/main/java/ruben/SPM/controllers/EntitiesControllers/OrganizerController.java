@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/organizers")
 @AllArgsConstructor
 @Tag(name="Organizers")
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class OrganizerController {
 
     private final OrganizerService organizerService;
@@ -279,7 +280,6 @@ public class OrganizerController {
         Organizer organizer_logged = this.organizerService.getOrganizerByUsername(username);
 
         if (organizer != null && organizer_logged.getId() == organizer.getId() ){
-            System.out.println(passwordChangeDTO.toString());
             if (passwordChangeDTO.getPassword().equals(passwordChangeDTO.getConfirmpassword())){
                 organizer = this.organizerService.setPasswordHashed(organizer, passwordChangeDTO.getPassword());
                 this.organizerService.updateOrganizer(organizer);
@@ -310,7 +310,5 @@ public class OrganizerController {
                     .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
-        log.info("Organizer updated successfully");
-        return ResponseEntity.ok(OrganizerDTO.fromOrganizer(organizerService.saveOrganizer(organizer)));
     }
 }

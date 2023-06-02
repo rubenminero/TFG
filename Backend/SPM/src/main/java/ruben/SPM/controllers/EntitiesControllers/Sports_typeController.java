@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/sports_types")
 @AllArgsConstructor
 @Tag(name="Sports types")
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class Sports_typeController {
 
     private final Sports_typeService sportsTypeService;

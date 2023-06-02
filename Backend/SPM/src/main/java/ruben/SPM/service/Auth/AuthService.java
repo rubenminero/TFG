@@ -34,7 +34,9 @@ import ruben.SPM.service.EntitiesServices.OrganizerService;
 import ruben.SPM.service.EntitiesServices.UserService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -202,8 +204,19 @@ public class AuthService {
         tokenRepository.save(token);
     }
 
-    private void revokeAllUserTokens(User user) {
-        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+    public void revokeAllUserTokens(User user) {
+        List<Token> tokens = tokenRepository.findAll();
+        List<Token> validUserTokens = new ArrayList<Token>();
+
+        for (Token t : tokens){
+            if (!t.isRevoked() && !t.isExpired() && t.getUser().getId() == user.getId()){
+                validUserTokens.add(t);
+            }
+        }
+        validUserTokens.forEach(token -> {
+            token.setExpired(true);
+            token.setRevoked(true);
+        });
         if (validUserTokens.isEmpty())
             return;
         validUserTokens.forEach(token -> {

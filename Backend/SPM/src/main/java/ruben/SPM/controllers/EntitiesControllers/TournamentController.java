@@ -11,7 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ruben.SPM.model.DTO.Entities.Sports_typeDTO;
 import ruben.SPM.model.DTO.Entities.TournamentDTO;
-<<<<<<< Updated upstream
 import ruben.SPM.model.Entities.Organizer;
 import ruben.SPM.model.Entities.Sports_type;
 import ruben.SPM.model.Entities.Tournament;
@@ -20,22 +19,21 @@ import ruben.SPM.service.EntitiesServices.OrganizerService;
 import ruben.SPM.service.EntitiesServices.Sports_typeService;
 import ruben.SPM.service.EntitiesServices.TournamentService;
 import ruben.SPM.service.EntitiesServices.UserService;
-=======
 import ruben.SPM.model.DTO.Front.EventFrontDTO;
 import ruben.SPM.model.DTO.Front.InscriptionFrontDTO;
 import ruben.SPM.model.DTO.Front.TournamentFrontDTO;
 import ruben.SPM.model.Entities.*;
 import ruben.SPM.service.EntitiesServices.*;
->>>>>>> Stashed changes
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
-@RequestMapping("/api/tournaments")
 @AllArgsConstructor
 @Tag(name="Tournaments")
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class TournamentController {
 
     private final TournamentService tournamentService;
@@ -44,7 +42,7 @@ public class TournamentController {
     private final InscriptionService inscriptionService;
     private final UserService userService;
 
-    @GetMapping("")
+    @GetMapping("/api/tournaments")
     @PreAuthorize("hasAuthority('athlete:read')")
     @Operation(summary = "Return the enabled tournaments.")
     public ResponseEntity getAllTournaments() {
@@ -65,15 +63,17 @@ public class TournamentController {
                     .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
-
-        List<TournamentDTO> tournamentDTOs = tournaments.stream().map(TournamentDTO::new).collect(Collectors.toList());
+        List<TournamentFrontDTO> tournamentFrontDTOS = new ArrayList<TournamentFrontDTO>();
+        for (Tournament t : tournaments) {
+            TournamentFrontDTO tournament = new TournamentFrontDTO(t);
+            tournamentFrontDTOS.add(tournament);
+        }
         log.info("The tournaments has successfully been retrieved.");
-        return ResponseEntity.ok(tournamentDTOs);
+        return ResponseEntity.ok(tournamentFrontDTOS);
     }
 
-<<<<<<< Updated upstream
-    @GetMapping("/{id}")
-=======
+
+
     @GetMapping("/api/events")
     @PreAuthorize("hasAuthority('athlete:read')")
     @Operation(summary = "Return the enabled events.")
@@ -105,7 +105,6 @@ public class TournamentController {
     }
 
     @GetMapping("/api/tournaments/{id}")
->>>>>>> Stashed changes
     @PreAuthorize("hasAuthority('athlete:read')")
     @Operation(summary = "Return a tournament with the id provided.")
     public ResponseEntity getTournamentById(@PathVariable(name = "id") Long id) {
@@ -142,7 +141,7 @@ public class TournamentController {
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/api/tournaments/{id}")
     @PreAuthorize("hasAuthority('organizer:update')")
     @Operation(summary = "Update a tournament with the data provided.")
     public ResponseEntity updateTournament(@PathVariable Long id, @RequestBody TournamentFrontDTO tournamentDTO) {
@@ -205,24 +204,16 @@ public class TournamentController {
                 }
             }else{
                 log.info("The tournament has successfully been updated.");
-<<<<<<< Updated upstream
-                return ResponseEntity.ok(TournamentDTO.fromTournament(tournamentService.saveTournament(tournament)));
-=======
                 TournamentFrontDTO tournamentFrontDTO = TournamentFrontDTO.fromTournament(tournamentService.saveTournament(tournament));
                 System.out.println(tournamentFrontDTO);
                 return ResponseEntity.ok(tournamentFrontDTO);
->>>>>>> Stashed changes
             }
         }
 
     }
 
-<<<<<<< Updated upstream
-    @PostMapping("")
-=======
 
     @PostMapping("/api/tournaments")
->>>>>>> Stashed changes
     @PreAuthorize("hasAuthority('organizer:create')")
     @Operation(summary = "Create a tournament with the data provided.")
     public ResponseEntity createTournament(@RequestBody TournamentFrontDTO tournamentFrontDTO ) {
@@ -270,12 +261,8 @@ public class TournamentController {
                 }
             }else{
                 log.info("The tournament has successfully been saved.");
-<<<<<<< Updated upstream
-                return ResponseEntity.ok(TournamentDTO.fromTournament(tournamentService.saveTournament(tournament)));
-=======
                 TournamentDTO tournamentDTO1 = TournamentDTO.fromTournament(tournamentService.saveTournament(tournament));
                 return ResponseEntity.ok(tournamentDTO1);
->>>>>>> Stashed changes
             }
         }
 

@@ -74,6 +74,19 @@ public class DeleteService {
     }
 
     /**
+     * Delete watchlists for a tournament from the database.
+     */
+    public void deleteWatchlistsTournament(Long id) {
+        List<Watchlist> watchlists = this.watchlistRepository.findAll();
+
+        for (Watchlist w : watchlists) {
+            if (w.getTournament().getId() == id){
+                watchlistRepository.delete(w);
+            }
+        }
+    }
+
+    /**
      * Delete  inscriptions from the database.
      * @param id the id of the user for delete.
      */
@@ -95,6 +108,19 @@ public class DeleteService {
 
         for (Inscription i : inscriptions) {
             if (!i.isEnabled()){
+                inscriptionRepository.delete(i);
+            }
+        }
+    }
+
+    /**
+     * Delete inscriptions for a tournament from the database.
+     */
+    public void deleteInscriptionsTournament(Long id) {
+        List<Inscription> inscriptions = this.inscriptionRepository.findAll();
+
+        for (Inscription i : inscriptions) {
+            if (i.getTournament().getId() == id){
                 inscriptionRepository.delete(i);
             }
         }
@@ -128,6 +154,15 @@ public class DeleteService {
     }
 
     /**
+     * Delete a tournament from the database.
+     * @param tournament the tournament to be deleted.
+     */
+    public void deleteTournament(Tournament tournament) {
+        this.deleteWatchlistsTournament(tournament.getId());
+        this.deleteInscriptionsTournament(tournament.getId());
+        tournamentRepository.delete(tournament);
+    }
+    /**
      * Delete tournaments from the database.
      * @param id the id of the user for delete.
      */
@@ -136,6 +171,8 @@ public class DeleteService {
 
         for (Tournament t : tournaments) {
             if (id == t.getOrganizer().getId()){
+                this.deleteWatchlistsTournament(t.getId());
+                this.deleteInscriptionsTournament(t.getId());
                 tournamentRepository.delete(t);
             }
         }

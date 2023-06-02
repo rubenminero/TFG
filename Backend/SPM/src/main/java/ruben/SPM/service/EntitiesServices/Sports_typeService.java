@@ -23,29 +23,25 @@ public class Sports_typeService {
 
     /**
      * Recover a sport type from the database.
-<<<<<<< Updated upstream
-=======
      *
->>>>>>> Stashed changes
      * @param id the id of the sport type.
      * @return sport type the sport type with the id.
      */
-    public Sports_type getSport_type(Long id){
+    public Sports_type getSport_type(Long id) {
         return sportsTypeRepository.findById(id).orElse(null);
     }
 
     /**
      * Save a sport type in the database.
+     * 
      * @param sport_type the sport type to be saved.
      */
-    public Sports_type saveSport_type(Sports_type sport_type){
+    public Sports_type saveSport_type(Sports_type sport_type) {
 
         return sportsTypeRepository.save(sport_type);
     }
 
     /**
-<<<<<<< Updated upstream
-=======
      * Update a sport type in the database.
      * 
      * @param sport_type the sport type to be updated.
@@ -59,41 +55,45 @@ public class Sports_typeService {
 
     /**
      * Delete a sport type from the database.
+     * 
      * @param id the id of the sport type.
      */
     public void deleteSport_type(Long id) {
         this.sportsTypeRepository.delete(this.getSport_type(id));
     }
+
     /**
->>>>>>> Stashed changes
      * Disable or enable a sport type in the database,depends on the last state.
+     * 
      * @param id the id of the sport type to be changed.
      */
-    public void changeStateSport_type(Long id){
+    public void changeStateSport_type(Long id) {
         Sports_type sport_type = this.getSport_type(id);
         sport_type.setEnabled(!sport_type.isEnabled());
         sportsTypeRepository.save(sport_type);
     }
 
-
     /**
      * Gets all the sport types from the database.
      * Only for admins.
+     * 
      * @return A list with all the sport types.
      */
     public List<Sports_type> getAllSports_types() {
 
         return sportsTypeRepository.findAll();
     }
+
     /**
      * Gets all the enabled sport types from the database.
+     * 
      * @return A list with all the sport types.
      */
     public List<Sports_type> getEnabledSport_types() {
         List<Sports_type> sports_types_enabled = new ArrayList<Sports_type>();
         List<Sports_type> sports_types = this.getAllSports_types();
         for (Sports_type s : sports_types) {
-            if (s.isEnabled()){
+            if (s.isEnabled()) {
                 sports_types_enabled.add(s);
             }
         }
@@ -102,6 +102,7 @@ public class Sports_typeService {
 
     /**
      * Recover a sport type from the database.
+     * 
      * @param name the name of the sport type.
      * @return sport type the sport type with the name.
      */
@@ -110,4 +111,4 @@ public class Sports_typeService {
         return sportsTypeRepository.findByName(name).orElse(null);
     }
 
-    }
+}

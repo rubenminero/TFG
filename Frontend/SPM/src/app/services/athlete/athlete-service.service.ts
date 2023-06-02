@@ -4,7 +4,7 @@ import { RegisterAthlete } from './../../interfaces/athelete/RegisterAthlete';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { EnvService } from '../env/env-service.service';
-
+import { Athlete } from 'src/app/interfaces/athelete/Athlete';
 @Injectable({
   providedIn: 'root',
 })
@@ -25,6 +25,20 @@ export class AthleteServiceService {
     return this.authService.getPathHome();
   }
 
+  getAthlete(id: number): Observable<any> {
+    const httpOptions = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.authService.getAccessToken(),
+      },
+    };
+    console.log(httpOptions);
+    return this.http.get(
+      this.envService.getApiUrl() + '/api/athletes/' + id,
+      httpOptions
+    );
+  }
+
   registerAthlete(athlete: RegisterAthlete): Observable<any> {
     return this.http.post(
       this.envService.getApiUrl() + '/api/auth/register-athlete',
@@ -41,6 +55,20 @@ export class AthleteServiceService {
     };
     return this.http.delete(
       this.envService.getApiUrl() + '/api/athletes/' + id,
+      httpOptions
+    );
+  }
+
+  updateAthlete(athlete: Athlete): Observable<any> {
+    const httpOptions = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.authService.getAccessToken(),
+      },
+    };
+    return this.http.put(
+      this.envService.getApiUrl() + '/api/athletes/' + this.authService.getId(),
+      athlete,
       httpOptions
     );
   }

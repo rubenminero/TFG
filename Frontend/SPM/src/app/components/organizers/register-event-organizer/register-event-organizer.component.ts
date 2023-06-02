@@ -91,6 +91,7 @@ export class RegisterEventOrganizerComponent {
         });
       },
       (error) => {
+        console.log(error);
         this.dialog.open(PopUpMsgComponent, {
           data: {
             msg: 'Error al crear el evento.',
