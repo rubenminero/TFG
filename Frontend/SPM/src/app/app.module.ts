@@ -41,6 +41,16 @@ import { TournamentsOrganizerComponent } from './components/organizers/tournamen
 import { RegisterTournamentOrganizerComponent } from './components/organizers/register-tournament-organizer/register-tournament-organizer.component';
 import { RegisterEventOrganizerComponent } from './components/organizers/register-event-organizer/register-event-organizer.component';
 import { InscriptionsOrganizerComponent } from './components/organizers/inscriptions-organizer/inscriptions-organizer.component';
+import { NavbarAdminComponent } from './components/admins/navbar-admin/navbar-admin.component';
+import { OrganizersAdminComponent } from './components/admins/organizers-admin/organizers-admin.component';
+import { AthletesAdminComponent } from './components/admins/athletes-admin/athletes-admin.component';
+import { TokensAdminComponent } from './components/admins/tokens-admin/tokens-admin.component';
+import { TournamentsAdminComponent } from './components/admins/tournaments-admin/tournaments-admin.component';
+import { EventsAdminComponent } from './components/admins/events-admin/events-admin.component';
+import { InscriptionsAdminComponent } from './components/admins/inscriptions-admin/inscriptions-admin.component';
+import { WatchlistAdminComponent } from './components/admins/watchlist-admin/watchlist-admin.component';
+import { WatchlistsAdminComponent } from './components/admins/watchlists-admin/watchlists-admin.component';
+import { DeleteAllDisabledAdminComponent } from './components/admins/delete-all-disabled-admin/delete-all-disabled-admin.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +85,16 @@ import { InscriptionsOrganizerComponent } from './components/organizers/inscript
     RegisterTournamentOrganizerComponent,
     RegisterEventOrganizerComponent,
     InscriptionsOrganizerComponent,
+    NavbarAdminComponent,
+    OrganizersAdminComponent,
+    AthletesAdminComponent,
+    TokensAdminComponent,
+    TournamentsAdminComponent,
+    EventsAdminComponent,
+    InscriptionsAdminComponent,
+    WatchlistAdminComponent,
+    WatchlistsAdminComponent,
+    DeleteAllDisabledAdminComponent,
   ],
   imports: [
     BrowserModule,

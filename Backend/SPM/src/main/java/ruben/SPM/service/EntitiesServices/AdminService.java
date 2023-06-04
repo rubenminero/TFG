@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ruben.SPM.model.Entities.*;
+import ruben.SPM.model.JWT_Token.Token;
 import ruben.SPM.model.Whitelist.Role;
 import ruben.SPM.repository.EntitiesRepositories.AdminRepository;
+import ruben.SPM.service.Auth.TokenService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,7 +27,10 @@ public class AdminService {
     private final Sports_typeService sportsTypeService;
     private final InscriptionService inscriptionService;
     private final WatchlistService watchlistService;
+    private final TokenService tokenService;
     private final DeleteService deleteService;
+
+
     private final PasswordEncoder passwordEncoder;
 
     /**
@@ -98,10 +103,20 @@ public class AdminService {
      * Gets all the tournaments from the database.
      * Only for admins
      * 
-     * @return A list with all the sports types.
+     * @return A list with all the tournaments.
      */
     public List<Tournament> getAllTournaments() {
         return tournamentService.getAllTournaments();
+    }
+
+    /**
+     * Gets all the events from the database.
+     * Only for admins
+     *
+     * @return A list with all the events.
+     */
+    public List<Tournament> getAllEvents() {
+        return tournamentService.getAllEvents();
     }
 
     /**
@@ -140,6 +155,38 @@ public class AdminService {
      */
     public List<Watchlist> getAllWatchlists() {
         return watchlistService.getAllWatchlists();
+    }
+
+
+    /**
+     * Enable or disable a token in the database.
+     *
+     * @param id the id of the token to be changed.
+     */
+    public void changeStateToken(Integer id) {
+        tokenService.changeStateToken(id);
+    }
+
+    /**
+     * Gets all the tokens from the database.
+     * Only for admins
+     *
+     * @return A list with all the tokens.
+     */
+    public List<Token> getAllTokens() {
+        return tokenService.getAllTokens();
+    }
+
+
+    /**
+     * Recover a token from the database.
+     *
+     * @param id the id of the token.
+     * @return token the token with the id.
+     */
+    public Token getToken(Integer id) {
+
+        return tokenService.getToken(id);
     }
 
     /**

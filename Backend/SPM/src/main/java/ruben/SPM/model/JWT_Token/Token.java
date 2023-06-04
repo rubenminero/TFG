@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ruben.SPM.model.DTO.Entities.TokenDTO;
 import ruben.SPM.model.Entities.User;
 
 @Data
@@ -32,4 +33,12 @@ public class Token {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     public User user;
+
+    public Token(TokenDTO tokenDTO){
+        this.id = tokenDTO.getId();
+        this.token = tokenDTO.getToken();
+        this.tokenType = tokenDTO.getTokenType();
+        this.expired = tokenDTO.getExpired();
+        this.revoked = tokenDTO.getRevoked();
+    }
 }

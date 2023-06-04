@@ -3,6 +3,7 @@ package ruben.SPM.service.EntitiesServices;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ruben.SPM.model.DTO.Front.DeleteDisabledSummaryFrontDTO;
 import ruben.SPM.model.Entities.*;
 import ruben.SPM.model.JWT_Token.Token;
 import ruben.SPM.repository.EntitiesRepositories.*;
@@ -20,8 +21,67 @@ public class DeleteService {
     private final Sports_typeRepository sportsTypeRepository;
     private final TournamentRepository tournamentRepository;
     private final WatchlistRepository  watchlistRepository;
+    private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
 
+
+    /**
+     * Delete all entities disabled from the database.
+     */
+    public void deleteDisableds() {
+        this.deleteWatchlistsDisabled();
+        this.deleteInscriptionsDisabled();
+        this.deleteTournamentsDisabled();
+        this.deleteTokensDisabled();
+        this.deleteSportsTypesDisabled();
+        this.deleteUsersDisabled();
+    }
+
+    /**
+     * Count all entities disabled from the database.
+     */
+    public DeleteDisabledSummaryFrontDTO countDisableds() {
+        var disableds = DeleteDisabledSummaryFrontDTO.builder()
+                .watchlists_disabled(this.countWatchlistsDisabled())
+                .inscriptions_disabled(this.countInscriptionsDisabled())
+                .tournaments_disabled(this.countTournamentsDisabled())
+                .tokens_disabled(this.countTokensDisabled())
+                .sports_types_disabled(this.countSportsTypesDisabled())
+                .users_disabled(this.countUsersDisabled())
+                .build();
+        return disableds;
+    }
+
+
+
+
+    /**
+     * Count how many users are disabled in the database.
+     */
+    public int countUsersDisabled() {
+        int count = 0;
+        List<User> users = this.userRepository.findAll();
+
+        for (User u : users) {
+            if (!u.isEnabled()){
+                count += 1;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Delete users that are disabled from the database.
+     */
+    public void deleteUsersDisabled() {
+        List<User> users = this.userRepository.findAll();
+
+        for (User u : users) {
+            if (!u.isEnabled()){
+                userRepository.delete(u);
+            }
+        }
+    }
 
     /**
      * Delete a user from the database.
@@ -61,6 +121,17 @@ public class DeleteService {
     }
 
     /**
+     * Delete a watchlist from the database.
+     * @param id the id of the watchlist for delete.
+     */
+    public void deleteWatchlist(Long id) {
+        Watchlist watchlist = this.watchlistRepository.findById(id).orElse(null);
+        if (watchlist != null){
+            this.watchlistRepository.delete(watchlist);
+        }
+    }
+
+    /**
      * Delete watchlists that are disabled from the database.
      */
     public void deleteWatchlistsDisabled() {
@@ -71,6 +142,21 @@ public class DeleteService {
                 watchlistRepository.delete(w);
             }
         }
+    }
+
+    /**
+     * Count how many watchlists are disabled in the database.
+     */
+    public int countWatchlistsDisabled() {
+        int count = 0;
+        List<Watchlist> watchlists = this.watchlistRepository.findAll();
+
+        for (Watchlist w : watchlists) {
+            if (!w.isEnabled()){
+                count += 1;
+            }
+        }
+        return count;
     }
 
     /**
@@ -114,6 +200,32 @@ public class DeleteService {
     }
 
     /**
+     * Delete a inscription from the database.
+     * @param id the id of the inscription for delete.
+     */
+    public void deleteInscription(Long id) {
+        Inscription inscription = this.inscriptionRepository.findById(id).orElse(null);
+        if (inscription != null){
+            this.inscriptionRepository.delete(inscription);
+        }
+    }
+
+    /**
+     * Count how many inscriptions are disabled in the database.
+     */
+    public int countInscriptionsDisabled() {
+        int count = 0;
+        List<Inscription> inscriptions = this.inscriptionRepository.findAll();
+
+        for (Inscription i : inscriptions) {
+            if (!i.isEnabled()){
+                count += 1;
+            }
+        }
+        return count;
+    }
+
+    /**
      * Delete inscriptions for a tournament from the database.
      */
     public void deleteInscriptionsTournament(Long id) {
@@ -154,13 +266,44 @@ public class DeleteService {
     }
 
     /**
-     * Delete a tournament from the database.
-     * @param tournament the tournament to be deleted.
+     * Delete a inscription from the database.
+     * @param id the id of the inscription for delete.
      */
-    public void deleteTournament(Tournament tournament) {
-        this.deleteWatchlistsTournament(tournament.getId());
-        this.deleteInscriptionsTournament(tournament.getId());
-        tournamentRepository.delete(tournament);
+    public void deleteToken(Integer id) {
+        Token token = this.tokenRepository.findById(id).orElse(null);
+        if (token != null){
+            this.tokenRepository.delete(token);
+        }
+    }
+
+
+    /**
+     * Count how many tokens are disabled in the database.
+     */
+    public int countTokensDisabled() {
+        int count = 0;
+        List<Token> tokens = this.tokenRepository.findAll();
+
+        for (Token t : tokens) {
+            if (t.isExpired() && t.isRevoked()){
+                count += 1;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Delete a tournament from the database.
+     * @param id the id of the tournament to be deleted.
+     */
+    public void deleteTournament(Long id) {
+        Tournament tournament = this.tournamentRepository.findById(id).orElse(null);
+
+        if (tournament != null) {
+            this.deleteWatchlistsTournament(tournament.getId());
+            this.deleteInscriptionsTournament(tournament.getId());
+            tournamentRepository.delete(tournament);
+        }
     }
     /**
      * Delete tournaments from the database.
@@ -189,5 +332,59 @@ public class DeleteService {
                 tournamentRepository.delete(t);
             }
         }
+    }
+
+    /**
+     * Count how many tournaments are disabled in the database.
+     */
+    public int countTournamentsDisabled() {
+        int count = 0;
+        List<Tournament> tournaments = this.tournamentRepository.findAll();
+
+        for (Tournament t : tournaments) {
+            if (!t.isEnabled()){
+                count += 1;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Delete sports types that are disabled from the database.
+     */
+    public void deleteSportsTypesDisabled() {
+        List<Sports_type> sports_types = this.sportsTypeRepository.findAll();
+
+        for (Sports_type s : sports_types) {
+            if (!s.isEnabled()){
+                sportsTypeRepository.delete(s);
+            }
+        }
+    }
+
+    /**
+     * Delete a sport type from the database.
+     * @param id the id of the sport type to be deleted.
+     */
+    public void deleteSportsType(Long id) {
+        Sports_type sportsType = this.sportsTypeRepository.findById(id).orElse(null);
+        if (sportsType != null){
+            this.sportsTypeRepository.delete(sportsType);
+        }
+    }
+
+    /**
+     * Count how many sports types are disabled in the database.
+     */
+    public int countSportsTypesDisabled() {
+        int count = 0;
+        List<Sports_type> sports_types = this.sportsTypeRepository.findAll();
+
+        for (Sports_type s : sports_types) {
+            if (!s.isEnabled()){
+                count += 1;
+            }
+        }
+        return count;
     }
 }

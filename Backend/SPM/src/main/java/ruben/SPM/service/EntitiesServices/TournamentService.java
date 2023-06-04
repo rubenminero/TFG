@@ -68,7 +68,7 @@ public class TournamentService {
      * @param id the id of the tournament.
      */
     public void deleteTournament(Long id) {
-        this.deleteService.deleteTournament(this.getTournament(id));
+        this.deleteService.deleteTournament(id);
     }
 
     /**
@@ -121,8 +121,31 @@ public class TournamentService {
      * @return A list with all the tournaments.
      */
     public List<Tournament> getAllTournaments() {
+        List<Tournament> tournaments= new ArrayList<Tournament>();
+        List<Tournament> tournaments_all = this.getAllTournaments();
+        for (Tournament t : tournaments_all) {
+            if (t.getInscription()) {
+                tournaments.add(t);
+            }
+        }
+        return tournaments;
+    }
 
-        return tournamentRepository.findAll();
+    /**
+     * Gets all the events from the database.
+     * Only for admins.
+     *
+     * @return A list with all the events.
+     */
+    public List<Tournament> getAllEvents() {
+        List<Tournament> events= new ArrayList<Tournament>();
+        List<Tournament> tournaments_all = this.getAllTournaments();
+        for (Tournament t : tournaments_all) {
+            if (!t.getInscription()) {
+                events.add(t);
+            }
+        }
+        return events;
     }
 
     /**
