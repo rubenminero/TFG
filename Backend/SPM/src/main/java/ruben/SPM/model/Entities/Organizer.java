@@ -42,6 +42,7 @@ public class Organizer extends User {
         super(user.getId(), user.getUsername(),user.getPassword(),user.getFirst_name(),user.getLast_name(),user.getNif(),user.getEmail(),user.getRole(),user.getTokens());
         this.company = company;
         this.address = address;
+        this.enabled = false;
     }
 
 
@@ -56,7 +57,7 @@ public class Organizer extends User {
         this.company = organizerDTO.getCompany();
         this.address = organizerDTO.getAddress();
         this.disabled_at = organizerDTO.getDisabled_at();
-        this.enabled = organizerDTO.getEnabled();
+        this.enabled = false;
     }
 
 

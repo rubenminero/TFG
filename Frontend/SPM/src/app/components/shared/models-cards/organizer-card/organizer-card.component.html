@@ -1,105 +1,104 @@
-<mat-card-content>
-  <mat-card-header class="header">
-    <mat-card-title>
-      <div class="header-text">
-        <p>Datos del usuario</p>
-      </div>
-    </mat-card-title>
-  </mat-card-header>
-  <mat-divider></mat-divider>
-  <form [formGroup]="form">
-    <mat-form-field class="form">
-      <mat-label>Nombre de usuario</mat-label>
-      <input matInput formControlName="username" />
-      <mat-error *ngIf="form.controls['username'].hasError('required')">
-        <p class="errors">Este campo es obligatorio</p>
-      </mat-error>
-    </mat-form-field>
+<form [formGroup]="form">
+  <mat-form-field class="form">
+    <mat-label>Nombre de usuario</mat-label>
+    <input matInput formControlName="username" />
+    <mat-error *ngIf="form.controls['username'].hasError('required')">
+      <p class="errors">Este campo es obligatorio</p>
+    </mat-error>
+  </mat-form-field>
 
-    <mat-form-field class="form">
-      <mat-label>DNI/NIE</mat-label>
-      <input matInput formControlName="nif" placeholder="12345678-X" />
-      <mat-error *ngIf="form.controls['nif'].hasError('required')">
-        <p class="errors">Este campo es obligatorio</p>
-      </mat-error>
-      <mat-error *ngIf="form.controls['nif'].hasError('pattern')">
-        <p class="errors">El formato del DNI/NIE no es correcto</p>
-      </mat-error>
-    </mat-form-field>
+  <mat-form-field class="form">
+    <mat-label>DNI/NIE</mat-label>
+    <input matInput formControlName="nif" placeholder="12345678-X" />
+    <mat-error *ngIf="form.controls['nif'].hasError('required')">
+      <p class="errors">Este campo es obligatorio</p>
+    </mat-error>
+    <mat-error *ngIf="form.controls['nif'].hasError('pattern')">
+      <p class="errors">El formato del DNI/NIE no es correcto</p>
+    </mat-error>
+  </mat-form-field>
 
-    <mat-form-field class="form">
-      <mat-label>Correo electrónico</mat-label>
-      <input matInput formControlName="email" placeholder="example@mail.com" />
-      <mat-error *ngIf="form.controls['email'].hasError('required')">
-        <p class="errors">Este campo es obligatorio</p>
-      </mat-error>
-    </mat-form-field>
+  <mat-form-field class="form">
+    <mat-label>Correo electrónico</mat-label>
+    <input matInput formControlName="email" placeholder="example@mail.com" />
+    <mat-error *ngIf="form.controls['email'].hasError('required')">
+      <p class="errors">Este campo es obligatorio</p>
+    </mat-error>
+  </mat-form-field>
 
-    <mat-form-field class="form">
-      <mat-label>Nombre</mat-label>
-      <input matInput formControlName="first_name" />
-      <mat-error *ngIf="form.controls['first_name'].hasError('pattern')">
-        <p class="errors">El formato no es correcto</p>
-      </mat-error>
-      <mat-error *ngIf="form.controls['first_name'].hasError('required')">
-        <p class="errors">Este campo es obligatorio</p>
-      </mat-error>
-    </mat-form-field>
+  <mat-form-field class="form">
+    <mat-label>Nombre</mat-label>
+    <input matInput formControlName="first_name" />
+    <mat-error *ngIf="form.controls['first_name'].hasError('pattern')">
+      <p class="errors">El formato no es correcto</p>
+    </mat-error>
+    <mat-error *ngIf="form.controls['first_name'].hasError('required')">
+      <p class="errors">Este campo es obligatorio</p>
+    </mat-error>
+  </mat-form-field>
 
-    <mat-form-field class="form">
-      <mat-label>Apellidos</mat-label>
-      <input matInput formControlName="last_name" />
-      <mat-error *ngIf="form.controls['last_name'].hasError('pattern')">
-        <p class="errors">El formato no es correcto</p>
-      </mat-error>
-      <mat-error *ngIf="form.controls['last_name'].hasError('required')">
-        <p class="errors">Este campo es obligatorio</p>
-      </mat-error>
-    </mat-form-field>
+  <mat-form-field class="form">
+    <mat-label>Apellidos</mat-label>
+    <input matInput formControlName="last_name" />
+    <mat-error *ngIf="form.controls['last_name'].hasError('pattern')">
+      <p class="errors">El formato no es correcto</p>
+    </mat-error>
+    <mat-error *ngIf="form.controls['last_name'].hasError('required')">
+      <p class="errors">Este campo es obligatorio</p>
+    </mat-error>
+  </mat-form-field>
 
-    <mat-form-field class="form">
-      <mat-label>Nombre de la compañia</mat-label>
-      <input matInput formControlName="company" placeholder="La liga" />
-      <mat-error *ngIf="form.controls['company'].hasError('required')">
-        <p class="errors">Este campo es obligatorio</p>
-      </mat-error>
-      <mat-error *ngIf="form.controls['company'].hasError('pattern')">
-        <p class="errors">
-          El formato del nombre de la compañia no es correcto
-        </p>
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field class="form">
-      <mat-label>Direccion de la compañia</mat-label>
-      <input matInput formControlName="address" placeholder="+34 123 456 789" />
-      <mat-error *ngIf="form.controls['address'].hasError('required')">
-        <p class="errors">Este campo es obligatorio</p>
-      </mat-error>
-      <mat-error *ngIf="form.controls['address'].hasError('pattern')">
-        <p class="errors">
-          El formato de la direccion de la compañia no es correcto
-        </p>
-      </mat-error>
-    </mat-form-field>
-    <mat-card-actions class="button">
-      <button
-        mat-raised-button
-        color="primary"
-        type="submit"
-        [disabled]="!form.valid"
-        (click)="ngOnSubmit()"
-      >
-        Guardar cambios
-      </button>
-      <button mat-raised-button color="primary" (click)="changePassword()">
-        Cambiar contraseña
-      </button>
-      <button mat-raised-button color="primary" (click)="unsubscribe()">
-        Darse de baja
-      </button>
-      <button mat-raised-button color="primary" type="submit" (click)="back()">
-        Volver
-      </button>
-    </mat-card-actions>
-  </form>
-</mat-card-content>
+  <mat-form-field class="form">
+    <mat-label>Nombre de la compañia</mat-label>
+    <input matInput formControlName="company" placeholder="La liga" />
+    <mat-error *ngIf="form.controls['company'].hasError('required')">
+      <p class="errors">Este campo es obligatorio</p>
+    </mat-error>
+    <mat-error *ngIf="form.controls['company'].hasError('pattern')">
+      <p class="errors">El formato del nombre de la compañia no es correcto</p>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="form">
+    <mat-label>Direccion de la compañia</mat-label>
+    <input matInput formControlName="address" placeholder="+34 123 456 789" />
+    <mat-error *ngIf="form.controls['address'].hasError('required')">
+      <p class="errors">Este campo es obligatorio</p>
+    </mat-error>
+    <mat-error *ngIf="form.controls['address'].hasError('pattern')">
+      <p class="errors">
+        El formato de la direccion de la compañia no es correcto
+      </p>
+    </mat-error>
+  </mat-form-field>
+  <mat-card-actions class="button">
+    <button
+      *ngIf="admin"
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!form.valid"
+      (click)="ngOnSubmit()"
+    >
+      Guardar cambios
+    </button>
+    <button
+      *ngIf="admin"
+      mat-raised-button
+      color="primary"
+      (click)="changePassword()"
+    >
+      Cambiar contraseña
+    </button>
+    <button
+      *ngIf="admin"
+      mat-raised-button
+      color="primary"
+      (click)="unsubscribe()"
+    >
+      Darse de baja
+    </button>
+    <button mat-raised-button color="primary" type="submit" (click)="back()">
+      Volver
+    </button>
+  </mat-card-actions>
+</form>

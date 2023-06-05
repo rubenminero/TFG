@@ -22,7 +22,7 @@ export class PopUpPasswordComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.dialogRef.updateSize('500px');
+    this.dialogRef.updateSize('600px');
     this.form = this.fb.group({
       oldpassword: ['', Validators.required],
       password: [

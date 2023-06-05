@@ -11,6 +11,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { PopUpMsgComponent } from 'src/app/components/shared/pop-ups/pop-up-msg/pop-up-msg.component';
 import { Events } from 'src/app/interfaces/event/event';
 import { ViewChild } from '@angular/core';
+import { AuthService } from 'src/app/services/auth/auth-service.service';
 
 @Component({
   selector: 'app-watchlist-athlete',
@@ -25,6 +26,7 @@ export class WatchlistAthleteComponent {
     athlete_name: '',
     tournament_id: -1,
     athlete_id: -1,
+    enabled: false,
   };
   tournament_show: boolean = false;
   tournament: Tournament = {
@@ -37,6 +39,7 @@ export class WatchlistAthleteComponent {
     capacity: -1,
     organizer: '',
     sport_type: '',
+    enabled: false,
   };
   event_show: boolean = false;
   event: Events = {
@@ -47,6 +50,7 @@ export class WatchlistAthleteComponent {
     description: '',
     organizer: '',
     sport_type: '',
+    enabled: false,
   };
 
   watchlists_saved: Watchlist[] = [];
@@ -58,6 +62,7 @@ export class WatchlistAthleteComponent {
   constructor(
     private watchlistService: WatchlistService,
     private tournamentService: TournamentServiceService,
+    private authService: AuthService,
     private changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog
   ) {}
@@ -73,6 +78,7 @@ export class WatchlistAthleteComponent {
             athlete_name: data[i].athlete,
             tournament_id: data[i].tournament_id,
             athlete_id: data[i].athlete_id,
+            enabled: data[i].enabled,
           };
           this.watchlists_saved.push(watchlist_aux);
         }
@@ -85,17 +91,27 @@ export class WatchlistAthleteComponent {
       },
       (error) => {
         if (error.status == 404) {
-          this.dialog.open(PopUpMsgComponent, {
-            data: {
-              msg: 'Tu lista de seguimiento esta vacia.',
-            },
-          });
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Tu lista de seguimiento esta vacia.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.authService.getPath();
+            });
         } else {
-          this.dialog.open(PopUpMsgComponent, {
-            data: {
-              msg: 'Error al cargar tu lista de seguimiento.',
-            },
-          });
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Error al cargar tu lista de seguimiento.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.authService.getPath();
+            });
         }
       }
     );
@@ -114,6 +130,7 @@ export class WatchlistAthleteComponent {
           capacity: response.capacity,
           organizer: response.organizer,
           sport_type: response.sport_type,
+          enabled: response.enabled,
         };
 
         if (this.tournament.inscription) {
@@ -126,6 +143,7 @@ export class WatchlistAthleteComponent {
             description: '',
             organizer: '',
             sport_type: '',
+            enabled: false,
           };
           this.event_show = false;
         } else {
@@ -138,6 +156,7 @@ export class WatchlistAthleteComponent {
             description: this.tournament.description,
             organizer: this.tournament.organizer,
             sport_type: this.tournament.sport_type,
+            enabled: this.tournament.enabled,
           };
           this.tournament = {
             id: -1,
@@ -149,44 +168,53 @@ export class WatchlistAthleteComponent {
             capacity: -1,
             organizer: '',
             sport_type: '',
+            enabled: false,
           };
           this.event_show = true;
         }
         this.watchlist_show = true;
       },
       (error) => {
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Error al cargar el torneo.',
-          },
-        });
+        this.dialog
+          .open(PopUpMsgComponent, {
+            data: {
+              msg: 'Error al cargar el torneo.',
+            },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
+          });
       }
     );
   }
 
   deleteWatchlist(watchlist: Watchlist): void {
     this.watchlistService.deleteWatchlist(watchlist).subscribe(
-      (response) => {},
-      (error) => {
-        if (error.status == 400) {
-          this.dialog.open(PopUpMsgComponent, {
+      (response) => {
+        this.dialog
+          .open(PopUpMsgComponent, {
             data: {
-              msg: '400.',
+              msg: 'Borrado correctamente.',
             },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
           });
-        } else if (error.status == 404) {
-          this.dialog.open(PopUpMsgComponent, {
+      },
+      (error) => {
+        this.dialog
+          .open(PopUpMsgComponent, {
             data: {
               msg: 'Error al añadir.',
             },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
           });
-        }
       }
     );
-    this.dialog.open(PopUpMsgComponent, {
-      data: {
-        msg: 'Borrado correctamente.',
-      },
-    });
   }
 }

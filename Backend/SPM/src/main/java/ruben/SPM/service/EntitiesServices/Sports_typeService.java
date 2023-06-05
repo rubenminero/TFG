@@ -3,6 +3,7 @@ package ruben.SPM.service.EntitiesServices;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ruben.SPM.model.Entities.Sports_type;
+import ruben.SPM.model.Entities.Watchlist;
 import ruben.SPM.repository.EntitiesRepositories.Sports_typeRepository;
 
 import java.util.ArrayList;
@@ -19,8 +20,6 @@ public class Sports_typeService {
      * Access for Sports_type data.
      */
     private final Sports_typeRepository sportsTypeRepository;
-    private final DeleteService deleteService;
-
     /**
      * Recover a sport type from the database.
      *
@@ -70,20 +69,22 @@ public class Sports_typeService {
     public void changeStateSport_type(Long id) {
         Sports_type sport_type = this.getSport_type(id);
         sport_type.setEnabled(!sport_type.isEnabled());
-        sportsTypeRepository.save(sport_type);
+        sportsTypeRepository.update(sport_type.getId(),
+                sport_type.isEnabled(),
+                sport_type.getName());
     }
+
 
     /**
      * Gets all the sport types from the database.
      * Only for admins.
-     * 
+     *
      * @return A list with all the sport types.
      */
     public List<Sports_type> getAllSports_types() {
 
         return sportsTypeRepository.findAll();
     }
-
     /**
      * Gets all the enabled sport types from the database.
      * 
@@ -110,5 +111,22 @@ public class Sports_typeService {
 
         return sportsTypeRepository.findByName(name).orElse(null);
     }
+
+    /**
+     * Checks if the name is valid.
+     *
+     * @param name the name of the sport type.
+     * @return true if is valid, false otherwise.
+     */
+    public Boolean validName(String name) {
+        Sports_type sportsType = this.getSport_typeByName(name);
+
+        if (sportsType != null){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 
 }

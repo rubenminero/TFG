@@ -7,4 +7,5 @@ export interface Organizer {
   last_name: string;
   company: string;
   address: string;
+  enabled: boolean;
 }

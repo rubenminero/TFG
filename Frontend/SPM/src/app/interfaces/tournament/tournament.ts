@@ -8,4 +8,5 @@ export interface Tournament {
   capacity: number;
   organizer: string;
   sport_type: string;
+  enabled: boolean;
 }

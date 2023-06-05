@@ -13,12 +13,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import ruben.SPM.model.DTO.Auth.AuthRegisterDTOs.AuthRegisterAdminDTO;
 import ruben.SPM.model.DTO.Auth.AuthRegisterDTOs.AuthRegisterAthleteDTO;
-import ruben.SPM.model.Entities.Admin;
-import ruben.SPM.model.Entities.Athlete;
-import ruben.SPM.model.Entities.Organizer;
-import ruben.SPM.model.Entities.User;
+import ruben.SPM.model.Entities.*;
 import ruben.SPM.model.JWT_Token.Token;
 import ruben.SPM.model.DTO.Auth.AuthRequestDTO;
 import ruben.SPM.model.DTO.Auth.AuthResponseDTO;
@@ -26,12 +24,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ruben.SPM.model.DTO.Auth.AuthRegisterDTOs.AuthRegisterOrganizerDTO;
 import ruben.SPM.model.JWT_Token.TokenType;
+import ruben.SPM.model.Whitelist.Role;
 import ruben.SPM.repository.EntitiesRepositories.UserRepository;
 import ruben.SPM.repository.TokenRepository.TokenRepository;
-import ruben.SPM.service.EntitiesServices.AdminService;
-import ruben.SPM.service.EntitiesServices.AthleteService;
-import ruben.SPM.service.EntitiesServices.OrganizerService;
-import ruben.SPM.service.EntitiesServices.UserService;
+import ruben.SPM.service.EntitiesServices.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,7 +59,6 @@ public class AuthService {
 
         Organizer organizer = new Organizer(user,request.getCompany(),request.getAddress());
 
-
         var saveUser = organizerService.saveOrganizer(organizer);
         var extraclaims = new HashMap<String,Object>();
         extraclaims.put("id",saveUser.getId());
@@ -85,7 +80,7 @@ public class AuthService {
                 .email(request.getEmail())
                 .password(request.getPassword())
                 .nif(request.getNif())
-                .role(request.getRole())
+                .role(Role.ATHLETE)
                 .build();
 
         Athlete athlete = new Athlete(user,request.getPhone_number());

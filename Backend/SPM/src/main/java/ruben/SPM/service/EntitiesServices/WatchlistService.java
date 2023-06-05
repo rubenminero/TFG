@@ -22,8 +22,7 @@ public class WatchlistService {
      * Access for Watchlist data.
      */
     private final WatchlistRepository watchlistRepository;
-
-    private final DeleteService deleteService;
+    private final TournamentService tournamentService;
 
     /**
      * Recover a watchlist from the database.
@@ -41,7 +40,7 @@ public class WatchlistService {
      * @param watchlist the watchlist to be saved.
      */
     public Watchlist saveWatchlist(Watchlist watchlist) {
-
+        this.tournamentService.lessCapacity(watchlist.getTournament());
         return watchlistRepository.save(watchlist);
     }
 
@@ -65,7 +64,9 @@ public class WatchlistService {
      * @param id the id of the watchlist.
      */
     public void deleteWatchlist(Long id) {
-        this.watchlistRepository.delete(this.getWatchList(id));
+        Watchlist watchlist = this.getWatchList(id);
+        this.tournamentService.moreCapacity(watchlist.getTournament());
+        this.watchlistRepository.delete(watchlist);
     }
 
     /**
@@ -76,6 +77,11 @@ public class WatchlistService {
     public void changeStateWatchlist(Long id) {
         Watchlist watchlist = this.getWatchList(id);
         watchlist.setEnabled(!watchlist.isEnabled());
+        if (!watchlist.isEnabled()){
+            this.tournamentService.moreCapacity(watchlist.getTournament());
+        }else{
+            this.tournamentService.lessCapacity(watchlist.getTournament());
+        }
         watchlistRepository.save(watchlist);
     }
 
@@ -105,15 +111,6 @@ public class WatchlistService {
             }
         }
         return watchlists_enabled;
-    }
-
-    /**
-     * Delete watchlists from the database.
-     * 
-     * @param id the id of the user for delete.
-     */
-    public void deleteWatchlistsUser(Long id) {
-        this.deleteService.deleteWatchlistsUser(id);
     }
 
     /**

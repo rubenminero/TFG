@@ -6,35 +6,40 @@
   </mat-card-title>
 </mat-card-header>
 <mat-divider></mat-divider>
-<mat-paginator
-  [length]="inscriptions_saved.length"
-  [pageSize]="3"
-  [pageSizeOptions]="[3, 6, 9, 12]"
-  [showFirstLastButtons]="true"
->
-</mat-paginator>
-<mat-card class="event-card" *ngFor="let inscription of obs | async">
-  <mat-card-content class="event">
-    <div class="row">
-      <div class="block">
-        <mat-label class="title">Torneo</mat-label>
-        <p class="text">{{ inscription.tournament }}</p>
-      </div>
-      <div class="block">
-        <mat-label class="title">Usuario</mat-label>
-        <p class="text">{{ inscription.athlete }}</p>
-      </div>
-    </div>
-    <mat-card-actions>
-      <button
-        class="button"
-        mat-raised-button
-        color="primary"
-        type="submit"
-        (click)="deleteInscription(inscription)"
-      >
-        Borrar inscripcion del usuario
-      </button>
-    </mat-card-actions>
-  </mat-card-content>
-</mat-card>
+<div>
+  <mat-paginator
+    [length]="inscriptions_saved.length"
+    [pageSize]="4"
+    [pageSizeOptions]="[4, 8, 12]"
+    [showFirstLastButtons]="true"
+  >
+  </mat-paginator>
+</div>
+<mat-grid-list cols="4" rowHeight="800px">
+  <mat-grid-tile *ngFor="let inscription of obs | async">
+    <mat-card class="card">
+      <mat-card-content>
+        <div class="column">
+          <div class="row">
+            <mat-label class="title">Torneo</mat-label>
+            <p class="text">{{ inscription.tournament }}</p>
+          </div>
+          <div class="row">
+            <mat-label class="title">Usuario</mat-label>
+            <p class="text">{{ inscription.athlete }}</p>
+          </div>
+        </div>
+        <mat-card-actions class="button">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            (click)="deleteInscription(inscription)"
+          >
+            Borrar inscripcion del usuario
+          </button>
+        </mat-card-actions>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>

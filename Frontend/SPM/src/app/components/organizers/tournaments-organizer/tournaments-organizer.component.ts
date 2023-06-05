@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { OrganizerServiceService } from 'src/app/services/organizer/organizer-service.service';
 import { TournamentServiceService } from 'src/app/services/tournament/tournament-service.service';
+import { AuthService } from 'src/app/services/auth/auth-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PopUpMsgComponent } from 'src/app/components/shared/pop-ups/pop-up-msg/pop-up-msg.component';
 
@@ -27,6 +28,7 @@ export class TournamentsOrganizerComponent {
     capacity: -1,
     organizer: '',
     sport_type: '',
+    enabled: false,
   };
   tournaments_saved: Tournament[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
@@ -38,7 +40,8 @@ export class TournamentsOrganizerComponent {
     private organizerService: OrganizerServiceService,
     private changeDetectorRef: ChangeDetectorRef,
     private tournamentService: TournamentServiceService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private AuthService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -57,6 +60,7 @@ export class TournamentsOrganizerComponent {
             capacity: data[i].capacity,
             organizer: data[i].organizer,
             sport_type: data[i].sport_type,
+            enabled: data[i].enabled,
           };
           this.tournaments_saved.push(tournament_aux);
         }
@@ -68,11 +72,29 @@ export class TournamentsOrganizerComponent {
         this.obs = this.dataSource.connect();
       },
       (error) => {
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Error al cargar los eventos.',
-          },
-        });
+        if (error.status == 404) {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'No tienes torneos.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.AuthService.getPath();
+            });
+        } else {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Error al cargar los torneos.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.AuthService.getPath();
+            });
+        }
       }
     );
   }
@@ -92,18 +114,28 @@ export class TournamentsOrganizerComponent {
   deleteTournament(tournament: Tournament): void {
     this.tournamentService.deleteTournament(tournament).subscribe(
       (response) => {
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Borrado correctamente.',
-          },
-        });
+        this.dialog
+          .open(PopUpMsgComponent, {
+            data: {
+              msg: 'Borrado correctamente.',
+            },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
+          });
       },
       (error) => {
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Error al borrar.',
-          },
-        });
+        this.dialog
+          .open(PopUpMsgComponent, {
+            data: {
+              msg: 'Error al borrar.',
+            },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
+          });
       }
     );
   }

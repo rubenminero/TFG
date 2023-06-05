@@ -1,20 +1,15 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth-service.service';
-import { RegisterAthlete } from './../../interfaces/athelete/RegisterAthlete';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { EnvService } from '../env/env-service.service';
-import { Athlete } from 'src/app/interfaces/athelete/Athlete';
+import { Athlete } from 'src/app/interfaces/athlete/Athlete';
+import { RegisterAthlete } from 'src/app/interfaces/athlete/RegisterAthlete';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AthleteServiceService {
-  httpOptions = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + this.authService.getAccessToken(),
-    },
-  };
   constructor(
     private http: HttpClient,
     private authService: AuthService,
@@ -32,7 +27,6 @@ export class AthleteServiceService {
         Authorization: 'Bearer ' + this.authService.getAccessToken(),
       },
     };
-    console.log(httpOptions);
     return this.http.get(
       this.envService.getApiUrl() + '/api/athletes/' + id,
       httpOptions

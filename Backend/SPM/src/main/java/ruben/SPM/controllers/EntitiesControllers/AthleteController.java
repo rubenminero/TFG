@@ -48,8 +48,6 @@ public class AthleteController {
     private final InscriptionService inscriptionService;
     private final WatchlistService watchlistService;
     private final UserService userService;
-    private final AuthService authService;
-    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('athlete:read')")

@@ -22,6 +22,7 @@ export class EventCardComponent {
     description: '',
     organizer: '',
     sport_type: '',
+    enabled: false,
   };
   form: FormGroup = new FormGroup({});
 
@@ -97,6 +98,7 @@ export class EventCardComponent {
       description: this.form.value.description,
       organizer: this.form.value.organizer,
       sport_type: this.form.value.sport_type,
+      enabled: this.event.enabled,
     };
     this.eventService.updateEvent(this.event).subscribe(
       (response) => {

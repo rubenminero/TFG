@@ -1,0 +1,116 @@
+<ng-container *ngIf="!athlete_show; else athlete_data">
+  <mat-card-header class="header">
+    <mat-card-title>
+      <div class="header-text">
+        <p>Atletas</p>
+      </div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <div>
+    <mat-form-field class="select">
+      <mat-label>Estado</mat-label>
+      <mat-select
+        [formControl]="selected"
+        (selectionChange)="
+          selectState($event.value.value, $event.value.viewValue)
+        "
+        placeholder=""
+      >
+        <mat-option *ngFor="let state of states" [value]="state">
+          {{ state.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-paginator
+      [length]="athletes_saved.length"
+      [pageSize]="4"
+      [pageSizeOptions]="[4, 8, 12]"
+      [showFirstLastButtons]="true"
+    >
+    </mat-paginator>
+  </div>
+  <mat-grid-list cols="4" rowHeight="800px">
+    <mat-grid-tile *ngFor="let athlete of obs | async">
+      <mat-card class="card">
+        <mat-card-content>
+          <div class="column">
+            <div class="row">
+              <mat-label class="title">Nombre de usuario</mat-label>
+              <p class="text">{{ athlete.username }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Nombre</mat-label>
+              <p class="text">{{ athlete.first_name }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Apellidos</mat-label>
+              <p class="text">{{ athlete.last_name }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">DNI/NIE</mat-label>
+              <p class="text">{{ athlete.nif }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Correo electronico</mat-label>
+              <p class="text">{{ athlete.email }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Numero de telefono</mat-label>
+              <p class="text">{{ athlete.phone_number }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Estado</mat-label>
+              <p *ngIf="athlete.enabled" class="text">Activo</p>
+              <p *ngIf="!athlete.enabled" class="text">Inactivo</p>
+            </div>
+          </div>
+          <mat-card-actions class="button">
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              (click)="changeStateAthlete(athlete)"
+            >
+              <p *ngIf="athlete.enabled">Desactivar</p>
+              <p *ngIf="!athlete.enabled">Activar</p>
+            </button>
+            <button
+              class="button-right"
+              mat-raised-button
+              color="primary"
+              type="submit"
+              (click)="deleteAthlete(athlete)"
+            >
+              Borrar atleta
+            </button>
+            <button
+              class="button-right"
+              mat-raised-button
+              color="primary"
+              (click)="openAthlete(athlete)"
+            >
+              Ver mas
+            </button>
+          </mat-card-actions>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</ng-container>
+<ng-template #athlete_data>
+  <mat-card>
+    <mat-card-header class="header">
+      <mat-card-title>
+        <div class="header-text">
+          <p>Datos del deportista</p>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <app-athlete-card
+      [athlete]="this.athlete"
+      [admin]="false"
+    ></app-athlete-card>
+  </mat-card>
+</ng-template>

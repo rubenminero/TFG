@@ -29,6 +29,7 @@ export class TournamentCardComponent {
     capacity: -1,
     organizer: '',
     sport_type: '',
+    enabled: false,
   };
   form: FormGroup = new FormGroup({});
 
@@ -118,6 +119,7 @@ export class TournamentCardComponent {
       capacity: this.form.value.capacity,
       organizer: this.form.value.organizer,
       sport_type: this.form.value.sport_type,
+      enabled: this.tournament.enabled,
     };
     this.tournamentService.updateTournament(this.tournament).subscribe(
       (response) => {

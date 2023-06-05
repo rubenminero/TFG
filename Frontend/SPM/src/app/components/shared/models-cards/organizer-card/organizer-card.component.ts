@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PopUpPasswordComponent } from '../../pop-ups/pop-up-password/pop-up-password.component';
 import { PopUpMsgComponent } from '../../pop-ups/pop-up-msg/pop-up-msg.component';
 import { AuthService } from 'src/app/services/auth/auth-service.service';
+import { Input } from '@angular/core';
 
 @Component({
   selector: 'app-organizer-card',
@@ -18,7 +19,8 @@ import { AuthService } from 'src/app/services/auth/auth-service.service';
   styleUrls: ['./organizer-card.component.scss'],
 })
 export class OrganizerCardComponent {
-  organizer: Organizer = {
+  @Input() admin: boolean = false;
+  @Input() organizer: Organizer = {
     id: -1,
     username: '',
     nif: '',
@@ -27,6 +29,7 @@ export class OrganizerCardComponent {
     last_name: '',
     company: '',
     address: '',
+    enabled: false,
   };
   form: FormGroup = new FormGroup({});
 
@@ -38,50 +41,57 @@ export class OrganizerCardComponent {
   ) {}
 
   ngOnInit(): void {
-    this.organizerService.getOrganizer(this.AuthService.getId()).subscribe(
-      (response) => {
-        this.organizer = {
-          id: response.id,
-          username: response.username,
-          nif: response.nif,
-          email: response.email,
-          first_name: response.first_name,
-          last_name: response.last_name,
-          company: response.company,
-          address: response.address,
-        };
-
-        this.form.setValue({
-          username: this.organizer.username,
-          nif: this.organizer.nif,
-          email: this.organizer.email,
-          first_name: this.organizer.first_name,
-          last_name: this.organizer.last_name,
-          company: this.organizer.company,
-          address: this.organizer.address,
+    if (this.organizer.id == -1) {
+      this.dialog
+        .open(PopUpMsgComponent, {
+          data: {
+            msg: 'Error al cargar los datos del organizador.',
+          },
+        })
+        .afterClosed()
+        .subscribe((result) => {
+          this.AuthService.getPath();
         });
-      },
-      (error) => {
-        this.AuthService.getPath();
-      }
-    );
+    }
     this.form = this.fb.group({
-      username: new FormControl('', [Validators.required]),
-      nif: new FormControl('', [
-        Validators.required,
-        Validators.pattern('[0-9]{8}-[A-Z]{1}'),
-      ]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      first_name: new FormControl('', [
-        Validators.pattern('[a-zA-Z ]*'),
-        Validators.required,
-      ]),
-      last_name: new FormControl('', [
-        Validators.pattern('[a-zA-Z ]*'),
-        Validators.required,
-      ]),
-      company: new FormControl('', [Validators.required]),
-      address: new FormControl('', [Validators.required]),
+      username: [{ value: '', disabled: !this.admin }, Validators.required],
+      nif: [
+        { value: '', disabled: !this.admin },
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('[0-9]{8}-[A-Z]{1}'),
+        ]),
+      ],
+      email: [
+        { value: '', disabled: !this.admin },
+        Validators.compose([Validators.required, Validators.email]),
+      ],
+      first_name: [
+        { value: '', disabled: !this.admin },
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('[a-zA-Z ]*'),
+        ]),
+      ],
+      last_name: [
+        { value: '', disabled: !this.admin },
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('[a-zA-Z ]*'),
+        ]),
+      ],
+      company: [{ value: '', disabled: !this.admin }, Validators.required],
+      address: [{ value: '', disabled: !this.admin }, Validators.required],
+    });
+
+    this.form.setValue({
+      username: this.organizer.username,
+      nif: this.organizer.nif,
+      email: this.organizer.email,
+      first_name: this.organizer.first_name,
+      last_name: this.organizer.last_name,
+      company: this.organizer.company,
+      address: this.organizer.address,
     });
   }
 
@@ -156,6 +166,7 @@ export class OrganizerCardComponent {
       last_name: this.form.value.last_name,
       company: this.form.value.company,
       address: this.form.value.address,
+      enabled: this.organizer.enabled,
     };
 
     this.organizerService.updateOrganizer(this.organizer).subscribe(

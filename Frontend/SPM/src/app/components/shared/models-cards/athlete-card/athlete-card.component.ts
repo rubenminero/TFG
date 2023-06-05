@@ -1,5 +1,5 @@
 import { AuthService } from './../../../../services/auth/auth-service.service';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { AthleteServiceService } from 'src/app/services/athlete/athlete-service.service';
 import { Athlete } from 'src/app/interfaces/athlete/Athlete';
@@ -19,7 +19,8 @@ import { PopUpMsgComponent } from '../../pop-ups/pop-up-msg/pop-up-msg.component
   styleUrls: ['./athlete-card.component.scss'],
 })
 export class AthleteCardComponent {
-  athlete: Athlete = {
+  @Input() admin: boolean = false;
+  @Input() athlete: Athlete = {
     id: -1,
     username: '',
     nif: '',
@@ -27,65 +28,73 @@ export class AthleteCardComponent {
     first_name: '',
     last_name: '',
     phone_number: '',
+    enabled: false,
   };
   form: FormGroup = new FormGroup({});
 
   constructor(
     private dialog: MatDialog,
-    private router: Router,
     private athleteService: AthleteServiceService,
     private AuthService: AuthService,
     private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
-    this.athleteService.getAthlete(this.AuthService.getId()).subscribe(
-      (response) => {
-        this.athlete = {
-          id: response.id,
-          username: response.username,
-          nif: response.nif,
-          email: response.email,
-          first_name: response.first_name,
-          last_name: response.last_name,
-          phone_number: response.phone_number,
-        };
-
-        console.log(this.athlete);
-
-        this.form.setValue({
-          username: this.athlete.username,
-          nif: this.athlete.nif,
-          email: this.athlete.email,
-          first_name: this.athlete.first_name,
-          last_name: this.athlete.last_name,
-          phone_number: this.athlete.phone_number,
+    if (this.athlete.id == -1) {
+      this.dialog
+        .open(PopUpMsgComponent, {
+          data: {
+            msg: 'Error al cargar los datos del atleta.',
+          },
+        })
+        .afterClosed()
+        .subscribe((result) => {
+          this.AuthService.getPath();
         });
-      },
-      (error) => {
-        console.log(error);
-        this.router.navigate(['/login']);
-      }
-    );
+    }
     this.form = this.fb.group({
-      username: new FormControl('', [Validators.required]),
-      nif: new FormControl(this.athlete.nif, [
-        Validators.required,
-        Validators.pattern('[0-9]{8}-[A-Z]{1}'),
-      ]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      first_name: new FormControl('', [
-        Validators.pattern('[a-zA-Z ]*'),
-        Validators.required,
-      ]),
-      last_name: new FormControl('', [
-        Validators.pattern('[a-zA-Z ]*'),
-        Validators.required,
-      ]),
-      phone_number: new FormControl('', [
-        Validators.pattern('[- +()0-9]{15,15}'),
-        Validators.required,
-      ]),
+      username: [{ value: '', disabled: !this.admin }, Validators.required],
+      nif: [
+        { value: '', disabled: !this.admin },
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('[0-9]{8}-[A-Z]{1}'),
+        ]),
+      ],
+      email: [
+        { value: '', disabled: !this.admin },
+        Validators.compose([Validators.required, Validators.email]),
+      ],
+      first_name: [
+        { value: '', disabled: !this.admin },
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('[a-zA-Z ]*'),
+        ]),
+      ],
+      last_name: [
+        { value: '', disabled: !this.admin },
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('[a-zA-Z ]*'),
+        ]),
+      ],
+      phone_number: [
+        { value: '', disabled: !this.admin },
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('[- +()0-9]{15,15}'),
+        ]),
+      ],
+    });
+
+    this.form.setValue({
+      username: this.athlete.username,
+      nif: this.athlete.nif,
+      email: this.athlete.email,
+      first_name: this.athlete.first_name,
+      last_name: this.athlete.last_name,
+      phone_number: this.athlete.phone_number,
     });
   }
 
@@ -155,6 +164,7 @@ export class AthleteCardComponent {
       first_name: this.form.value.first_name,
       last_name: this.form.value.last_name,
       phone_number: this.form.value.phone_number,
+      enabled: this.athlete.enabled,
     };
 
     this.athleteService.updateAthlete(this.athlete).subscribe(

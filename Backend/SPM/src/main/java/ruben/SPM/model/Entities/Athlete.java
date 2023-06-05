@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import ruben.SPM.model.DTO.Entities.AthleteDTO;
+import ruben.SPM.model.Whitelist.Role;
 
 import java.util.Date;
 

@@ -10,8 +10,8 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { Events } from 'src/app/interfaces/event/event';
 import { RegisterEvent } from 'src/app/interfaces/event/register-event';
+import { AuthService } from 'src/app/services/auth/auth-service.service';
 
 @Component({
   selector: 'app-register-event-organizer',
@@ -34,6 +34,7 @@ export class RegisterEventOrganizerComponent {
   constructor(
     private sportTypeService: SportTypeService,
     private eventService: EventServiceService,
+    private AuthService: AuthService,
     private dialog: MatDialog,
     private fb: FormBuilder
   ) {}
@@ -51,11 +52,29 @@ export class RegisterEventOrganizerComponent {
         }
       },
       (error) => {
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Error al cargar los tipos de deporte.',
-          },
-        });
+        if (error.status == 404) {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'No hay deportes.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.AuthService.getPath();
+            });
+        } else {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Error al cargar los deportes.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.AuthService.getPath();
+            });
+        }
       }
     );
 
@@ -84,19 +103,29 @@ export class RegisterEventOrganizerComponent {
     console.log(this.event);
     this.eventService.createEvent(this.event).subscribe(
       (response) => {
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'El evento se ha creado correctamente.',
-          },
-        });
+        this.dialog
+          .open(PopUpMsgComponent, {
+            data: {
+              msg: 'El evento se ha creado correctamente.',
+            },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
+          });
       },
       (error) => {
         console.log(error);
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Error al crear el evento.',
-          },
-        });
+        this.dialog
+          .open(PopUpMsgComponent, {
+            data: {
+              msg: 'Error al crear el evento.',
+            },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
+          });
       }
     );
   }

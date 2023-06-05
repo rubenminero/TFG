@@ -4,4 +4,5 @@ export interface Watchlist {
   athlete_name: string;
   tournament_id: number;
   athlete_id: number;
+  enabled: boolean;
 }

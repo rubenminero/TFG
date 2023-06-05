@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ruben.SPM.model.Entities.Athlete;
 import ruben.SPM.model.Entities.Inscription;
 import ruben.SPM.model.Entities.Tournament;
+import ruben.SPM.model.Entities.Watchlist;
 import ruben.SPM.repository.EntitiesRepositories.InscriptionRepository;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class InscriptionService {
      * Access for Inscription data.
      */
     private final InscriptionRepository inscriptionRepository;
-    private final DeleteService deleteService;
+    private final TournamentService tournamentService;
 
     /**
      * Recover a inscription from the database.
@@ -66,6 +67,8 @@ public class InscriptionService {
      * @param id the id of the inscription.
      */
     public void deleteInscription(Long id) {
+        Inscription inscription = this.getInscription(id);
+        this.tournamentService.moreCapacity(inscription.getTournament());
         this.inscriptionRepository.delete(this.getInscription(id));
     }
 
@@ -75,7 +78,7 @@ public class InscriptionService {
      * @param inscription the inscription to be saved.
      */
     public Inscription saveInscription(Inscription inscription) {
-
+        this.tournamentService.lessCapacity(inscription.getTournament());
         return inscriptionRepository.save(inscription);
     }
 
@@ -87,6 +90,11 @@ public class InscriptionService {
     public void changeStateInscription(Long id) {
         Inscription inscription = this.getInscription(id);
         inscription.setEnabled(!inscription.isEnabled());
+        if (!inscription.isEnabled()){
+            this.tournamentService.moreCapacity(inscription.getTournament());
+        }else{
+            this.tournamentService.lessCapacity(inscription.getTournament());
+        }
         inscriptionRepository.save(inscription);
     }
 
