@@ -14,14 +14,15 @@
 -- Database creation must be performed outside a multi lined SQL file. 
 -- These commands were put in this file only as a convenience.
 -- 
--- object: tfg | type: DATABASE --
--- DROP DATABASE IF EXISTS tfg;
-CREATE DATABASE tfg
-	ENCODING = 'UTF8'
-	LC_COLLATE = 'Spanish_Spain.1252'
-	LC_CTYPE = 'Spanish_Spain.1252'
-	TABLESPACE = pg_default
-	OWNER = postgres;
+
+-- object: SPM | type: DATABASE --
+-- DROP DATABASE IF EXISTS SPM;
+-- CREATE DATABASE SPM
+--	ENCODING = 'UTF8'
+--	LC_COLLATE = 'Spanish_Spain.1252'
+--	LC_CTYPE = 'Spanish_Spain.1252'
+--	TABLESPACE = pg_default
+--	OWNER = postgres;
 -- ddl-end --
 
 
@@ -158,6 +159,7 @@ CREATE TABLE public.token (
 	token character varying(255),
 	token_type character varying(255),
 	user_id bigint,
+	username character varying(255),
 	CONSTRAINT token_pkey PRIMARY KEY (id),
 	CONSTRAINT uk_pddrhgwxnms2aceeku9s2ewy5 UNIQUE (token)
 );
@@ -255,6 +257,43 @@ CREATE TABLE public.watchlist (
 );
 -- ddl-end --
 ALTER TABLE public.watchlist OWNER TO postgres;
+-- ddl-end --
+
+-- object: public.ApproveRequests_id_seq | type: SEQUENCE --
+-- DROP SEQUENCE IF EXISTS public.ApproveRequests_id_seq CASCADE;
+CREATE SEQUENCE public.ApproveRequests_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START WITH 1
+	CACHE 1
+	NO CYCLE
+	OWNED BY NONE;
+
+-- ddl-end --
+ALTER SEQUENCE public.ApproveRequests_id_seq OWNER TO postgres;
+-- ddl-end --
+
+-- object: public.sports_types | type: TABLE --
+-- DROP TABLE IF EXISTS public.sports_types CASCADE;
+CREATE TABLE public.ApproveRequests (
+	id bigint NOT NULL DEFAULT nextval('public.ApproveRequests_id_seq'::regclass),
+	id_organizer bigint,
+	approved boolean,
+	reason character varying(255),
+	CONSTRAINT ApproveRequests_pkey PRIMARY KEY (id)
+);
+-- ddl-end --
+ALTER TABLE public.ApproveRequests OWNER TO postgres;
+-- ddl-end --
+
+
+
+-- object: fkd73huifgsd852gh9f9sx25qfg7a | type: CONSTRAINT --
+-- ALTER TABLE public.inscription DROP CONSTRAINT IF EXISTS fkd73huifgsd852gh9f9sx25qfg7a CASCADE;
+ALTER TABLE public.ApproveRequests ADD CONSTRAINT fkd73huifgsd852gh9f9sx25qfg7a FOREIGN KEY (id_organizer)
+REFERENCES public.organizers (id) MATCH SIMPLE
+ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- ddl-end --
 
 -- object: fkanhsicqm3lc8ya77tr7r0je18 | type: CONSTRAINT --

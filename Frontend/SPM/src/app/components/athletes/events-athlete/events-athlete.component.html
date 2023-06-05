@@ -1,0 +1,80 @@
+<ng-container *ngIf="!event_show; else event_data">
+  <mat-card-header class="header">
+    <mat-card-title>
+      <div class="header-text">
+        <p>Eventos disponibles</p>
+      </div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <div>
+    <mat-paginator
+      [length]="events_saved.length"
+      [pageSize]="4"
+      [pageSizeOptions]="[4, 8, 12]"
+      [showFirstLastButtons]="true"
+    >
+    </mat-paginator>
+  </div>
+  <mat-grid-list cols="4" rowHeight="800px">
+    <mat-grid-tile *ngFor="let event of obs | async">
+      <mat-card class="card">
+        <mat-card-content>
+          <div class="column">
+            <div class="row">
+              <mat-label class="title">Nombre</mat-label>
+              <p class="text">{{ event.name }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Ubicacion</mat-label>
+              <p class="text">{{ event.location }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Direccion</mat-label>
+              <p class="text">{{ event.address }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Organizador</mat-label>
+              <p class="text">{{ event.organizer }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Deporte</mat-label>
+              <p class="text">{{ event.sport_type }}</p>
+            </div>
+          </div>
+          <mat-card-actions class="button">
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              (click)="saveWatchlist(event)"
+            >
+              Guardar el evento en mi lista
+            </button>
+            <button
+              class="button-right"
+              mat-raised-button
+              color="primary"
+              type="submit"
+              (click)="openEvent(event)"
+            >
+              Ver mas
+            </button>
+          </mat-card-actions>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</ng-container>
+<ng-template #event_data>
+  <mat-card>
+    <mat-card-header class="header">
+      <mat-card-title>
+        <div class="header-text">
+          <p>Datos del evento</p>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+    <app-event-card [event]="this.event"></app-event-card>
+  </mat-card>
+</ng-template>

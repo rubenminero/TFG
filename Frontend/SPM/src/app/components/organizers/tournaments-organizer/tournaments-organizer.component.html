@@ -1,0 +1,106 @@
+<ng-container *ngIf="!tournament_show; else tournament_data">
+  <mat-card-header class="header">
+    <mat-card-title>
+      <div class="header-text">
+        <p>Tus torneos</p>
+      </div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <div>
+    <mat-paginator
+      [length]="tournaments_saved.length"
+      [pageSize]="4"
+      [pageSizeOptions]="[4, 8, 12]"
+      [showFirstLastButtons]="true"
+    >
+    </mat-paginator>
+  </div>
+  <mat-grid-list cols="4" rowHeight="800px">
+    <mat-grid-tile *ngFor="let tournament of obs | async">
+      <mat-card class="card">
+        <mat-card-content>
+          <div class="column">
+            <div class="row">
+              <mat-label class="title">Nombre</mat-label>
+              <p class="text">{{ tournament.name }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Ubicacion</mat-label>
+              <p class="text">{{ tournament.location }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Direccion</mat-label>
+              <p class="text">{{ tournament.address }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Aforo</mat-label>
+              <p class="text">{{ tournament.capacity }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Descripcion</mat-label>
+              <p class="text">{{ tournament.description }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Organizador</mat-label>
+              <p class="text">{{ tournament.organizer }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Deporte</mat-label>
+              <p class="text">{{ tournament.sport_type }}</p>
+            </div>
+          </div>
+          <mat-card-actions class="button">
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              (click)="deleteTournament(tournament)"
+            >
+              Borrar torneo
+            </button>
+            <button
+              class="button-right"
+              mat-raised-button
+              color="primary"
+              (click)="watchInscriptions(tournament)"
+            >
+              Inscripciones del torneo
+            </button>
+            <button
+              class="button-right"
+              mat-raised-button
+              color="primary"
+              (click)="openTournament(tournament)"
+            >
+              Ver mas
+            </button>
+          </mat-card-actions>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</ng-container>
+<ng-template #tournament_data>
+  <ng-container *ngIf="!tournament_inscriptions">
+    <mat-card>
+      <mat-card-header class="header">
+        <mat-card-title>
+          <div class="header-text">
+            <p>Datos del torneo</p>
+          </div>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <app-tournament-card
+        [tournament]="this.tournament"
+        [admin]="true"
+      ></app-tournament-card>
+    </mat-card>
+  </ng-container>
+  <ng-container *ngIf="tournament_inscriptions">
+    <app-inscriptions-organizer
+      [tournament]="this.tournament"
+    ></app-inscriptions-organizer>
+  </ng-container>
+</ng-template>

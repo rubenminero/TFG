@@ -1,0 +1,63 @@
+<mat-card>
+  <mat-card-header class="header">
+    <mat-card-title>
+      <div class="header-text">
+        <p>Resumen de entidades deshabilitadas</p>
+      </div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content class="event">
+    <form [formGroup]="form">
+      <mat-form-field class="form">
+        <mat-label>Numero de usuarios deshabilitados</mat-label>
+        <input matInput formControlName="users_disabled" />
+      </mat-form-field>
+      <mat-form-field class="form">
+        <mat-label>Numero de torneos deshabilitados</mat-label>
+        <input matInput formControlName="tournaments_disabled" />
+      </mat-form-field>
+      <mat-form-field class="form">
+        <mat-label>Numero de eventos deshabilitados</mat-label>
+        <input matInput formControlName="events_disabled" />
+      </mat-form-field>
+      <mat-form-field class="form">
+        <mat-label>Numero de inscripciones deshabilitados</mat-label>
+        <input matInput formControlName="inscriptions_disabled" />
+      </mat-form-field>
+      <mat-form-field class="form">
+        <mat-label
+          >Numero de elementos de listas de seguimiento
+          deshabilitados</mat-label
+        >
+        <input matInput formControlName="watchlists_disabled" />
+      </mat-form-field>
+      <mat-form-field class="form">
+        <mat-label>Numero de tokens deshabilitados</mat-label>
+        <input matInput formControlName="tokens_disabled" />
+      </mat-form-field>
+      <mat-form-field class="form">
+        <mat-label>Numero de deportes deshabilitados</mat-label>
+        <input matInput formControlName="sports_types_disabled" />
+      </mat-form-field>
+      <mat-card-actions class="button">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          (click)="deleteDisableds()"
+        >
+          Borrar entidades deshabilitadas
+        </button>
+        <button
+          class="button-right"
+          mat-raised-button
+          color="primary"
+          (click)="back()"
+        >
+          Volver
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,21 @@
+.espaciado {
+  flex: 1 1 auto;
+}
+
+.fondo{
+  background-color: #003ef3;
+}
+
+.texto{
+  color: white;
+}
+
+img{
+  object-fit:contain;
+  width: 10%;
+  height: 100%;
+}
+
+img:hover {
+  cursor: pointer;
+}

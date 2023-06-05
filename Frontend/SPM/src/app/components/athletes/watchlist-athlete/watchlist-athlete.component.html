@@ -1,0 +1,72 @@
+<ng-container *ngIf="!watchlist_show; else watchlist_data">
+  <mat-card-header class="header">
+    <mat-card-title>
+      <div class="header-text">
+        <p>Tu lista de seguimiento</p>
+      </div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <div>
+    <mat-paginator
+      [length]="watchlists_saved.length"
+      [pageSize]="4"
+      [pageSizeOptions]="[4, 8, 12]"
+      [showFirstLastButtons]="true"
+    >
+    </mat-paginator>
+  </div>
+  <mat-grid-list cols="4" rowHeight="800px">
+    <mat-grid-tile *ngFor="let watchlist of obs | async">
+      <mat-card class="card">
+        <mat-card-content>
+          <div class="column">
+            <div class="row">
+              <mat-label class="title">Nombre</mat-label>
+              <p class="text">{{ watchlist.tournament_name }}</p>
+            </div>
+          </div>
+          <mat-card-actions class="button">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="deleteWatchlist(watchlist)"
+            >
+              Sacar de la lista
+            </button>
+            <button
+              class="button-right"
+              mat-raised-button
+              color="primary"
+              (click)="openTournament(watchlist)"
+            >
+              Ver mas
+            </button>
+          </mat-card-actions>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</ng-container>
+<ng-template #watchlist_data>
+  <mat-card *ngIf="this.tournament_show">
+    <mat-card-header class="header">
+      <mat-card-title>
+        <div class="header-text">
+          <p>Datos del torneo</p>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+    <app-tournament-card [tournament]="this.tournament"></app-tournament-card>
+  </mat-card>
+  <mat-card *ngIf="this.event_show">
+    <mat-card-header class="header">
+      <mat-card-title>
+        <div class="header-text">
+          <p>Datos del evento</p>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+    <app-event-card [event]="this.event"></app-event-card>
+  </mat-card>
+</ng-template>

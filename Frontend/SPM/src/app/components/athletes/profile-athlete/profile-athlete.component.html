@@ -1,0 +1,12 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div *ngIf="athlete_show">
+        <app-athlete-card
+          [athlete]="this.athlete"
+          [admin]="true"
+        ></app-athlete-card>
+      </div>
+    </div>
+  </div>
+</div>

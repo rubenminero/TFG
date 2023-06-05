@@ -1,0 +1,89 @@
+<mat-card>
+  <mat-card-header class="header">
+    <mat-card-title>
+      <div class="header-text">
+        <p>Registrar evento</p>
+      </div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content class="card">
+    <form [formGroup]="form">
+      <mat-form-field class="form">
+        <mat-label>Nombre del evento</mat-label>
+        <input matInput formControlName="name" />
+        <mat-error *ngIf="form.controls['name'].hasError('required')">
+          <p class="errors">Este campo es obligatorio</p>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form">
+        <mat-label>Ubicacion</mat-label>
+        <input
+          matInput
+          formControlName="location"
+          placeholder="Alcala de Henares, Madrid"
+        />
+        <mat-error *ngIf="form.controls['location'].hasError('required')">
+          <p class="errors">Este campo es obligatorio</p>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form">
+        <mat-label>Direccion</mat-label>
+        <input
+          matInput
+          formControlName="address"
+          placeholder="Calle de la Imagen, 1"
+        />
+        <mat-error *ngIf="form.controls['address'].hasError('required')">
+          <p class="errors">Este campo es obligatorio</p>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form">
+        <mat-label>Descripcion</mat-label>
+        <input
+          matInput
+          formControlName="description"
+          placeholder="Esto es la descripcion del evento de la liga en Alcala"
+        />
+        <mat-error *ngIf="form.controls['description'].hasError('required')">
+          <p class="errors">Este campo es obligatorio</p>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="form">
+        <mat-select
+          formControlName="sport_type_name"
+          placeholder="Tipo de deporte"
+        >
+          <mat-option
+            *ngFor="let sport_type of sports_types_list"
+            [value]="sport_type"
+          >
+            {{ sport_type.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-card-actions class="button">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!form.valid"
+          (click)="ngOnSubmit()"
+        >
+          Registrar el evento
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          (click)="back()"
+        >
+          Volver
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>
