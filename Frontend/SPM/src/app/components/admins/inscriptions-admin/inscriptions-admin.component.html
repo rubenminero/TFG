@@ -1,1 +1,74 @@
-<p>inscriptions-admin works!</p>
+<mat-card-header class="header">
+  <mat-card-title>
+    <div class="header-text">
+      <p>Torneos</p>
+    </div>
+  </mat-card-title>
+</mat-card-header>
+<mat-divider></mat-divider>
+<div>
+  <mat-form-field class="select">
+    <mat-label>Estado</mat-label>
+    <mat-select
+      [formControl]="selected"
+      (selectionChange)="
+        selectState($event.value.value, $event.value.viewValue)
+      "
+      placeholder=""
+    >
+      <mat-option *ngFor="let state of states" [value]="state">
+        {{ state.viewValue }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-paginator
+    [length]="inscriptions_saved.length"
+    [pageSize]="4"
+    [pageSizeOptions]="[4, 8, 12]"
+    [showFirstLastButtons]="true"
+  >
+  </mat-paginator>
+</div>
+<mat-grid-list cols="4" rowHeight="800px">
+  <mat-grid-tile *ngFor="let inscription of obs | async">
+    <mat-card class="card">
+      <mat-card-content>
+        <div class="column">
+          <div class="row">
+            <mat-label class="title">Nombre del torneo</mat-label>
+            <p class="text">{{ inscription.tournament }}</p>
+          </div>
+          <div class="row">
+            <mat-label class="title">Nombre del usuario</mat-label>
+            <p class="text">{{ inscription.athlete }}</p>
+          </div>
+          <div class="row">
+            <mat-label class="title">Estado</mat-label>
+            <p *ngIf="inscription.enabled" class="text">Activo</p>
+            <p *ngIf="!inscription.enabled" class="text">Inactivo</p>
+          </div>
+        </div>
+        <mat-card-actions class="button">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            (click)="changeStateInscription(inscription)"
+          >
+            <p *ngIf="inscription.enabled">Desactivar</p>
+            <p *ngIf="!inscription.enabled">Activar</p>
+          </button>
+          <button
+            class="button-right"
+            mat-raised-button
+            color="primary"
+            type="submit"
+            (click)="deleteInscription(inscription)"
+          >
+            Borrar inscripcion
+          </button>
+        </mat-card-actions>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>

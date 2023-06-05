@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { EnvService } from '../env/env-service.service';
 import { AuthService } from '../auth/auth-service.service';
+import { RegisterSportType } from 'src/app/interfaces/sport.type/RegisterSportType';
+import { SportType } from 'src/app/interfaces/sport.type/SportType';
 
 @Injectable({
   providedIn: 'root',

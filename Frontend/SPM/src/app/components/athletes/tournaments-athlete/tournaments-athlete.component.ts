@@ -32,6 +32,7 @@ export class TournamentsAthleteComponent {
     capacity: -1,
     organizer: '',
     sport_type: '',
+    enabled: false,
   };
   tournaments_saved: Tournament[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
@@ -43,7 +44,7 @@ export class TournamentsAthleteComponent {
     private tournamentService: TournamentServiceService,
     private inscriptionService: InscriptionServiceService,
     private watchlistService: WatchlistService,
-    private AuthService: AuthService,
+    private authService: AuthService,
     private changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private router: Router
@@ -64,6 +65,7 @@ export class TournamentsAthleteComponent {
             capacity: data[i].capacity,
             organizer: data[i].organizer,
             sport_type: data[i].sport_type,
+            enabled: data[i].enabled,
           };
           this.tournaments_saved.push(tournament_aux);
         }
@@ -75,11 +77,29 @@ export class TournamentsAthleteComponent {
         this.obs = this.dataSource.connect();
       },
       (error) => {
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Error al cargar los torneos.',
-          },
-        });
+        if (error.status == 404) {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'No hay torneos.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.authService.getPath();
+            });
+        } else {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Error al cargar las torneos.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.authService.getPath();
+            });
+        }
       }
     );
   }
@@ -93,31 +113,46 @@ export class TournamentsAthleteComponent {
     let inscription: RegisterInscription = {
       tournament: tournament.name,
       tournament_id: tournament.id,
-      athlete: this.AuthService.getSubject(),
-      athlete_id: this.AuthService.getId(),
+      athlete: this.authService.getSubject(),
+      athlete_id: this.authService.getId(),
     };
     this.inscriptionService.addTournamentToInscription(inscription).subscribe(
       (response) => {
         console.log(response);
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Añadido correctamente.',
-          },
-        });
+        this.dialog
+          .open(PopUpMsgComponent, {
+            data: {
+              msg: 'Añadido correctamente.',
+            },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
+          });
       },
       (error) => {
         if (error.status == 400) {
-          this.dialog.open(PopUpMsgComponent, {
-            data: {
-              msg: 'Ya estas inscrito en este torneo.',
-            },
-          });
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Ya estas inscrito en este torneo.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.ngOnInit();
+            });
         } else if (error.status == 404) {
-          this.dialog.open(PopUpMsgComponent, {
-            data: {
-              msg: 'Error al añadir.',
-            },
-          });
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Error al añadir.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.ngOnInit();
+            });
         }
       }
     );
@@ -126,30 +161,45 @@ export class TournamentsAthleteComponent {
   saveWatchlist(tournament: Tournament): void {
     let Watchlist: RegisterWatchlist = {
       tournament: tournament.id,
-      athlete: this.AuthService.getId(),
+      athlete: this.authService.getId(),
     };
     this.watchlistService.addToWatchlist(Watchlist).subscribe(
       (response) => {
         console.log(response);
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Añadido correctamente.',
-          },
-        });
+        this.dialog
+          .open(PopUpMsgComponent, {
+            data: {
+              msg: 'Añadido correctamente.',
+            },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
+          });
       },
       (error) => {
         if (error.status == 400) {
-          this.dialog.open(PopUpMsgComponent, {
-            data: {
-              msg: 'Ya tienes este evento en tu lista.',
-            },
-          });
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Ya tienes este torneo en tu lista.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.ngOnInit();
+            });
         } else if (error.status == 404) {
-          this.dialog.open(PopUpMsgComponent, {
-            data: {
-              msg: 'Error al añadir.',
-            },
-          });
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Error al añadir.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.ngOnInit();
+            });
         }
       }
     );

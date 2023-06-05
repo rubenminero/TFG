@@ -133,6 +133,17 @@ export class AuthService {
     return subject;
   }
 
+  getEnabled() {
+    const helper = new JwtHelperService();
+    let token = sessionStorage.getItem('access_token');
+    let enabled = false;
+    if (token) {
+      let decodedToken = helper.decodeToken(token);
+      enabled = decodedToken['enabled'];
+    }
+    return enabled;
+  }
+
   getPathHome(): String {
     let path = '';
     let role = this.getRole();
@@ -157,7 +168,7 @@ export class AuthService {
       this.router.navigate(['/athletes-menu']);
     } else if (role === 'ORGANIZER') {
       this.router.navigate(['/organizers-menu']);
-    } else if (role === 'ROLE_ADMIN') {
+    } else if (role === 'ADMIN') {
       this.router.navigate(['/admins-menu']);
     } else {
       this.router.navigate(['/login']);

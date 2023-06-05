@@ -6,4 +6,5 @@ export interface Events {
   description: string;
   organizer: string;
   sport_type: string;
+  enabled: boolean;
 }

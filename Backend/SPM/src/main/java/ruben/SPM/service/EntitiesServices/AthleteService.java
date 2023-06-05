@@ -28,7 +28,6 @@ public class AthleteService {
     private final WatchlistService watchlistService;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
-    private final DeleteService deleteService;
 
     /**
      * Recover a athlete from the database.
@@ -69,7 +68,7 @@ public class AthleteService {
      * @param athlete the user to be deleted.
      */
     public void deleteAthlete(Athlete athlete) {
-        this.deleteService.deleteAthlete(athlete);
+        this.athleteRepository.delete(athlete);
     }
 
     /**

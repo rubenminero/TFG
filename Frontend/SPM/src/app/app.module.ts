@@ -44,13 +44,14 @@ import { InscriptionsOrganizerComponent } from './components/organizers/inscript
 import { NavbarAdminComponent } from './components/admins/navbar-admin/navbar-admin.component';
 import { OrganizersAdminComponent } from './components/admins/organizers-admin/organizers-admin.component';
 import { AthletesAdminComponent } from './components/admins/athletes-admin/athletes-admin.component';
-import { TokensAdminComponent } from './components/admins/tokens-admin/tokens-admin.component';
 import { TournamentsAdminComponent } from './components/admins/tournaments-admin/tournaments-admin.component';
 import { EventsAdminComponent } from './components/admins/events-admin/events-admin.component';
 import { InscriptionsAdminComponent } from './components/admins/inscriptions-admin/inscriptions-admin.component';
-import { WatchlistAdminComponent } from './components/admins/watchlist-admin/watchlist-admin.component';
 import { WatchlistsAdminComponent } from './components/admins/watchlists-admin/watchlists-admin.component';
 import { DeleteAllDisabledAdminComponent } from './components/admins/delete-all-disabled-admin/delete-all-disabled-admin.component';
+import { AdminsMenuComponent } from './pages/admins-menu/admins-menu.component';
+import { PopUpCreateSportTypeComponent } from './components/shared/pop-ups/pop-up-create-sport-type/pop-up-create-sport-type.component';
+import { SportsTypesAdminComponent } from './components/admins/sports-types-admin/sports-types-admin.component';
 
 @NgModule({
   declarations: [
@@ -88,13 +89,14 @@ import { DeleteAllDisabledAdminComponent } from './components/admins/delete-all-
     NavbarAdminComponent,
     OrganizersAdminComponent,
     AthletesAdminComponent,
-    TokensAdminComponent,
     TournamentsAdminComponent,
     EventsAdminComponent,
     InscriptionsAdminComponent,
-    WatchlistAdminComponent,
     WatchlistsAdminComponent,
     DeleteAllDisabledAdminComponent,
+    AdminsMenuComponent,
+    PopUpCreateSportTypeComponent,
+    SportsTypesAdminComponent,
   ],
   imports: [
     BrowserModule,

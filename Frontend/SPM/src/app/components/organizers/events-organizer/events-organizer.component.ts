@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/services/auth/auth-service.service';
 import { Component } from '@angular/core';
 import { OrganizerServiceService } from 'src/app/services/organizer/organizer-service.service';
 import { ChangeDetectorRef } from '@angular/core';
@@ -26,6 +27,7 @@ export class EventsOrganizerComponent {
     description: '',
     organizer: '',
     sport_type: '',
+    enabled: false,
   };
   events_saved: Events[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
@@ -36,7 +38,8 @@ export class EventsOrganizerComponent {
     private organizerService: OrganizerServiceService,
     private changeDetectorRef: ChangeDetectorRef,
     private eventService: EventServiceService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private AuthService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -52,6 +55,7 @@ export class EventsOrganizerComponent {
             description: data[i].description,
             organizer: data[i].organizer,
             sport_type: data[i].sport_type,
+            enabled: data[i].enabled,
           };
           this.events_saved.push(event_aux);
         }
@@ -59,13 +63,43 @@ export class EventsOrganizerComponent {
         this.dataSource = new MatTableDataSource<Events>(this.events_saved);
         this.dataSource.paginator = this.paginator;
         this.obs = this.dataSource.connect();
+        if (this.events_saved.length == 0) {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'No tienes eventos.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.AuthService.getPath();
+            });
+        }
       },
       (error) => {
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Error al cargar los eventos.',
-          },
-        });
+        if (error.status == 404) {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'No hay eventos.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.AuthService.getPath();
+            });
+        } else {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Error al cargar los eventos.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.AuthService.getPath();
+            });
+        }
       }
     );
   }
@@ -78,18 +112,28 @@ export class EventsOrganizerComponent {
   deleteEvent(event: Events): void {
     this.eventService.deleteEvent(event).subscribe(
       (response) => {
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Borrado correctamente.',
-          },
-        });
+        this.dialog
+          .open(PopUpMsgComponent, {
+            data: {
+              msg: 'Borrado correctamente.',
+            },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
+          });
       },
       (error) => {
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Error al borrar.',
-          },
-        });
+        this.dialog
+          .open(PopUpMsgComponent, {
+            data: {
+              msg: 'Error al borrar.',
+            },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
+          });
       }
     );
   }

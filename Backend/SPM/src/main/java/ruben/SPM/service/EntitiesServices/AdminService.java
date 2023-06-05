@@ -140,10 +140,11 @@ public class AdminService {
 
     /**
      * Enable or disable a watchlist in the database.
-     * 
+     *
      * @param id the id of the watchlist to be changed.
      */
     public void changeStateWatchlist(Long id) {
+
         watchlistService.changeStateWatchlist(id);
     }
 
@@ -156,7 +157,6 @@ public class AdminService {
     public List<Watchlist> getAllWatchlists() {
         return watchlistService.getAllWatchlists();
     }
-
 
     /**
      * Enable or disable a token in the database.
@@ -176,7 +176,6 @@ public class AdminService {
     public List<Token> getAllTokens() {
         return tokenService.getAllTokens();
     }
-
 
     /**
      * Recover a token from the database.

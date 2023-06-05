@@ -11,6 +11,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { TournamentServiceService } from 'src/app/services/tournament/tournament-service.service';
+import { AuthService } from 'src/app/services/auth/auth-service.service';
 
 @Component({
   selector: 'app-register-tournament-organizer',
@@ -35,6 +36,7 @@ export class RegisterTournamentOrganizerComponent {
   constructor(
     private sportTypeService: SportTypeService,
     private tournamentService: TournamentServiceService,
+    private AuthService: AuthService,
     private dialog: MatDialog,
     private fb: FormBuilder
   ) {}
@@ -52,11 +54,29 @@ export class RegisterTournamentOrganizerComponent {
         }
       },
       (error) => {
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Error al cargar los tipos de deporte.',
-          },
-        });
+        if (error.status == 404) {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'No hay deportes.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.AuthService.getPath();
+            });
+        } else {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Error al cargar los deportes.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.AuthService.getPath();
+            });
+        }
       }
     );
 
@@ -93,18 +113,28 @@ export class RegisterTournamentOrganizerComponent {
     };
     this.tournamentService.createTournament(this.tournament).subscribe(
       (response) => {
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'El torneo se ha creado correctamente.',
-          },
-        });
+        this.dialog
+          .open(PopUpMsgComponent, {
+            data: {
+              msg: 'El torneo se ha creado correctamente.',
+            },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
+          });
       },
       (error) => {
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Error al crear el torneo.',
-          },
-        });
+        this.dialog
+          .open(PopUpMsgComponent, {
+            data: {
+              msg: 'Error al crear el torneo.',
+            },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
+          });
       }
     );
   }

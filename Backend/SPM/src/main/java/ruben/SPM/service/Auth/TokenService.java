@@ -27,8 +27,8 @@ public class TokenService {
 
     public void changeStateToken(Integer id){
         Token token = this.getToken(id);
-        token.setExpired(true);
-        token.setRevoked(true);
+        token.setExpired(!token.isExpired());
+        token.setRevoked(!token.isRevoked());
         this.tokenRepository.update(token.getId(),
                 token.getToken(),
                 token.getTokenType(),

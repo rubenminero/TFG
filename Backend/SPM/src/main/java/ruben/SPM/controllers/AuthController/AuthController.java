@@ -105,60 +105,13 @@ public class AuthController {
     }
 
 
-    @PutMapping("/password/{id}")
-    @PreAuthorize("hasAuthority('athlete:update')")
-    @Operation(summary = "Changes the password for the user")
-    public ResponseEntity changePassword(@PathVariable Long id,@RequestBody PasswordChangeDTO passwordChangeDTO){
-        User user = this.userService.getUser(id);
-        if (user != null ){
-            if (passwordChangeDTO.getPassword().equals(passwordChangeDTO.getOldpassword()) && passwordChangeDTO.getPassword().equals(passwordChangeDTO.getConfirmpassword())){
-                Athlete athlete = null;
-                Organizer organizer = null;
-                Admin admin = null;
-                if (user.getRole().equals(Role.ATHLETE)){
-                    athlete = this.athleteService.getAthlete(id);
-                    athlete = this.athleteService.setPasswordHashed(athlete, passwordChangeDTO.getPassword());
-                    this.athleteService.updateAthlete(athlete);
-                }else if (user.getRole().equals(Role.ORGANIZER)){
-                    organizer= this.organizerService.getOrganizer(id);
-                    organizer = this.organizerService.setPasswordHashed(organizer, passwordChangeDTO.getPassword());
-                    organizer = this.organizerService.updateOrganizer(organizer);
-                }else if (user.getRole().equals(Role.ADMIN)){
-                    admin = this.adminService.getAdmin(id);
-                    admin = this.adminService.setPasswordHashed(admin, passwordChangeDTO.getPassword());
-                    admin = this.adminService.updateAdmin(admin);
-                }
-
-                if (athlete != null || organizer != null  || admin !=null ){
-                    String msg = "The password has been changed.";
-                    log.warn(msg);
-                    return ResponseEntity
-                            .status(HttpStatus.OK)
-                            .body(msg);
-                }else{
-                    String msg = "The password has not been changed.";
-                    log.warn(msg);
-                    return ResponseEntity
-                            .status(HttpStatus.OK)
-                            .body(msg);
-                }
-            }else{
-                String msg = "The passwords provided doesnt match.";
-                log.warn(msg);
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body(msg);
-            }
-        }else {
-            String msg = "The user with the id provided doesnt exist.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(msg);
-        }
+    @PutMapping("/logout")
+    @Operation(summary = "Log out the user from the app.")
+    @PreAuthorize("hasAuthority('athlete:read')")
+    public void log_out(@Parameter(name = "Servlet request")HttpServletRequest request, @Parameter(name = "Servlet response")HttpServletResponse response
+    ) throws IOException {
+        service.log_out();
     }
-
-
 
 }
 

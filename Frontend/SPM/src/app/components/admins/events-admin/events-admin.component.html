@@ -1,1 +1,113 @@
-<p>events-admin works!</p>
+<ng-container *ngIf="!event_show; else event_data">
+  <mat-card-header class="header">
+    <mat-card-title>
+      <div class="header-text">
+        <p>Eventos</p>
+      </div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <div>
+    <mat-form-field class="select">
+      <mat-label>Estado</mat-label>
+      <mat-select
+        [formControl]="selected"
+        (selectionChange)="
+          selectState($event.value.value, $event.value.viewValue)
+        "
+        placeholder=""
+      >
+        <mat-option *ngFor="let state of states" [value]="state">
+          {{ state.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-paginator
+      [length]="events_saved.length"
+      [pageSize]="4"
+      [pageSizeOptions]="[4, 8, 12]"
+      [showFirstLastButtons]="true"
+    >
+    </mat-paginator>
+  </div>
+  <mat-grid-list cols="4" rowHeight="800px">
+    <mat-grid-tile *ngFor="let event of obs | async">
+      <mat-card class="card">
+        <mat-card-content>
+          <div class="column">
+            <div class="row">
+              <mat-label class="title">Nombre</mat-label>
+              <p class="text">{{ event.name }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Ubicacion</mat-label>
+              <p class="text">{{ event.location }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Direccion</mat-label>
+              <p class="text">{{ event.address }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Descripcion</mat-label>
+              <p class="text">{{ event.description }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Organizador</mat-label>
+              <p class="text">{{ event.organizer }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Deporte</mat-label>
+              <p class="text">{{ event.sport_type }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Estado</mat-label>
+              <p *ngIf="event.enabled" class="text">Activo</p>
+              <p *ngIf="!event.enabled" class="text">Inactivo</p>
+            </div>
+          </div>
+          <mat-card-actions class="button">
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              (click)="changeStateEvent(event)"
+            >
+              <p *ngIf="event.enabled">Desactivar</p>
+              <p *ngIf="!event.enabled">Activar</p>
+            </button>
+            <button
+              class="button-right"
+              mat-raised-button
+              color="primary"
+              type="submit"
+              (click)="deleteEvent(event)"
+            >
+              Borrar evento
+            </button>
+            <button
+              class="button-right"
+              mat-raised-button
+              color="primary"
+              (click)="openEvent(event)"
+            >
+              Ver mas
+            </button>
+          </mat-card-actions>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</ng-container>
+<ng-template #event_data>
+  <mat-card>
+    <mat-card-header class="header">
+      <mat-card-title>
+        <div class="header-text">
+          <p>Datos del evento</p>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <app-event-card [event]="this.event" [admin]="false"></app-event-card>
+  </mat-card>
+</ng-template>

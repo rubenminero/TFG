@@ -27,6 +27,7 @@ export class InscriptionsOrganizerComponent {
     capacity: -1,
     organizer: '',
     sport_type: '',
+    enabled: false,
   };
   inscription: Inscriptions = {
     id: -1,
@@ -70,22 +71,31 @@ export class InscriptionsOrganizerComponent {
         );
         this.dataSource.paginator = this.paginator;
         this.obs = this.dataSource.connect();
-        if (this.inscriptions_saved.length == 0) {
-          this.dialog.open(PopUpMsgComponent, {
-            data: {
-              msg: 'No hay inscripciones para este torneo.',
-            },
-          });
-          this.AuthService.getPath();
-        }
       },
       (error) => {
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Error al cargar las inscripciones.',
-          },
-        });
-        this.AuthService.getPath();
+        if (error.status == 404) {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'No hay inscripciones para este torneo.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.AuthService.getPath();
+            });
+        } else {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Error al cargar las inscripciones.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.AuthService.getPath();
+            });
+        }
       }
     );
   }
@@ -94,19 +104,29 @@ export class InscriptionsOrganizerComponent {
     this.inscriptionService.deleteInscription(inscription).subscribe(
       (response) => {
         console.log(response);
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Inscripción eliminada correctamente.',
-          },
-        });
+        this.dialog
+          .open(PopUpMsgComponent, {
+            data: {
+              msg: 'Inscripción eliminada correctamente.',
+            },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
+          });
       },
       (error) => {
         console.log(error);
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Error al eliminar la inscripción.',
-          },
-        });
+        this.dialog
+          .open(PopUpMsgComponent, {
+            data: {
+              msg: 'Error al eliminar la inscripción.',
+            },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
+          });
       }
     );
   }

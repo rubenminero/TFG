@@ -28,6 +28,7 @@ export class EventsAthleteComponent {
     description: '',
     organizer: '',
     sport_type: '',
+    enabled: false,
   };
   events_saved: Events[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
@@ -56,6 +57,7 @@ export class EventsAthleteComponent {
             description: data[i].description,
             organizer: data[i].organizer,
             sport_type: data[i].sport_type,
+            enabled: data[i].enabled,
           };
           this.events_saved.push(event_aux);
         }
@@ -65,11 +67,29 @@ export class EventsAthleteComponent {
         this.obs = this.dataSource.connect();
       },
       (error) => {
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Error al cargar los eventos.',
-          },
-        });
+        if (error.status == 404) {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'No hay eventos.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.authService.getPath();
+            });
+        } else {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Error al cargar las eventos.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.authService.getPath();
+            });
+        }
       }
     );
   }
@@ -87,25 +107,40 @@ export class EventsAthleteComponent {
     this.watchlistService.addToWatchlist(watchlist).subscribe(
       (response) => {
         console.log(response);
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Añadido correctamente.',
-          },
-        });
+        this.dialog
+          .open(PopUpMsgComponent, {
+            data: {
+              msg: 'Añadido correctamente.',
+            },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
+          });
       },
       (error) => {
         if (error.status == 400) {
-          this.dialog.open(PopUpMsgComponent, {
-            data: {
-              msg: 'Ya tienes este evento en tu lista.',
-            },
-          });
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Ya tienes este evento en tu lista.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.ngOnInit();
+            });
         } else if (error.status == 404) {
-          this.dialog.open(PopUpMsgComponent, {
-            data: {
-              msg: 'Error al añadir.',
-            },
-          });
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Error al añadir.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.ngOnInit();
+            });
         }
       }
     );

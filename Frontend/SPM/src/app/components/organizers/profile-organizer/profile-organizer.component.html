@@ -1,7 +1,12 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <app-organizer-card></app-organizer-card>
+      <div *ngIf="organizer_show">
+        <app-organizer-card
+          [organizer]="this.organizer"
+          [admin]="true"
+        ></app-organizer-card>
+      </div>
     </div>
   </div>
 </div>

@@ -39,6 +39,7 @@ export class InscriptionsAthleteComponent {
     capacity: -1,
     organizer: '',
     sport_type: '',
+    enabled: false,
   };
 
   inscriptions_saved: Inscriptions[] = [];
@@ -81,17 +82,27 @@ export class InscriptionsAthleteComponent {
       },
       (error) => {
         if (error.status == 404) {
-          this.dialog.open(PopUpMsgComponent, {
-            data: {
-              msg: 'No tienes inscripciones.',
-            },
-          });
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'No tienes inscripciones.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.authService.getPath();
+            });
         } else {
-          this.dialog.open(PopUpMsgComponent, {
-            data: {
-              msg: 'Error al cargar las inscripciones.',
-            },
-          });
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Error al cargar las inscripciones.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.authService.getPath();
+            });
         }
       }
     );
@@ -110,43 +121,64 @@ export class InscriptionsAthleteComponent {
           capacity: response.capacity,
           organizer: response.organizer,
           sport_type: response.sport_type,
+          enabled: response.enabled,
         };
         this.inscription_show = true;
       },
       (error) => {
-        this.dialog.open(PopUpMsgComponent, {
-          data: {
-            msg: 'Error al cargar el torneo.',
-          },
-        });
+        this.dialog
+          .open(PopUpMsgComponent, {
+            data: {
+              msg: 'Error al cargar el torneo.',
+            },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
+          });
       }
     );
   }
 
   deleteInscription(inscription: Inscriptions): void {
-    console.log('Borrando inscripcion');
     this.inscriptionService.deleteInscription(inscription).subscribe(
-      (response) => {},
+      (response) => {
+        this.dialog
+          .open(PopUpMsgComponent, {
+            data: {
+              msg: 'Borrada correctamente.',
+            },
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.ngOnInit();
+          });
+      },
       (error) => {
         if (error.status == 400) {
-          this.dialog.open(PopUpMsgComponent, {
-            data: {
-              msg: '400.',
-            },
-          });
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'La inscripcion no pertenece a tu cuenta.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.ngOnInit();
+            });
         } else if (error.status == 404) {
-          this.dialog.open(PopUpMsgComponent, {
-            data: {
-              msg: 'Error al añadir.',
-            },
-          });
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Error al añadir.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.ngOnInit();
+            });
         }
       }
     );
-    this.dialog.open(PopUpMsgComponent, {
-      data: {
-        msg: 'Borrado correctamente.',
-      },
-    });
   }
 }

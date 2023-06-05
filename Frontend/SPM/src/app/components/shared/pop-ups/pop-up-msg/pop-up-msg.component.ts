@@ -17,6 +17,6 @@ export class PopUpMsgComponent {
   }
 
   back() {
-    window.history.back();
+    this.data.dialogRef.close();
   }
 }

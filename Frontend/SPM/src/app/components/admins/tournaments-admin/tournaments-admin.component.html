@@ -1,1 +1,120 @@
-<p>tournaments-admin works!</p>
+<ng-container *ngIf="!tournament_show; else tournament_data">
+  <mat-card-header class="header">
+    <mat-card-title>
+      <div class="header-text">
+        <p>Torneos</p>
+      </div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <div>
+    <mat-form-field class="select">
+      <mat-label>Estado</mat-label>
+      <mat-select
+        [formControl]="selected"
+        (selectionChange)="
+          selectState($event.value.value, $event.value.viewValue)
+        "
+        placeholder=""
+      >
+        <mat-option *ngFor="let state of states" [value]="state">
+          {{ state.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-paginator
+      [length]="tournaments_saved.length"
+      [pageSize]="4"
+      [pageSizeOptions]="[4, 8, 12]"
+      [showFirstLastButtons]="true"
+    >
+    </mat-paginator>
+  </div>
+  <mat-grid-list cols="4" rowHeight="800px">
+    <mat-grid-tile *ngFor="let tournament of obs | async">
+      <mat-card class="card">
+        <mat-card-content>
+          <div class="column">
+            <div class="row">
+              <mat-label class="title">Nombre</mat-label>
+              <p class="text">{{ tournament.name }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Ubicacion</mat-label>
+              <p class="text">{{ tournament.location }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Direccion</mat-label>
+              <p class="text">{{ tournament.address }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Descripcion</mat-label>
+              <p class="text">{{ tournament.description }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Plazas disponibles</mat-label>
+              <p class="text">{{ tournament.capacity }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Organizador</mat-label>
+              <p class="text">{{ tournament.organizer }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Deporte</mat-label>
+              <p class="text">{{ tournament.sport_type }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Estado</mat-label>
+              <p *ngIf="tournament.enabled" class="text">Activo</p>
+              <p *ngIf="!tournament.enabled" class="text">Inactivo</p>
+            </div>
+          </div>
+          <mat-card-actions class="button">
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              (click)="changeStateTournament(tournament)"
+            >
+              <p *ngIf="tournament.enabled">Desactivar</p>
+              <p *ngIf="!tournament.enabled">Activar</p>
+            </button>
+            <button
+              class="button-right"
+              mat-raised-button
+              color="primary"
+              type="submit"
+              (click)="deleteTournament(tournament)"
+            >
+              Borrar torneo
+            </button>
+            <button
+              class="button-right"
+              mat-raised-button
+              color="primary"
+              (click)="openTournament(tournament)"
+            >
+              Ver mas
+            </button>
+          </mat-card-actions>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</ng-container>
+<ng-template #tournament_data>
+  <mat-card>
+    <mat-card-header class="header">
+      <mat-card-title>
+        <div class="header-text">
+          <p>Datos del torneo</p>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <app-tournament-card
+      [tournament]="this.tournament"
+      [admin]="false"
+    ></app-tournament-card>
+  </mat-card>
+</ng-template>

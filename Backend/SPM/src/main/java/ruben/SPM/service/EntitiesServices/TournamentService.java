@@ -20,8 +20,6 @@ public class TournamentService {
      */
     private final TournamentRepository tournamentRepository;
 
-    private final DeleteService deleteService;
-
     /**
      * Recover a tournament from the database.
      * 
@@ -68,7 +66,8 @@ public class TournamentService {
      * @param id the id of the tournament.
      */
     public void deleteTournament(Long id) {
-        this.deleteService.deleteTournament(id);
+        Tournament tournament = this.getTournament(id);
+        this.tournamentRepository.delete(tournament);
     }
 
     /**
@@ -122,7 +121,7 @@ public class TournamentService {
      */
     public List<Tournament> getAllTournaments() {
         List<Tournament> tournaments= new ArrayList<Tournament>();
-        List<Tournament> tournaments_all = this.getAllTournaments();
+        List<Tournament> tournaments_all = this.tournamentRepository.findAll();
         for (Tournament t : tournaments_all) {
             if (t.getInscription()) {
                 tournaments.add(t);
@@ -139,7 +138,7 @@ public class TournamentService {
      */
     public List<Tournament> getAllEvents() {
         List<Tournament> events= new ArrayList<Tournament>();
-        List<Tournament> tournaments_all = this.getAllTournaments();
+        List<Tournament> tournaments_all = this.tournamentRepository.findAll();
         for (Tournament t : tournaments_all) {
             if (!t.getInscription()) {
                 events.add(t);
@@ -171,7 +170,7 @@ public class TournamentService {
      */
     public List<Tournament> getEnabledEvents() {
         List<Tournament> events_enabled = new ArrayList<Tournament>();
-        List<Tournament> events = this.getAllTournaments();
+        List<Tournament> events = this.getAllEvents();
         for (Tournament t : events) {
             if (t.isEnabled() && !t.getInscription()) {
                 events_enabled.add(t);

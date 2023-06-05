@@ -33,6 +33,7 @@ public class Sports_typeController {
     @Operation(summary = "Create a sport type with the data provided.")
     public ResponseEntity createSport_Type(@RequestBody Sports_type sport_type) {
         User user = userService.isAuthorized();
+        Boolean name_check = this.sportsTypeService.validName(sport_type.getName());
 
         if (user == null){
             String msg = "This user cant do that operation.";
@@ -41,6 +42,15 @@ public class Sports_typeController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
+
+        if (name_check){
+            String msg = "The name is already taken.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(msg);
+        }
+
         log.info("Sport type created successfully");
         return ResponseEntity.ok(Sports_typeDTO.fromSport_type(sportsTypeService.saveSport_type(sport_type)));
     }
@@ -49,6 +59,7 @@ public class Sports_typeController {
     @Operation(summary = "Update a sport type with the data provided.")
     public ResponseEntity updateSport_Type(@PathVariable Long id,  @RequestBody Sports_type sport_type) {
         User user = userService.isAuthorized();
+        Boolean name_check = this.sportsTypeService.validName(sport_type.getName());
 
         if (user == null){
             String msg = "This user cant do that operation.";
@@ -57,6 +68,15 @@ public class Sports_typeController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
+
+        if (name_check){
+            String msg = "The name is already taken.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(msg);
+        }
+
         if (!id.equals(sport_type.getId())) {
             String msg = "Bad request ,the id given in the path doesnt match with the id on the organizer.";
             log.warn(msg);
@@ -76,7 +96,7 @@ public class Sports_typeController {
         return ResponseEntity.ok(Sports_typeDTO.fromSport_type(sportsTypeService.saveSport_type(sport_type)));
     }
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('athlete:read')")
+    @PreAuthorize("hasAuthority('organizer:read')")
     @Operation(summary = "Return the sport type with the id provided.")
     public ResponseEntity getSport_typeById( @PathVariable(name = "id") Long id) {
         User user = userService.isAuthorized();

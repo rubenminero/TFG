@@ -22,7 +22,6 @@ public class OrganizerService {
 
     private final TournamentService tournamentService;
     private final PasswordEncoder passwordEncoder;
-    private final DeleteService deleteService;
 
     /**
      * Recover an organizer from the database.
@@ -102,7 +101,7 @@ public class OrganizerService {
      * @param organizer the organizer to be deleted.
      */
     public void deleteOrganizer(Organizer organizer) {
-        this.deleteService.deleteOrganizer(organizer);
+        this.organizerRepository.delete(organizer);
     }
 
     /**

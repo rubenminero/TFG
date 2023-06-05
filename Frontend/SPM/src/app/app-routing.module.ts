@@ -1,6 +1,7 @@
+import { DeleteAllDisabledAdminComponent } from './components/admins/delete-all-disabled-admin/delete-all-disabled-admin.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
+//Common Components
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { AthleteRegisterComponent } from './pages/athlete-register/athlete-register.component';
 import { OrganizerRegisterComponent } from './pages/organizer-register/organizer-register.component';
@@ -15,17 +16,25 @@ import { EventsAthleteComponent } from './components/athletes/events-athlete/eve
 import { ProfileAthleteComponent } from './components/athletes/profile-athlete/profile-athlete.component';
 // Organizer Components
 import { ProfileOrganizerComponent } from './components/organizers/profile-organizer/profile-organizer.component';
-//Guards
-import { AuthGuard } from './guards/auth/auth.guard';
-import { AthleteGuard } from './guards/athlete/athlete.guard';
-import { AthleteCardComponent } from './components/shared/models-cards/athlete-card/athlete-card.component';
-import { EventCardComponent } from './components/shared/models-cards/event-card/event-card.component';
 import { OrganizersMenuComponent } from './pages/organizers-menu/organizers-menu.component';
-import { OrganizerGuard } from './guards/organizer/organizer.guard';
 import { EventsOrganizerComponent } from './components/organizers/events-organizer/events-organizer.component';
 import { TournamentsOrganizerComponent } from './components/organizers/tournaments-organizer/tournaments-organizer.component';
 import { RegisterTournamentOrganizerComponent } from './components/organizers/register-tournament-organizer/register-tournament-organizer.component';
 import { RegisterEventOrganizerComponent } from './components/organizers/register-event-organizer/register-event-organizer.component';
+//Guards
+import { AuthGuard } from './guards/auth/auth.guard';
+import { AthleteGuard } from './guards/athlete/athlete.guard';
+import { OrganizerGuard } from './guards/organizer/organizer.guard';
+import { AdminGuard } from './guards/admin/admin.guard';
+//Admin Components
+import { AdminsMenuComponent } from './pages/admins-menu/admins-menu.component';
+import { AthletesAdminComponent } from './components/admins/athletes-admin/athletes-admin.component';
+import { OrganizersAdminComponent } from './components/admins/organizers-admin/organizers-admin.component';
+import { EventsAdminComponent } from './components/admins/events-admin/events-admin.component';
+import { TournamentsAdminComponent } from './components/admins/tournaments-admin/tournaments-admin.component';
+import { WatchlistsAdminComponent } from './components/admins/watchlists-admin/watchlists-admin.component';
+import { InscriptionsAdminComponent } from './components/admins/inscriptions-admin/inscriptions-admin.component';
+import { SportsTypesAdminComponent } from './components/admins/sports-types-admin/sports-types-admin.component';
 
 const routes: Routes = [
   {
@@ -125,6 +134,63 @@ const routes: Routes = [
         path: 'register-event',
         component: RegisterEventOrganizerComponent,
         canActivate: [AuthGuard, OrganizerGuard],
+      },
+      {
+        path: '',
+        redirectTo: 'welcome',
+        pathMatch: 'full',
+      },
+    ],
+  },
+  {
+    path: 'admins-menu',
+    component: AdminsMenuComponent,
+    canActivate: [AuthGuard, AdminGuard],
+    children: [
+      {
+        path: 'welcome',
+        component: WelcomeComponent,
+        canActivate: [AuthGuard, AdminGuard],
+      },
+      {
+        path: 'athletes',
+        component: AthletesAdminComponent,
+        canActivate: [AuthGuard, AdminGuard],
+      },
+      {
+        path: 'organizers',
+        component: OrganizersAdminComponent,
+        canActivate: [AuthGuard, AdminGuard],
+      },
+      {
+        path: 'events',
+        component: EventsAdminComponent,
+        canActivate: [AuthGuard, AdminGuard],
+      },
+      {
+        path: 'tournaments',
+        component: TournamentsAdminComponent,
+        canActivate: [AuthGuard, AdminGuard],
+      },
+      {
+        path: 'watchlists',
+        component: WatchlistsAdminComponent,
+        canActivate: [AuthGuard, AdminGuard],
+      },
+      {
+        path: 'inscriptions',
+        component: InscriptionsAdminComponent,
+        canActivate: [AuthGuard, AdminGuard],
+      },
+      {
+        path: 'sports_types',
+        component: SportsTypesAdminComponent,
+        canActivate: [AuthGuard, AdminGuard],
+      },
+      {
+        path: 'delete_disableds',
+        component: DeleteAllDisabledAdminComponent,
+        canActivate: [AuthGuard, AdminGuard],
       },
       {
         path: '',

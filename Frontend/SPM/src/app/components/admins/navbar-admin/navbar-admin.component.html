@@ -1,1 +1,51 @@
-<p>navbar-admin works!</p>
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+  >
+    <mat-toolbar>
+      <a mat-list-item [routerLink]="['/admins-menu/welcome']">
+        <h3 style="color: rgb(255, 255, 255)">Administrador</h3>
+      </a>
+    </mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item [routerLink]="['/admins-menu/athletes']">
+        <h3 style="color: rgb(255, 255, 255)">Atletas</h3>
+      </a>
+      <a mat-list-item [routerLink]="['/admins-menu/organizers']">
+        <h3 style="color: rgb(255, 255, 255)">Organizadores</h3>
+      </a>
+      <a mat-list-item [routerLink]="['/admins-menu/tournaments']">
+        <h3 style="color: rgb(255, 255, 255)">Torneos</h3>
+      </a>
+      <a mat-list-item [routerLink]="['/admins-menu/events']">
+        <h3 style="color: rgb(255, 255, 255)">Eventos</h3>
+      </a>
+      <a mat-list-item [routerLink]="['/admins-menu/inscriptions']">
+        <h3 style="color: rgb(255, 255, 255)">Inscripciones</h3>
+      </a>
+      <a mat-list-item [routerLink]="['/admins-menu/watchlists']">
+        <h3 style="color: rgb(255, 255, 255)">Listas de seguimiento</h3>
+      </a>
+      <a mat-list-item [routerLink]="['/admins-menu/sports_types']">
+        <h3 style="color: rgb(255, 255, 255)">Tipos de deporte</h3>
+      </a>
+      <a mat-list-item (click)="createSportType()">
+        <h3 style="color: rgb(255, 255, 255)">Crear tipo de deporte</h3>
+      </a>
+      <a mat-list-item [routerLink]="['/admins-menu/delete_disableds']">
+        <h3 style="color: rgb(255, 255, 255)">Limpiar sistema</h3>
+      </a>
+      <a mat-list-item (click)="logout()">
+        <h3 style="color: rgb(255, 255, 255)">Cerrar sesión</h3>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

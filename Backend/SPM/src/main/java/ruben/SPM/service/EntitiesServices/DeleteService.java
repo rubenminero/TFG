@@ -8,6 +8,7 @@ import ruben.SPM.model.Entities.*;
 import ruben.SPM.model.JWT_Token.Token;
 import ruben.SPM.repository.EntitiesRepositories.*;
 import ruben.SPM.repository.TokenRepository.TokenRepository;
+import ruben.SPM.service.Auth.TokenService;
 
 import java.util.List;
 
@@ -15,14 +16,14 @@ import java.util.List;
 @AllArgsConstructor
 public class DeleteService {
 
-    private final AthleteRepository athleteRepository;
-    private final InscriptionRepository inscriptionRepository;
-    private final OrganizerRepository organizerRepository;
-    private final Sports_typeRepository sportsTypeRepository;
-    private final TournamentRepository tournamentRepository;
-    private final WatchlistRepository  watchlistRepository;
+    private final AthleteService athleteService;
+    private final InscriptionService inscriptionService;
+    private final OrganizerService organizerService;
+    private final Sports_typeService sportsTypeService;
+    private final TournamentService tournamentService;
+    private final WatchlistService  watchlistService;
+    private final TokenService tokenService;
     private final UserRepository userRepository;
-    private final TokenRepository tokenRepository;
 
 
     /**
@@ -32,6 +33,7 @@ public class DeleteService {
         this.deleteWatchlistsDisabled();
         this.deleteInscriptionsDisabled();
         this.deleteTournamentsDisabled();
+        this.deleteEventsDisabled();
         this.deleteTokensDisabled();
         this.deleteSportsTypesDisabled();
         this.deleteUsersDisabled();
@@ -45,6 +47,7 @@ public class DeleteService {
                 .watchlists_disabled(this.countWatchlistsDisabled())
                 .inscriptions_disabled(this.countInscriptionsDisabled())
                 .tournaments_disabled(this.countTournamentsDisabled())
+                .events_disabled(this.countEventsDisabled())
                 .tokens_disabled(this.countTokensDisabled())
                 .sports_types_disabled(this.countSportsTypesDisabled())
                 .users_disabled(this.countUsersDisabled())
@@ -78,6 +81,11 @@ public class DeleteService {
 
         for (User u : users) {
             if (!u.isEnabled()){
+                this.deleteTokensUser(u.getId());
+                this.deleteWatchlistsUser(u.getId());
+                this.deleteInscriptionUser(u.getId());
+                this.deleteTournamentsUser(u.getId());
+                this.deleteEventsUser(u.getId());
                 userRepository.delete(u);
             }
         }
@@ -91,7 +99,7 @@ public class DeleteService {
         this.deleteWatchlistsUser(athlete.getId());
         this.deleteInscriptionUser(athlete.getId());
         this.deleteTokensUser(athlete.getId());
-        this.athleteRepository.delete(athlete);
+        this.athleteService.deleteAthlete(athlete);
     }
 
     /**
@@ -103,7 +111,8 @@ public class DeleteService {
         this.deleteInscriptionUser(organizer.getId());
         this.deleteTokensUser(organizer.getId());
         this.deleteTournamentsUser(organizer.getId());
-        this.organizerRepository.delete(organizer);
+        this.deleteEventsUser(organizer.getId());
+        this.organizerService.deleteOrganizer(organizer);
     }
 
     /**
@@ -111,11 +120,11 @@ public class DeleteService {
      * @param id the id of the user for delete.
      */
     public void deleteWatchlistsUser(Long id) {
-        List<Watchlist> watchlists = this.watchlistRepository.findAll();
+        List<Watchlist> watchlists = this.watchlistService.getAllWatchlists();
 
         for (Watchlist w : watchlists) {
             if (id == w.getAthlete().getId()){
-                watchlistRepository.delete(w);
+                this.watchlistService.deleteWatchlist(w.getId());
             }
         }
     }
@@ -125,9 +134,9 @@ public class DeleteService {
      * @param id the id of the watchlist for delete.
      */
     public void deleteWatchlist(Long id) {
-        Watchlist watchlist = this.watchlistRepository.findById(id).orElse(null);
+        Watchlist watchlist = this.watchlistService.getWatchList(id);
         if (watchlist != null){
-            this.watchlistRepository.delete(watchlist);
+            this.watchlistService.deleteWatchlist(watchlist.getId());
         }
     }
 
@@ -135,11 +144,11 @@ public class DeleteService {
      * Delete watchlists that are disabled from the database.
      */
     public void deleteWatchlistsDisabled() {
-        List<Watchlist> watchlists = this.watchlistRepository.findAll();
+        List<Watchlist> watchlists = this.watchlistService.getAllWatchlists();
 
         for (Watchlist w : watchlists) {
             if (!w.isEnabled()){
-                watchlistRepository.delete(w);
+                this.watchlistService.deleteWatchlist(w.getId());
             }
         }
     }
@@ -149,7 +158,7 @@ public class DeleteService {
      */
     public int countWatchlistsDisabled() {
         int count = 0;
-        List<Watchlist> watchlists = this.watchlistRepository.findAll();
+        List<Watchlist> watchlists = this.watchlistService.getAllWatchlists();
 
         for (Watchlist w : watchlists) {
             if (!w.isEnabled()){
@@ -163,11 +172,11 @@ public class DeleteService {
      * Delete watchlists for a tournament from the database.
      */
     public void deleteWatchlistsTournament(Long id) {
-        List<Watchlist> watchlists = this.watchlistRepository.findAll();
+        List<Watchlist> watchlists = this.watchlistService.getAllWatchlists();
 
         for (Watchlist w : watchlists) {
             if (w.getTournament().getId() == id){
-                watchlistRepository.delete(w);
+                this.watchlistService.deleteWatchlist(w.getId());
             }
         }
     }
@@ -177,11 +186,11 @@ public class DeleteService {
      * @param id the id of the user for delete.
      */
     public void deleteInscriptionUser(Long id) {
-        List<Inscription> inscriptions = this.inscriptionRepository.findAll();
+        List<Inscription> inscriptions = this.inscriptionService.getAllInscriptions();
 
         for (Inscription i : inscriptions) {
             if (id == i.getAthlete().getId()){
-                inscriptionRepository.delete(i);
+                this.inscriptionService.deleteInscription(i);
             }
         }
     }
@@ -190,11 +199,11 @@ public class DeleteService {
      * Delete inscriptions that are disabled from the database.
      */
     public void deleteInscriptionsDisabled() {
-        List<Inscription> inscriptions = this.inscriptionRepository.findAll();
+        List<Inscription> inscriptions = this.inscriptionService.getAllInscriptions();
 
         for (Inscription i : inscriptions) {
             if (!i.isEnabled()){
-                inscriptionRepository.delete(i);
+                this.inscriptionService.deleteInscription(i.getId());
             }
         }
     }
@@ -204,9 +213,9 @@ public class DeleteService {
      * @param id the id of the inscription for delete.
      */
     public void deleteInscription(Long id) {
-        Inscription inscription = this.inscriptionRepository.findById(id).orElse(null);
+        Inscription inscription = this.inscriptionService.getInscription(id);
         if (inscription != null){
-            this.inscriptionRepository.delete(inscription);
+            this.inscriptionService.deleteInscription(inscription.getId());
         }
     }
 
@@ -215,7 +224,7 @@ public class DeleteService {
      */
     public int countInscriptionsDisabled() {
         int count = 0;
-        List<Inscription> inscriptions = this.inscriptionRepository.findAll();
+        List<Inscription> inscriptions = this.inscriptionService.getAllInscriptions();
 
         for (Inscription i : inscriptions) {
             if (!i.isEnabled()){
@@ -229,11 +238,11 @@ public class DeleteService {
      * Delete inscriptions for a tournament from the database.
      */
     public void deleteInscriptionsTournament(Long id) {
-        List<Inscription> inscriptions = this.inscriptionRepository.findAll();
+        List<Inscription> inscriptions = this.inscriptionService.getAllInscriptions();
 
         for (Inscription i : inscriptions) {
             if (i.getTournament().getId() == id){
-                inscriptionRepository.delete(i);
+                this.inscriptionService.deleteInscription(i.getId());
             }
         }
     }
@@ -243,11 +252,11 @@ public class DeleteService {
      * @param id the id of the user for delete.
      */
     public void deleteTokensUser(Long id){
-        List<Token> tokens = this.tokenRepository.findAll();
+        List<Token> tokens = this.tokenService.getAllTokens();
 
         for (Token t : tokens) {
             if (id == t.getUser().getId()){
-                this.tokenRepository.delete(t);
+                this.tokenService.deleteToken(t);
             }
         }
     }
@@ -256,11 +265,11 @@ public class DeleteService {
      * Delete tokens that are revoked from the database.
      */
     public void deleteTokensDisabled() {
-        List<Token> tokens = this.tokenRepository.findAll();
+        List<Token> tokens = this.tokenService.getAllTokens();
 
         for (Token t : tokens) {
             if (t.isRevoked() && t.isExpired()){
-                tokenRepository.delete(t);
+                this.tokenService.deleteToken(t);
             }
         }
     }
@@ -270,9 +279,9 @@ public class DeleteService {
      * @param id the id of the inscription for delete.
      */
     public void deleteToken(Integer id) {
-        Token token = this.tokenRepository.findById(id).orElse(null);
+        Token token = this.tokenService.getToken(id);
         if (token != null){
-            this.tokenRepository.delete(token);
+            this.tokenService.deleteToken(token);
         }
     }
 
@@ -282,7 +291,7 @@ public class DeleteService {
      */
     public int countTokensDisabled() {
         int count = 0;
-        List<Token> tokens = this.tokenRepository.findAll();
+        List<Token> tokens = this.tokenService.getAllTokens();
 
         for (Token t : tokens) {
             if (t.isExpired() && t.isRevoked()){
@@ -297,12 +306,12 @@ public class DeleteService {
      * @param id the id of the tournament to be deleted.
      */
     public void deleteTournament(Long id) {
-        Tournament tournament = this.tournamentRepository.findById(id).orElse(null);
+        Tournament tournament = this.tournamentService.getTournament(id);
 
         if (tournament != null) {
             this.deleteWatchlistsTournament(tournament.getId());
             this.deleteInscriptionsTournament(tournament.getId());
-            tournamentRepository.delete(tournament);
+            this.tournamentService.deleteTournament(tournament.getId());
         }
     }
     /**
@@ -310,13 +319,13 @@ public class DeleteService {
      * @param id the id of the user for delete.
      */
     public void deleteTournamentsUser(Long id) {
-        List<Tournament> tournaments = this.tournamentRepository.findAll();
+        List<Tournament> tournaments = this.tournamentService.getAllTournaments();
 
         for (Tournament t : tournaments) {
             if (id == t.getOrganizer().getId()){
                 this.deleteWatchlistsTournament(t.getId());
                 this.deleteInscriptionsTournament(t.getId());
-                tournamentRepository.delete(t);
+                this.tournamentService.deleteTournament(t.getId());
             }
         }
     }
@@ -325,11 +334,11 @@ public class DeleteService {
      * Delete tournaments that are disabled from the database.
      */
     public void deleteTournamentsDisabled() {
-        List<Tournament> tournaments = this.tournamentRepository.findAll();
+        List<Tournament> tournaments = this.tournamentService.getAllTournaments();
 
         for (Tournament t : tournaments) {
             if (!t.isEnabled()){
-                tournamentRepository.delete(t);
+                this.tournamentService.deleteTournament(t.getId());
             }
         }
     }
@@ -339,7 +348,7 @@ public class DeleteService {
      */
     public int countTournamentsDisabled() {
         int count = 0;
-        List<Tournament> tournaments = this.tournamentRepository.findAll();
+        List<Tournament> tournaments = this.tournamentService.getAllTournaments();
 
         for (Tournament t : tournaments) {
             if (!t.isEnabled()){
@@ -348,16 +357,58 @@ public class DeleteService {
         }
         return count;
     }
+    /**
+     * Delete events from the database.
+     * @param id the id of the user for delete.
+     */
+    public void deleteEventsUser(Long id) {
+        List<Tournament> tournaments = this.tournamentService.getAllEvents();
 
+        for (Tournament t : tournaments) {
+            if (id == t.getOrganizer().getId()){
+                this.deleteWatchlistsTournament(t.getId());
+                this.deleteInscriptionsTournament(t.getId());
+                this.tournamentService.deleteTournament(t.getId());
+            }
+        }
+    }
+
+    /**
+     * Delete tournaments that are disabled from the database.
+     */
+    public void deleteEventsDisabled() {
+        List<Tournament> tournaments = this.tournamentService.getAllEvents();
+
+        for (Tournament t : tournaments) {
+            if (!t.isEnabled()){
+                this.tournamentService.deleteTournament(t.getId());
+            }
+        }
+    }
+
+    /**
+     * Count how many tournaments are disabled in the database.
+     */
+    public int countEventsDisabled() {
+        int count = 0;
+        List<Tournament> tournaments = this.tournamentService.getAllEvents();
+
+        for (Tournament t : tournaments) {
+            if (!t.isEnabled()){
+                count += 1;
+            }
+        }
+        return count;
+    }
     /**
      * Delete sports types that are disabled from the database.
      */
     public void deleteSportsTypesDisabled() {
-        List<Sports_type> sports_types = this.sportsTypeRepository.findAll();
+        List<Sports_type> sports_types = this.sportsTypeService.getAllSports_types();
 
         for (Sports_type s : sports_types) {
             if (!s.isEnabled()){
-                sportsTypeRepository.delete(s);
+                this.sportsTypeService.deleteSport_type(s.getId());
             }
         }
     }
@@ -367,9 +418,9 @@ public class DeleteService {
      * @param id the id of the sport type to be deleted.
      */
     public void deleteSportsType(Long id) {
-        Sports_type sportsType = this.sportsTypeRepository.findById(id).orElse(null);
+        Sports_type sportsType = this.sportsTypeService.getSport_type(id);
         if (sportsType != null){
-            this.sportsTypeRepository.delete(sportsType);
+            this.sportsTypeService.deleteSport_type(sportsType.getId());
         }
     }
 
@@ -378,7 +429,7 @@ public class DeleteService {
      */
     public int countSportsTypesDisabled() {
         int count = 0;
-        List<Sports_type> sports_types = this.sportsTypeRepository.findAll();
+        List<Sports_type> sports_types = this.sportsTypeService.getAllSports_types();
 
         for (Sports_type s : sports_types) {
             if (!s.isEnabled()){

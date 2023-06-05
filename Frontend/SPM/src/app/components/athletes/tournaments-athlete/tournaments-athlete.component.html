@@ -7,72 +7,77 @@
     </mat-card-title>
   </mat-card-header>
   <mat-divider></mat-divider>
-  <mat-paginator
-    [length]="tournaments_saved.length"
-    [pageSize]="3"
-    [pageSizeOptions]="[3, 6, 9, 12]"
-    [showFirstLastButtons]="true"
-  >
-  </mat-paginator>
-  <mat-card class="event-card" *ngFor="let tournament of obs | async">
-    <mat-card-content class="event">
-      <div class="row">
-        <div class="block">
-          <mat-label class="title">Nombre</mat-label>
-          <p class="text">{{ tournament.name }}</p>
-        </div>
-        <div class="block">
-          <mat-label class="title">Ubicacion</mat-label>
-          <p class="text">{{ tournament.location }}</p>
-        </div>
-        <div class="block">
-          <mat-label class="title">Direccion</mat-label>
-          <p class="text">{{ tournament.address }}</p>
-        </div>
-        <div class="block">
-          <mat-label class="title">Aforo</mat-label>
-          <p class="text">{{ tournament.capacity }}</p>
-        </div>
-        <div class="block">
-          <mat-label class="title">Organizador</mat-label>
-          <p class="text">{{ tournament.organizer }}</p>
-        </div>
-        <div class="block">
-          <mat-label class="title">Deporte</mat-label>
-          <p class="text">{{ tournament.sport_type }}</p>
-        </div>
-      </div>
-      <mat-card-actions>
-        <button
-          class="button"
-          mat-raised-button
-          color="primary"
-          type="submit"
-          (click)="saveInscription(tournament)"
-        >
-          Inscribirse
-        </button>
-        <button
-          class="button"
-          mat-raised-button
-          color="primary"
-          type="submit"
-          (click)="saveWatchlist(tournament)"
-        >
-          Añadir a lista de deseados
-        </button>
-        <button
-          class="button"
-          mat-raised-button
-          color="primary"
-          type="submit"
-          (click)="openTournament(tournament)"
-        >
-          Ver mas
-        </button>
-      </mat-card-actions>
-    </mat-card-content>
-  </mat-card>
+  <div>
+    <mat-paginator
+      [length]="tournaments_saved.length"
+      [pageSize]="4"
+      [pageSizeOptions]="[4, 8, 12]"
+      [showFirstLastButtons]="true"
+    >
+    </mat-paginator>
+  </div>
+  <mat-grid-list cols="4" rowHeight="800px">
+    <mat-grid-tile *ngFor="let tournament of obs | async">
+      <mat-card class="card">
+        <mat-card-content>
+          <div class="column">
+            <div class="row">
+              <mat-label class="title">Nombre</mat-label>
+              <p class="text">{{ tournament.name }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Ubicacion</mat-label>
+              <p class="text">{{ tournament.location }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Direccion</mat-label>
+              <p class="text">{{ tournament.address }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Aforo</mat-label>
+              <p class="text">{{ tournament.capacity }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Organizador</mat-label>
+              <p class="text">{{ tournament.organizer }}</p>
+            </div>
+            <div class="row">
+              <mat-label class="title">Deporte</mat-label>
+              <p class="text">{{ tournament.sport_type }}</p>
+            </div>
+          </div>
+          <mat-card-actions class="button">
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              (click)="saveInscription(tournament)"
+            >
+              Inscribirse
+            </button>
+            <button
+              class="button-right"
+              mat-raised-button
+              color="primary"
+              type="submit"
+              (click)="saveWatchlist(tournament)"
+            >
+              Añadir a lista de deseados
+            </button>
+            <button
+              class="button-right"
+              mat-raised-button
+              color="primary"
+              type="submit"
+              (click)="openTournament(tournament)"
+            >
+              Ver mas
+            </button>
+          </mat-card-actions>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
 </ng-container>
 <ng-template #tournament_data>
   <mat-card>
