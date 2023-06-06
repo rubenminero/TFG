@@ -9,18 +9,6 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class AuthService {
-  httpOptions = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + this.getAccessToken(),
-    },
-  };
-  httpOptionsForRefresh = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + this.getRefreshToken(),
-    },
-  };
   constructor(
     private http: HttpClient,
     private envService: EnvService,
@@ -38,20 +26,21 @@ export class AuthService {
     );
   }
   logout(): Observable<any> {
-    let access_token = sessionStorage.getItem('access_token');
-    let refresh_token = sessionStorage.getItem('refresh_token');
     const httpOptions = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + access_token,
+        Authorization: 'Bearer ' + this.getAccessToken(),
       },
     };
+    return this.http.put(
+      this.envService.getApiUrl() + '/api/auth/logout',
+      httpOptions
+    );
+  }
+
+  revokeTokens(): void {
     sessionStorage.removeItem('access_token');
     sessionStorage.removeItem('refresh_token');
-    return this.http.post(
-      this.envService.getApiUrl() + '/api/auth/logout',
-      access_token
-    );
   }
 
   changePassword(

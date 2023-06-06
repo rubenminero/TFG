@@ -32,17 +32,7 @@ public class Sports_typeController {
     @PreAuthorize("hasAuthority('admin:create')")
     @Operation(summary = "Create a sport type with the data provided.")
     public ResponseEntity createSport_Type(@RequestBody Sports_type sport_type) {
-        User user = userService.isAuthorized();
-        Boolean name_check = this.sportsTypeService.validName(sport_type.getName());
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
+        Boolean name_check = sportsTypeService.validName(sport_type.getName());
         if (name_check){
             String msg = "The name is already taken.";
             log.warn(msg);
@@ -59,16 +49,7 @@ public class Sports_typeController {
     @Operation(summary = "Update a sport type with the data provided.")
     public ResponseEntity updateSport_Type(@PathVariable Long id,  @RequestBody Sports_type sport_type) {
         User user = userService.isAuthorized();
-        Boolean name_check = this.sportsTypeService.validName(sport_type.getName());
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
+        Boolean name_check = sportsTypeService.validName(sport_type.getName());
         if (name_check){
             String msg = "The name is already taken.";
             log.warn(msg);
@@ -78,7 +59,7 @@ public class Sports_typeController {
         }
 
         if (!id.equals(sport_type.getId())) {
-            String msg = "Bad request ,the id given in the path doesnt match with the id on the organizer.";
+            String msg = "Bad request ,the id given in the path doesnt match with the id on the sport type.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
@@ -86,7 +67,7 @@ public class Sports_typeController {
         }
 
         if (sportsTypeService.getSport_type(id) == null) {
-            String msg = "Bad request ,there is no sport type for that id.";
+            String msg = "Bad request, there is no sport type for that id.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -99,15 +80,6 @@ public class Sports_typeController {
     @PreAuthorize("hasAuthority('organizer:read')")
     @Operation(summary = "Return the sport type with the id provided.")
     public ResponseEntity getSport_typeById( @PathVariable(name = "id") Long id) {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         Sports_type sportType = sportsTypeService.getSport_type(id);
         if (sportType != null) {
             if (sportType.isEnabled()){
@@ -122,7 +94,7 @@ public class Sports_typeController {
             }
         }
         else {
-            String msg = "The sport type that you asked doesnt exist.";
+            String msg = "The sport type that you asked doesn't exist.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -134,15 +106,6 @@ public class Sports_typeController {
     @PreAuthorize("hasAuthority('organizer:read')")
     @Operation(summary = "Return all the enabled sports types.")
     public ResponseEntity getAllSports_types() {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         List<Sports_type> sportsTypes = sportsTypeService.getEnabledSport_types();
         if (sportsTypes.size() == 0 || sportsTypes == null) {
             String msg = "There is no sports types.";

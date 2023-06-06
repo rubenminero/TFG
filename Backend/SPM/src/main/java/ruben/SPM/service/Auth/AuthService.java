@@ -83,37 +83,12 @@ public class AuthService {
                 .role(Role.ATHLETE)
                 .build();
 
-        Athlete athlete = new Athlete(user,request.getPhone_number());
 
+        System.out.println(user);
+        Athlete athlete = new Athlete(user,request.getPhone_number());
+        System.out.println(athlete);
 
         var saveUser = athleteService.saveAthlete(athlete);
-        var extraclaims = new HashMap<String,Object>();
-        extraclaims.put("id",saveUser.getId());
-        extraclaims.put("role",saveUser.getRole());
-        var jwtToken = jwtService.generateToken(extraclaims,user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(saveUser, jwtToken);
-
-        return AuthResponseDTO.builder()
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
-                .build();
-    }
-    public AuthResponseDTO registerAdmin(AuthRegisterAdminDTO request) {
-        var user = User.builder()
-                .username(request.getUsername())
-                .first_name(request.getFirst_name())
-                .last_name(request.getLast_name())
-                .email(request.getEmail())
-                .password(request.getPassword())
-                .nif(request.getNif())
-                .role(request.getRole())
-                .build();
-
-        Admin admin = new Admin(user,request.getValid_from());
-
-
-        var saveUser = adminService.saveAdmin(admin);
         var extraclaims = new HashMap<String,Object>();
         extraclaims.put("id",saveUser.getId());
         extraclaims.put("role",saveUser.getRole());
@@ -168,24 +143,25 @@ public class AuthService {
         }
     }
 
-    public ResponseEntity<?> log_out() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = this.userService.getUserByUsername(username);
-        if (user != null){
-            this.revokeAllUserTokens(user);
-            SecurityContextHolder.clearContext();
-            String msg = "Logged out.";
-            log.warn(msg);
+    public ResponseEntity<?> log_out(HttpServletRequest request, HttpServletResponse response) {
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String username;
+        final String token;
+        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
             return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(msg);
-        }else{
-            String msg = "Not logged out, the user doesnt exist.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(msg);
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("There is no token");
         }
+        token = authHeader.substring(7);
+        username = jwtService.extractUsername(token);
+        User user = this.userService.getUserByUsername(username);
+        this.revokeAllUserTokens(user);
+        SecurityContextHolder.clearContext();
+        String msg = "Logged out.";
+        log.warn(msg);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(msg);
     }
 
     private void saveUserToken(User user, String jwtToken) {

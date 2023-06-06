@@ -32,10 +32,6 @@ public class EventFrontDTO {
             this.sport_type = tournament.getSport_type().getName();
         }
 
-        public EventFrontDTO(){
-
-        }
-
         public static EventFrontDTO fromTournament(Tournament tournament) {
             return new EventFrontDTO(tournament);
         }

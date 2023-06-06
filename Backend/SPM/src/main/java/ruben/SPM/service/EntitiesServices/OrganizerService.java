@@ -123,7 +123,11 @@ public class OrganizerService {
     public void changeStateOrganizer(Long id) {
         Organizer organizer = this.getOrganizer(id);
         organizer.setEnabled(!organizer.isEnabled());
-        organizer.setDisabled_at(new Date());
+        if (!organizer.isEnabled()){
+            organizer.setDisabled_at(new Date());
+        }else{
+            organizer.setDisabled_at(null);
+        }
         organizerRepository.save(organizer);
     }
 

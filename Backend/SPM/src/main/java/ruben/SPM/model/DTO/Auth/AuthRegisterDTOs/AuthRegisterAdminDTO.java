@@ -14,7 +14,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthRegisterAdminDTO {
-    private Long id;
     private String username;
     private String first_name;
     private String last_name;

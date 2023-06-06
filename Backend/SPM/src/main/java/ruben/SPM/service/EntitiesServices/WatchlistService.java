@@ -129,18 +129,4 @@ public class WatchlistService {
         }
         return true;
     }
-
-    /**
-     * Checks if the watchlist is valid to be saved.
-     * @return true if is valid, false otherwise.
-     */
-    public Boolean validWatchlist(Athlete athlete, Tournament tournament) {
-        List<Watchlist> watchlists = this.getAllWatchlists();
-        for (Watchlist w : watchlists) {
-            if (athlete.getId() == w.getAthlete().getId() && tournament.getId() == w.getTournament().getId()) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

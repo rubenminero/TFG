@@ -36,7 +36,10 @@ export class NavbarAdminComponent {
   }
 
   logout(): void {
-    this.AuthService.logout();
-    this.AuthService.getPath();
+    this.AuthService.logout().subscribe((data) => {
+      console.log(data);
+      this.AuthService.revokeTokens();
+      this.AuthService.getPath();
+    });
   }
 }
