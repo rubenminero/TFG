@@ -106,7 +106,7 @@ public class WatchlistService {
         List<Watchlist> watchlists_enabled = new ArrayList<Watchlist>();
         List<Watchlist> watchlists = this.getAllWatchlists();
         for (Watchlist w : watchlists) {
-            if (w.isEnabled() && w.getAthlete().getId() == id) {
+            if (w.isEnabled() && w.getAthlete().getId().equals(id)) {
                 watchlists_enabled.add(w);
             }
         }
@@ -122,8 +122,8 @@ public class WatchlistService {
     public Boolean isValid(Watchlist watchlist) {
         List<Watchlist> watchlists = this.getAllWatchlists();
         for (Watchlist w : watchlists) {
-            if (w.getTournament().getId() == watchlist.getTournament().getId()
-                    && w.getAthlete().getId() == watchlist.getAthlete().getId()) {
+            if (w.getTournament().getId().equals(watchlist.getTournament().getId())
+                    && w.getAthlete().getId().equals(watchlist.getAthlete().getId())) {
                 return false;
             }
         }

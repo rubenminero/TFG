@@ -103,7 +103,7 @@ public class Sports_typeController {
     }
 
     @GetMapping("")
-    @PreAuthorize("hasAuthority('organizer:read')")
+    @PreAuthorize("hasAuthority('athlete:read')")
     @Operation(summary = "Return all the enabled sports types.")
     public ResponseEntity getAllSports_types() {
         List<Sports_type> sportsTypes = sportsTypeService.getEnabledSport_types();

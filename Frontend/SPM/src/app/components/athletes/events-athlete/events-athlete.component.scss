@@ -2,13 +2,6 @@ html{
   height: 100%;
   justify-content: center;
 }
-.select{
-  border-radius: 5px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  margin-left: 80%;
-}
-
 
 .header{
   font-size: 50px;
@@ -68,4 +61,24 @@ html{
   font-size: 12px;
   margin-top: 10px;
   margin-bottom: 30px;
+}
+
+.filters{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 40px;
+}
+.filter-search{
+  margin-left: 40px;
+  margin-right: 40px;
+}
+.filter-sport-type{
+  margin-left: 40px;
+  margin-right: 40px;
+}
+.filter-paginator{
+  margin-right: 40px;
 }
