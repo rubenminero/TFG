@@ -161,7 +161,7 @@ public class AdminController {
     public ResponseEntity getAllTournaments_Admin() {
         List<Tournament> tournaments = adminService.getAllTournaments();
         if (tournaments.size() == 0 || tournaments == null) {
-            String msg = "There is no tournaments.";
+            String msg = "There are no tournaments.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -217,7 +217,7 @@ public class AdminController {
     public ResponseEntity getAllEvents_Admin() {
         List<Tournament> events = adminService.getAllEvents();
         if (events.size() == 0 || events == null) {
-            String msg = "There is no events.";
+            String msg = "There are no events.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -272,7 +272,7 @@ public class AdminController {
     public ResponseEntity getAllSports_types_Admin() {
         List<Sports_type> sportsTypes = adminService.getAllSports_types();
         if (sportsTypes.size() == 0 || sportsTypes == null) {
-            String msg = "There is no sports types.";
+            String msg = "There are no sports types.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -327,7 +327,7 @@ public class AdminController {
     public ResponseEntity getAllInscriptionsAdmin() {
         List<Inscription> inscriptions = adminService.getAllInscriptions();
         if (inscriptions.size() == 0 || inscriptions == null) {
-            String msg = "There is no inscriptions.";
+            String msg = "There are no inscriptions.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -383,7 +383,7 @@ public class AdminController {
     public ResponseEntity getAllWatchlists_Admin() {
         List<Watchlist> watchlists = adminService.getAllWatchlists();
         if (watchlists.size() == 0 || watchlists == null) {
-            String msg = "There is no watchlists.";
+            String msg = "There are no watchlists.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -445,8 +445,6 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:delete')")
     @Operation(summary = "Deletes all the entities disabled.")
     public ResponseEntity deleteDisableds() {
-
-
         this.deleteService.deleteDisableds();
         String msg = "All the entities disabled have been deleted";
         log.info(msg);

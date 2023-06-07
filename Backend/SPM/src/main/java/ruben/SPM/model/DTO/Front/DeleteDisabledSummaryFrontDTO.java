@@ -25,4 +25,7 @@ public class DeleteDisabledSummaryFrontDTO {
         this.tokens_disabled = 0;
         this.sports_types_disabled = 0;
     }
+
+    public void setEventCount(int i) {
+    }
 }
