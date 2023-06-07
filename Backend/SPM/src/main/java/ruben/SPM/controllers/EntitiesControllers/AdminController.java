@@ -42,16 +42,6 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:read')")
     @Operation(summary = "Return all the organizers in the database.")
     public ResponseEntity getAllOrganizers_Admin() {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
         List<Organizer> organizers = adminService.getAllOrganizers();
         if (organizers.size() == 0 || organizers == null) {
             String msg = "There is no organizers.";
@@ -68,15 +58,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:update')")
     @Operation(summary = "Disable/enable the organizer with the id provided.")
     public ResponseEntity updateOrganizer(@PathVariable Long id) {
-        User user = userService.isAuthorized();
         Organizer organizer = adminService.getOrganizer(id);
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
 
         if (organizer  == null) {
             String msg = "There is no organizer with this id.";
@@ -96,15 +78,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:delete')")
     @Operation(summary = "Deletes the organizer with the id provided.")
     public ResponseEntity deleteOrganizer(@PathVariable Long id) {
-        User user = userService.isAuthorized();
 
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         Organizer organizer = this.adminService.getOrganizer(id);
         if (organizer == null) {
             String msg = "There is no organizer with this id.";
@@ -125,15 +99,8 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:read')")
     @Operation(summary = "Return all the athletes in the database.")
     public ResponseEntity getAllAthletes_Admin() {
-        User user = userService.isAuthorized();
 
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
+
         List<Athlete> athletes = adminService.getAllAthletes();
         if (athletes.size() == 0 || athletes == null) {
             String msg = "There is no athletes.";
@@ -151,15 +118,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:update')")
     @Operation(summary = "Disable/enable the athlete with the id provided.")
     public ResponseEntity updateAthlete(@PathVariable Long id) {
-        User user = userService.isAuthorized();
         Athlete athlete = adminService.getAthlete(id);
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
 
         if (athlete == null) {
             String msg = "There is no athlete with this id.";
@@ -179,15 +138,8 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:delete')")
     @Operation(summary = "Deletes the athlete with the id provided.")
     public ResponseEntity deleteAthlete(@PathVariable Long id) {
-        User user = userService.isAuthorized();
 
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
+
         Athlete athlete = this.adminService.getAthlete(id);
         if (athlete == null) {
             String msg = "There is no athlete with this id.";
@@ -207,19 +159,9 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:read')")
     @Operation(summary = "Return all the tournaments in the database.")
     public ResponseEntity getAllTournaments_Admin() {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
         List<Tournament> tournaments = adminService.getAllTournaments();
         if (tournaments.size() == 0 || tournaments == null) {
-            String msg = "There is no tournaments.";
+            String msg = "There are no tournaments.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -234,15 +176,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:update')")
     @Operation(summary = "Disable/enable the tournaments with the id provided.")
     public ResponseEntity updateTournament(@PathVariable Long id) {
-        User user = userService.isAuthorized();
         Tournament tournament = adminService.getTournament(id);
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
 
         if (tournament == null) {
             String msg = "There is no tournament with this id.";
@@ -263,15 +197,6 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:delete')")
     @Operation(summary = "Deletes the tournament with the id provided.")
     public ResponseEntity deleteTournament(@PathVariable Long id) {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         Tournament tournament = this.adminService.getTournament(id);
         if (tournament == null) {
             String msg = "There is no tournament with this id.";
@@ -290,19 +215,9 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:read')")
     @Operation(summary = "Return all the events in the database.")
     public ResponseEntity getAllEvents_Admin() {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
         List<Tournament> events = adminService.getAllEvents();
         if (events.size() == 0 || events == null) {
-            String msg = "There is no events.";
+            String msg = "There are no events.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -317,16 +232,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:update')")
     @Operation(summary = "Disable/enable the event with the id provided.")
     public ResponseEntity updateEvent(@PathVariable Long id) {
-        User user = userService.isAuthorized();
         Tournament event = adminService.getTournament(id);
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
         if (event == null) {
             String msg = "There is no event with this id.";
             log.warn(msg);
@@ -345,15 +251,6 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:delete')")
     @Operation(summary = "Deletes the event with the id provided.")
     public ResponseEntity deleteEvent(@PathVariable Long id) {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         Tournament event = this.adminService.getTournament(id);
         if (event == null) {
             String msg = "There is no event with this id.";
@@ -373,19 +270,9 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:read')")
     @Operation(summary = "Return all the sports types in the database.")
     public ResponseEntity getAllSports_types_Admin() {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
         List<Sports_type> sportsTypes = adminService.getAllSports_types();
         if (sportsTypes.size() == 0 || sportsTypes == null) {
-            String msg = "There is no sports types.";
+            String msg = "There are no sports types.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -400,15 +287,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:update')")
     @Operation(summary = "Disable/enable the sports types with the id provided.")
     public ResponseEntity updateSport_type(@PathVariable Long id) {
-        User user = userService.isAuthorized();
         Sports_type sportsType = adminService.getSport_type(id);
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         if (sportsType == null) {
             String msg = "There is no sport type with this id.";
             log.warn(msg);
@@ -427,15 +306,6 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:delete')")
     @Operation(summary = "Deletes the sport type with the id provided.")
     public ResponseEntity deleteSport_type(@PathVariable Long id) {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         Sports_type sportsType = this.adminService.getSport_type(id);
         if (sportsType == null) {
             String msg = "There is no sport type with this id.";
@@ -455,18 +325,9 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:read')")
     @Operation(summary = "Return all the inscriptions in the database.")
     public ResponseEntity getAllInscriptionsAdmin() {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         List<Inscription> inscriptions = adminService.getAllInscriptions();
         if (inscriptions.size() == 0 || inscriptions == null) {
-            String msg = "There is no inscriptions.";
+            String msg = "There are no inscriptions.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -481,15 +342,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:update')")
     @Operation(summary = "Disable/enable the inscriptions with the id provided.")
     public ResponseEntity updateInscription(@PathVariable Long id) {
-        User user = userService.isAuthorized();
         Inscription inscription = adminService.getInscription(id);
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         if (inscription == null) {
             String msg = "There is no inscription with this id.";
             log.warn(msg);
@@ -509,15 +362,6 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:delete')")
     @Operation(summary = "Deletes the inscription the id provided.")
     public ResponseEntity deleteInscription(@PathVariable Long id) {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         Inscription inscription = this.adminService.getInscription(id);
         if (inscription == null) {
             String msg = "There is no inscription with this id.";
@@ -537,19 +381,9 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:read')")
     @Operation(summary = "Return all the watchlists in the database.")
     public ResponseEntity getAllWatchlists_Admin() {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
         List<Watchlist> watchlists = adminService.getAllWatchlists();
         if (watchlists.size() == 0 || watchlists == null) {
-            String msg = "There is no watchlists.";
+            String msg = "There are no watchlists.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -564,15 +398,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:update')")
     @Operation(summary = "Disable/enable the watchlists with the id provided.")
     public ResponseEntity updateWatchlist(@PathVariable Long id) {
-        User user = userService.isAuthorized();
         Watchlist watchlist = adminService.getWatchlist(id);
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         if (watchlist == null) {
             String msg = "There is no watchlist with this id.";
             log.warn(msg);
@@ -591,15 +417,6 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:delete')")
     @Operation(summary = "Deletes the watchlist the id provided.")
     public ResponseEntity deleteWatchlist(@PathVariable Long id) {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         Watchlist watchlist = this.adminService.getWatchlist(id);
         if (watchlist == null) {
             String msg = "There is no watchlist with this id.";
@@ -615,62 +432,10 @@ public class AdminController {
         return ResponseEntity.ok(watchlistFrontDTO);
     }
 
-    @PutMapping("/password")
-    @Operation(summary = "Changes the password for the admin")
-    @PreAuthorize("hasAuthority('admin:update')")
-    public ResponseEntity changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO){
-        Admin admin = this.adminService.getAdmin(passwordChangeDTO.getId_user());
-
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Admin admin_logged = this.adminService.getAdminByUsername(username);
-
-        if (admin != null && admin_logged.getId() == admin.getId() ){
-            System.out.println(passwordChangeDTO.toString());
-            if (passwordChangeDTO.getPassword().equals(passwordChangeDTO.getConfirmpassword())){
-                admin = this.adminService.setPasswordHashed(admin, passwordChangeDTO.getPassword());
-                this.adminService.updateAdmin(admin);
-                if (admin != null ){
-                    String msg = "The password has been changed.";
-                    log.warn(msg);
-                    return ResponseEntity
-                            .status(HttpStatus.OK)
-                            .body(msg);
-                }else{
-                    String msg = "The password has not been changed.";
-                    log.warn(msg);
-                    return ResponseEntity
-                            .status(HttpStatus.BAD_REQUEST)
-                            .body(msg);
-                }
-            }else{
-                String msg = "The passwords provided doesnt match.";
-                log.warn(msg);
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body(msg);
-            }
-        }else {
-            String msg = "The admin with the id provided doesnt exist or doesnt match with the user logged.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(msg);
-        }
-    }
-
     @GetMapping("/disableds")
     @PreAuthorize("hasAuthority('admin:read')")
     @Operation(summary = "Gets a summary with the entities disabled on the database.")
     public ResponseEntity countDisableds() {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         DeleteDisabledSummaryFrontDTO disabledsSummary = this.deleteService.countDisableds();
         String msg = "There is the summary";
         log.info(msg);
@@ -680,15 +445,6 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:delete')")
     @Operation(summary = "Deletes all the entities disabled.")
     public ResponseEntity deleteDisableds() {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This admin cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         this.deleteService.deleteDisableds();
         String msg = "All the entities disabled have been deleted";
         log.info(msg);

@@ -12,7 +12,6 @@ import ruben.SPM.model.Whitelist.Role;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthRegisterAthleteDTO {
-    private Long id;
     private String username;
     private String first_name;
     private String last_name;

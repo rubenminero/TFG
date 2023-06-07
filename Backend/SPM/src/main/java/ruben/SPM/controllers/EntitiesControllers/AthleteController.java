@@ -48,68 +48,23 @@ public class AthleteController {
     private final InscriptionService inscriptionService;
     private final WatchlistService watchlistService;
     private final UserService userService;
-
-    @GetMapping("")
-    @PreAuthorize("hasAuthority('athlete:read')")
-    @Operation(summary = "Return all the enabled athletes in the database.")
-    public ResponseEntity<?> getAllAthletes() {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(msg);
-        }
-        List<Athlete> athletes = athleteService.getEnabledAthletes();
-        if (athletes.size() == 0 ) {
-            String msg = "There is no athletes.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(msg);
-        }
-
-        List<AthleteDTO> athleteDTOS = athletes.stream().map(AthleteDTO::new).collect(Collectors.toList());
-        log.info("The athletes has successfully been retrieved.");
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(athleteDTOS);
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('athlete:read')")
     @Operation(summary = "Return a athletes in the database.")
     public ResponseEntity getAthleteById(@PathVariable(name = "id") Long id) {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
         Athlete athlete = athleteService.getAthlete(id);
         if (athlete != null && athlete.isEnabled()) {
             log.info("The athlete has successfully been retrieved.");
             return ResponseEntity.ok(new AthleteDTO(athlete));
         }
         else {
-            if (user.isEnabled() == false){
-                String msg = "The athlete that you asked is disabled.";
-                log.warn(msg);
-                return ResponseEntity
-                        .status(HttpStatus.FORBIDDEN)
-                        .body(msg);
-            }else {
-                String msg = "The athlete that you asked doesnt exist.";
-                log.warn(msg);
-                return ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .body(msg);
-            }
-
+            String msg = "The athlete that you asked doesnt exist.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(msg);
         }
     }
 
@@ -118,15 +73,7 @@ public class AthleteController {
     @PreAuthorize("hasAuthority('athlete:update')")
     @Operation(summary = "Update a athlete with the data provided.")
     public ResponseEntity updateAthlete(@PathVariable Long id, @RequestBody Athlete athlete) {
-        User user = userService.isAuthorized();
         Athlete athlete_saved = this.athleteService.getAthlete(id);
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         if (athlete_saved == null){
             String msg = "There is no user with that data.";
             log.warn(msg);
@@ -153,73 +100,22 @@ public class AthleteController {
                         .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }
-
-            if (athleteService.getAthlete(id) == null) {
-                String msg = "Bad request ,there is no athlete for that id.";
-                log.warn(msg);
-                return ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .body(msg);
-            }
             log.info("The athlete has successfully been updated.");
             return ResponseEntity.ok(AthleteDTO.fromUser(athleteService.updateAthlete(athlete,athlete_saved)));
         }
-    }
-
-    @PostMapping("")
-    @PreAuthorize("hasAuthority('athlete:create')")
-    @Operation(summary = "Create a athlete with the data provided.")
-    public ResponseEntity createAthlete(@RequestBody Athlete athlete) {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-        Boolean username_check = userService.validUsername(athlete.getUsername());
-        if (username_check){
-            String msg = "This username is already taken.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-        log.info("The athletes has successfully been created.");
-        return ResponseEntity.ok(AthleteDTO.fromUser(athleteService.saveAthlete(athlete)));
     }
 
     @GetMapping("/inscriptions/{id}")
     @PreAuthorize("hasAuthority('athlete:read')")
     @Operation(summary = "Return the inscriptions for that user.")
     public ResponseEntity getInscriptionById(@PathVariable(name = "id") Long id) {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
         List<Inscription> inscriptions = inscriptionService.getEnabledInscriptions(id);
         if (inscriptions.size() == 0 || inscriptions == null) {
-            if (user.isEnabled() == false){
-                String msg = "The athlete that you asked is disabled.";
-                log.warn(msg);
-                return ResponseEntity
-                        .status(HttpStatus.FORBIDDEN)
-                        .body(msg);
-            }else {
-                String msg = "The athlete that you asked doesnt have inscriptions.";
-                log.warn(msg);
-                return ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .body(msg);
-            }
+            String msg = "The athlete that you asked doesnt have inscriptions.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(msg);
         }
         else {
             List<InscriptionFrontDTO> inscriptionDTOS = inscriptions.stream().map(InscriptionFrontDTO::new).collect(Collectors.toList());
@@ -232,33 +128,14 @@ public class AthleteController {
     @PreAuthorize("hasAuthority('athlete:read')")
     @Operation(summary = "Return the watchlists for that user.")
     public ResponseEntity getWatchlistById(@PathVariable(name = "id") Long id) {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
         List<Watchlist> watchlists = watchlistService.getEnabledWatchlists(id);
         if (watchlists.size() == 0 || watchlists == null) {
-            if (user.isEnabled() == false){
-                String msg = "The athlete that you asked is disabled.";
-                log.warn(msg);
-                return ResponseEntity
-                        .status(HttpStatus.FORBIDDEN)
-                        .body(msg);
-            }else {
                 String msg = "The athlete that you asked doesnt have watchlists.";
                 log.warn(msg);
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
                         .body(msg);
-            }
-        }
-        else {
+        } else {
             List<WatchlistFrontDTO> watchlistDTOs = watchlists.stream().map(WatchlistFrontDTO::new).collect(Collectors.toList());
             log.info("The watchlists for that athlete has successfully been retrieved.");
             return ResponseEntity.ok(watchlistDTOs);
@@ -269,12 +146,10 @@ public class AthleteController {
     @Operation(summary = "Changes the password for the athlete")
     @PreAuthorize("hasAuthority('athlete:update')")
     public ResponseEntity changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO){
+        User user = userService.isAuthorized();
         Athlete athlete = this.athleteService.getAthlete(passwordChangeDTO.getId_user());
-
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Athlete athlete_logged = this.athleteService.getAthleteByUsername(username);
-
-        if (athlete != null && athlete_logged.getId() == athlete.getId() ){
+        Athlete athlete_logged = athleteService.getAthlete(user.getId());
+        if (athlete != null && athlete_logged.getId() == athlete.getId() && passwordEncoder.matches(passwordChangeDTO.getOldpassword(),athlete_logged.getPassword())){
             if (passwordChangeDTO.getPassword().equals(passwordChangeDTO.getConfirmpassword())){
                 athlete = this.athleteService.setPasswordHashed(athlete, passwordChangeDTO.getPassword());
                 this.athleteService.updateAthlete(athlete);
@@ -313,9 +188,7 @@ public class AthleteController {
     @Operation(summary = "Delete the athlete with the id provided.")
     public ResponseEntity deleteAthlete(@PathVariable Long id) {
         Athlete athlete = athleteService.getAthlete(id);
-
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
+        User user = userService.isAuthorized();
         if (athlete == null){
             String msg = "This user cant do that operation.";
             log.warn(msg);
@@ -323,8 +196,7 @@ public class AthleteController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
-
-        if (athlete.getId() != userService.getUserByUsername(username).getId()){
+        if (athlete.getId() != user.getId()){
             String msg = "The id provided doesnt doesnt belong to your user.";
             log.warn(msg);
             return ResponseEntity

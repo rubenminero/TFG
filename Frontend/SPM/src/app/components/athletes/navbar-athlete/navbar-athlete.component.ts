@@ -29,7 +29,10 @@ export class NavbarAthleteComponent {
   }
 
   logout(): void {
-    this.AuthService.logout();
-    this.router.navigate(['login']);
+    this.AuthService.logout().subscribe((data) => {
+      console.log(data);
+      this.AuthService.revokeTokens();
+      this.AuthService.getPath();
+    });
   }
 }

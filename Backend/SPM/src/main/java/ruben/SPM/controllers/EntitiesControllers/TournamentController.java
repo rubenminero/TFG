@@ -46,15 +46,6 @@ public class TournamentController {
     @PreAuthorize("hasAuthority('athlete:read')")
     @Operation(summary = "Return the enabled tournaments.")
     public ResponseEntity getAllTournaments() {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         List<Tournament> tournaments = tournamentService.getEnabledTournaments();
         if (tournaments.size() == 0 || tournaments == null) {
             String msg = "There is no tournaments.";
@@ -78,15 +69,6 @@ public class TournamentController {
     @PreAuthorize("hasAuthority('athlete:read')")
     @Operation(summary = "Return the enabled events.")
     public ResponseEntity getAllEvents() {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         List<Tournament> tournaments = tournamentService.getEnabledEvents();
         if (tournaments.size() == 0 || tournaments == null) {
             String msg = "There is no events.";
@@ -108,16 +90,6 @@ public class TournamentController {
     @PreAuthorize("hasAuthority('athlete:read')")
     @Operation(summary = "Return a tournament with the id provided.")
     public ResponseEntity getTournamentById(@PathVariable(name = "id") Long id) {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
         Tournament tournament = tournamentService.getTournament(id);
         if (tournament != null) {
             if (tournament.isEnabled()){
@@ -145,43 +117,33 @@ public class TournamentController {
     @PreAuthorize("hasAuthority('organizer:update')")
     @Operation(summary = "Update a tournament with the data provided.")
     public ResponseEntity updateTournament(@PathVariable Long id, @RequestBody TournamentFrontDTO tournamentDTO) {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         if (!id.equals(tournamentDTO.getId())) {
-            String msg = "Bad request ,the id given in the path doesnt match with the id on the organizer.";
+            String msg = "Bad request, the id given in the path doesn't match with the id on the tournament.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
-
-        if (tournamentService.getTournament(id) == null) {
-            String msg = "Bad request ,there is no tournament for that id.";
+        Tournament tournament = tournamentService.getTournament(id);
+        if (tournament == null) {
+            String msg = "Bad request, there is no tournament for that id.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
-
         Organizer organizer = this.organizerService.getOrganizerByCompany_name(tournamentDTO.getOrganizer());
         Sports_type sportsType = this.sportsTypeService.getSport_typeByName(tournamentDTO.getSport_type());
-        Tournament tournament = new Tournament(tournamentDTO,organizer,sportsType);
+        tournament = new Tournament(tournamentDTO,organizer,sportsType);
         if (tournament.getOrganizer() == null || tournament.getSport_type() == null){
             if (tournament.getOrganizer() == null ) {
-                String msg = "The organizer of the tournament doesnt exist.";
+                String msg = "The organizer of the tournament doesn't exist.";
                 log.warn(msg);
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }else {
-                String msg = "The sport type for the tournament doesnt exist.";
+                String msg = "The sport type for the tournament doesn't exist.";
                 log.warn(msg);
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
@@ -204,8 +166,8 @@ public class TournamentController {
                 }
             }else{
                 log.info("The tournament has successfully been updated.");
-                TournamentFrontDTO tournamentFrontDTO = TournamentFrontDTO.fromTournament(tournamentService.saveTournament(tournament));
-                System.out.println(tournamentFrontDTO);
+                tournamentService.updateTournament(tournament);
+                TournamentFrontDTO tournamentFrontDTO = TournamentFrontDTO.fromTournament(tournament);
                 return ResponseEntity.ok(tournamentFrontDTO);
             }
         }
@@ -218,27 +180,18 @@ public class TournamentController {
     @Operation(summary = "Create a tournament with the data provided.")
     public ResponseEntity createTournament(@RequestBody TournamentFrontDTO tournamentFrontDTO ) {
         User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Organizer organizer = organizerService.getOrganizerByUsername(username);
+        Organizer organizer = organizerService.getOrganizerByUsername(user.getUsername());
         Sports_type sportType = sportsTypeService.getSport_typeByName(tournamentFrontDTO.getSport_type());
-        Tournament tournament = TournamentFrontDTO.toTournament(tournamentFrontDTO,organizer,sportType);
+        Tournament tournament = new Tournament(tournamentFrontDTO,organizer,sportType);
         if (tournament.getOrganizer() == null || tournament.getSport_type() == null){
             if (tournament.getOrganizer() == null ) {
-                String msg = "The organizer of the tournament doesnt exist.";
+                String msg = "The organizer of the tournament doesn't exist.";
                 log.warn(msg);
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }else {
-                String msg = "The sport type for the tournament doesnt exist.";
+                String msg = "The sport type for the tournament doesn't exist.";
                 log.warn(msg);
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
@@ -261,8 +214,9 @@ public class TournamentController {
                 }
             }else{
                 log.info("The tournament has successfully been saved.");
-                TournamentDTO tournamentDTO1 = TournamentDTO.fromTournament(tournamentService.saveTournament(tournament));
-                return ResponseEntity.ok(tournamentDTO1);
+                tournamentService.saveTournament(tournament);
+                TournamentFrontDTO tournamentFrontDTO1 = TournamentFrontDTO.fromTournament(tournament);
+                return ResponseEntity.ok(tournamentFrontDTO1);
             }
         }
 
@@ -272,25 +226,16 @@ public class TournamentController {
     @PreAuthorize("hasAuthority('organizer:update')")
     @Operation(summary = "Update a event with the data provided.")
     public ResponseEntity updateEvent(@PathVariable Long id, @RequestBody EventFrontDTO eventFrontDTO) {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         if (!id.equals(eventFrontDTO.getId())) {
-            String msg = "Bad request ,the id given in the path doesnt match with the id on the organizer.";
+            String msg = "Bad request, the id given in the path doesn't match with the id on the event.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
-
-        if (tournamentService.getTournament(id) == null) {
-            String msg = "Bad request ,there is no event for that id.";
+        Tournament tournament = tournamentService.getTournament(id);
+        if (tournament == null) {
+            String msg = "Bad request, there is no event for that id.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -298,16 +243,16 @@ public class TournamentController {
         }
         Organizer organizer = this.organizerService.getOrganizerByCompany_name(eventFrontDTO.getOrganizer());
         Sports_type sportsType = this.sportsTypeService.getSport_typeByName(eventFrontDTO.getSport_type());
-        Tournament tournament = new Tournament(eventFrontDTO,organizer,sportsType);
+        tournament = new Tournament(eventFrontDTO,organizer,sportsType);
         if (tournament.getOrganizer() == null || tournament.getSport_type() == null){
             if (tournament.getOrganizer() == null ) {
-                String msg = "The organizer of the event doesnt exist.";
+                String msg = "The organizer of the event doesn't exist.";
                 log.warn(msg);
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }else {
-                String msg = "The sport type for the event doesnt exist.";
+                String msg = "The sport type for the event doesn't exist.";
                 log.warn(msg);
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
@@ -330,8 +275,8 @@ public class TournamentController {
                 }
             }else{
                 log.info("The event has successfully been updated.");
-                EventFrontDTO eventFrontDTO1 = EventFrontDTO.fromTournament(tournamentService.saveTournament(tournament));
-                System.out.println(eventFrontDTO1);
+                tournamentService.updateTournament(tournament);
+                EventFrontDTO eventFrontDTO1 = EventFrontDTO.fromTournament(tournament);;
                 return ResponseEntity.ok(eventFrontDTO1);
             }
         }
@@ -342,28 +287,18 @@ public class TournamentController {
     @Operation(summary = "Create a event with the data provided.")
     public ResponseEntity createEvent(@RequestBody EventFrontDTO eventFrontDTO ) {
         User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Organizer organizer = organizerService.getOrganizerByUsername(username);
+        Organizer organizer = organizerService.getOrganizerByUsername(user.getUsername());
         Sports_type sportType = sportsTypeService.getSport_typeByName(eventFrontDTO.getSport_type());
-        Tournament tournament = EventFrontDTO.toTournament(eventFrontDTO,organizer,sportType);
-        tournament.setEnabled(true);
+        Tournament tournament = new Tournament(eventFrontDTO,organizer,sportType);
         if (tournament.getOrganizer() == null || tournament.getSport_type() == null){
             if (tournament.getOrganizer() == null ) {
-                String msg = "The organizer of the event doesnt exist.";
+                String msg = "The organizer of the event doesn't exist.";
                 log.warn(msg);
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }else {
-                String msg = "The sport type for the event doesnt exist.";
+                String msg = "The sport type for the event doesn't exist.";
                 log.warn(msg);
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
@@ -386,7 +321,8 @@ public class TournamentController {
                 }
             }else{
                 log.info("The event has successfully been saved.");
-                EventFrontDTO eventFrontDTO1 = EventFrontDTO.fromTournament(tournamentService.saveTournament(tournament));
+                tournamentService.saveTournament(tournament);
+                EventFrontDTO eventFrontDTO1 = EventFrontDTO.fromTournament(tournament);
                 return ResponseEntity.ok(eventFrontDTO1);
             }
         }
@@ -400,32 +336,25 @@ public class TournamentController {
     public ResponseEntity deleteTournament(@PathVariable Long id) {
         User user = userService.isAuthorized();
         Tournament tournament = tournamentService.getTournament(id);
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
-        if (tournament.getOrganizer().getId() != user.getId()){
-            String msg = "Bad request ,the organizer id for the tournament doesnt match with the id on the organizer.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
         if (tournament == null) {
-            String msg = "Bad request ,there is no tournament for that id.";
+            String msg = "Bad request, there is no tournament for that id.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
+        if (tournament.getOrganizer().getId() != user.getId()){
+            String msg = "Bad request, the organizer id for the tournament doesn't match with the id on the organizer.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(msg);
+        }
         this.tournamentService.deleteTournament(id);
         log.info("The tournament has successfully been deleted.");
-        return ResponseEntity.ok(TournamentDTO.fromTournament(tournamentService.updateTournament(tournament)));
+        tournamentService.deleteTournament(tournament.getId());
+        TournamentDTO tournamentDTO = new TournamentDTO(tournament);
+        return ResponseEntity.ok(tournamentDTO);
     }
 
     @GetMapping("/api/tournaments/inscriptions/{id}")
@@ -433,21 +362,24 @@ public class TournamentController {
     @Operation(summary = "Return the inscriptions for the tournament with the id provided.")
     public ResponseEntity getInscriptionsforTournament(@PathVariable(name = "id") Long id) {
         User user = userService.isAuthorized();
+        Tournament tournament = tournamentService.getTournament(id);
 
         if (user == null){
-            String msg = "This user cant do that operation.";
+            String msg = "This user can't do that operation.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
-
-        Tournament tournament = tournamentService.getTournament(id);
         if (tournament != null) {
             if (tournament.isEnabled()){
                List<Inscription> inscriptions = this.inscriptionService.getInscriptionsforTournament(id);
-               List<InscriptionFrontDTO> inscriptionFrontDTOS = inscriptions.stream().map(InscriptionFrontDTO::new).collect(Collectors.toList());
-               log.info("The insctiptions for that tournament has successfully been retrieved.");
+               List<InscriptionFrontDTO> inscriptionFrontDTOS = new ArrayList<>();
+                for (Inscription i : inscriptions) {
+                    InscriptionFrontDTO inscriptionFrontDTO = new InscriptionFrontDTO(i);
+                    inscriptionFrontDTOS.add(inscriptionFrontDTO);
+                }
+               log.info("The inscriptions for that tournament has successfully been retrieved.");
                return ResponseEntity.ok(inscriptionFrontDTOS);
             }else {
                 String msg = "The tournament that you asked is disabled.";
@@ -458,7 +390,7 @@ public class TournamentController {
             }
         }
         else {
-            String msg = "The tournament by id has not been found";
+            String msg = "The tournament by id has not been found.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)

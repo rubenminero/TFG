@@ -76,19 +76,6 @@ public class AuthController {
         }
         return ResponseEntity.ok(service.registerAthlete(request));
     }
-    @PostMapping("/register-admin")
-    @Operation(summary = "Register a admin in the database. Returning the token for that user.")
-    public ResponseEntity<?> registerAdmin(@Parameter(name = "The DTO that contains the admin data") @RequestBody AuthRegisterAdminDTO request) {
-        Boolean username_check = userService.validUsername(request.getUsername());
-        if (username_check){
-            String msg = "This username is already taken.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-        return ResponseEntity.ok(service.registerAdmin(request));
-    }
 
     @PostMapping("/authenticate")
     @Operation(summary = "Authenticate the user for authenticated operations.Returning the token for that user ")
@@ -107,10 +94,10 @@ public class AuthController {
 
     @PutMapping("/logout")
     @Operation(summary = "Log out the user from the app.")
-    @PreAuthorize("hasAuthority('athlete:read')")
+    @PreAuthorize("hasAuthority('athlete:update')")
     public void log_out(@Parameter(name = "Servlet request")HttpServletRequest request, @Parameter(name = "Servlet response")HttpServletResponse response
     ) throws IOException {
-        service.log_out();
+        service.log_out(request,response);
     }
 
 }

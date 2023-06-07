@@ -35,59 +35,10 @@ public class OrganizerController {
     private final OrganizerService organizerService;
     private final UserService userService;
 
-    @GetMapping("")
-    @PreAuthorize("hasAuthority('organizer:read')")
-    @Operation(summary = "Return all the enabled organizers in the database.")
-    public ResponseEntity getAllOrganizers() {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
-        List<Organizer> organizers = organizerService.getEnabledOrganizers();
-        if (organizers.size() == 0 || organizers == null) {
-            String msg = "There is no athletes.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(msg);
-        }
-
-        // Convert the list of organizers to a list of OrganizerDTOs
-        List<OrganizerDTO> organizerDTOs = organizers.stream().map(OrganizerDTO::new).collect(Collectors.toList());
-        log.info("The organizers has successfully been retrieved.");
-        return ResponseEntity.ok(organizerDTOs);
-    }
-
     @GetMapping("/tournaments/{id}")
     @PreAuthorize("hasAuthority('organizer:read')")
     @Operation(summary = "Return all the enabled tournaments for the organizer in the database.")
     public ResponseEntity getTournamentsOrganizer(@PathVariable(name = "id") Long id) {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        user = this.userService.getUserByUsername(username);
-
-        if (user.getId() != id){
-            String msg = "The id provided doesnt match with the user logged.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         List<Tournament> tournaments = organizerService.getTournamentsOrganizer(id);
         if (tournaments.size() == 0 || tournaments == null) {
             String msg = "There is no tournaments.";
@@ -107,26 +58,6 @@ public class OrganizerController {
     @PreAuthorize("hasAuthority('organizer:read')")
     @Operation(summary = "Return all the enabled events for the organizer in the database.")
     public ResponseEntity getEventsOrganizer(@PathVariable(name = "id") Long id) {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        user = this.userService.getUserByUsername(username);
-
-        if (user.getId() != id){
-            String msg = "The id provided doesnt match with the user logged.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         List<Tournament> events = organizerService.getEventsOrganizer(id);
         if (events.size() == 0 || events == null) {
             String msg = "There is no events.";
@@ -146,16 +77,6 @@ public class OrganizerController {
     @PreAuthorize("hasAuthority('organizer:read')")
     @Operation(summary = "Return the organizer with the id provided.")
     public ResponseEntity getOrganizerById( @PathVariable(name = "id") Long id) {
-        User user = userService.isAuthorized();
-
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
-
         Organizer organizer = organizerService.getOrganizer(id);
         if (organizer != null) {
             if (organizer.isEnabled()){
@@ -165,7 +86,7 @@ public class OrganizerController {
                 String msg = "The organizer that you asked is disabled.";
                 log.warn(msg);
                 return ResponseEntity
-                        .status(HttpStatus.FORBIDDEN)
+                        .status(HttpStatus.NOT_FOUND)
                         .body(msg);
             }
 
@@ -184,15 +105,7 @@ public class OrganizerController {
     @PreAuthorize("hasAuthority('organizer:update')")
     @Operation(summary = "Update a organizer with the data provided.")
     public ResponseEntity updateOrganizer(@PathVariable Long id, @RequestBody Organizer organizer) {
-        User user = userService.isAuthorized();
         Organizer organizer_saved = this.organizerService.getOrganizer(id);
-        if (user == null){
-            String msg = "This user cant do that operation.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(msg);
-        }
         if (organizer_saved == null){
             String msg = "There is no user with that data.";
             log.warn(msg);
@@ -226,17 +139,8 @@ public class OrganizerController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
-
-        if (!id.equals(organizer.getId())) {
-            String msg = "The id that you give doesnt match with the id of the user.";
-            log.warn(msg);
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(msg);
-        }else{
-            log.info("The organizer has successfully been updated.");
-            return ResponseEntity.ok(OrganizerDTO.fromOrganizer(organizerService.updateOrganizer(organizer,organizer_saved)));
-        }
+        log.info("The organizer has successfully been updated.");
+        return ResponseEntity.ok(OrganizerDTO.fromOrganizer(organizerService.updateOrganizer(organizer,organizer_saved)));
     }
 
 
@@ -245,9 +149,7 @@ public class OrganizerController {
     @Operation(summary = "Delete the organizer with the id provided.")
     public ResponseEntity deleteOrganizer(@PathVariable Long id) {
         Organizer organizer = organizerService.getOrganizer(id);
-
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
+        User user = userService.isAuthorized();
         if (organizer == null){
             String msg = "This user cant do that operation.";
             log.warn(msg);
@@ -256,8 +158,8 @@ public class OrganizerController {
                     .body(msg);
         }
 
-        if (organizer.getId() != userService.getUserByUsername(username).getId()){
-            String msg = "The id provided doesnt doesnt belong to your user.";
+        if (organizer.getId() != user.getId()){
+            String msg = "The id provided doesnt belong to your user.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
