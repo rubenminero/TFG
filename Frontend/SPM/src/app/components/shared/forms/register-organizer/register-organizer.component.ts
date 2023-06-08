@@ -57,7 +57,7 @@ export class RegisterOrganizerComponent {
         ]),
         nif: new FormControl('', [
           Validators.required,
-          Validators.pattern('[0-9]{8}-[A-Z]{1}'),
+          Validators.pattern('[0-9]{8}[A-Z]{1}'),
         ]),
         email: new FormControl('', [Validators.required, Validators.email]),
         first_name: new FormControl('', [

@@ -59,7 +59,7 @@ export class OrganizerCardComponent {
         { value: '', disabled: !this.admin },
         Validators.compose([
           Validators.required,
-          Validators.pattern('[0-9]{8}-[A-Z]{1}'),
+          Validators.pattern('[0-9]{8}[A-Z]{1}'),
         ]),
       ],
       email: [

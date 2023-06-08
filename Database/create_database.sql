@@ -1,15 +1,4 @@
-
-BEGIN;
-
-
-DROP DATABASE IF EXISTS SPM;
-CREATE DATABASE SPM
-	ENCODING = 'UTF8'
-	LC_COLLATE = 'Spanish_Spain.UTF-8'
-	LC_CTYPE = 'Spanish_Spain.UTF-8'
-	TABLESPACE = pg_default
-	OWNER = postgres;
-
+DROP TABLE IF EXISTS public.inscription;
 CREATE TABLE IF NOT EXISTS public.admins
 (
     valid_from timestamp(6) without time zone,
@@ -17,25 +6,25 @@ CREATE TABLE IF NOT EXISTS public.admins
     id bigint NOT NULL,
     CONSTRAINT admins_pkey PRIMARY KEY (id)
 );
-
+DROP TABLE IF EXISTS public.inscription;
 CREATE TABLE IF NOT EXISTS public.athletes
 (
     disabled_at timestamp(6) without time zone,
     enabled boolean,
-    "phone number" character varying(255) COLLATE pg_catalog."default",
+    phone_number character varying(255) COLLATE pg_catalog."default",
     id bigint NOT NULL,
     CONSTRAINT athletes_pkey PRIMARY KEY (id)
 );
-
+DROP TABLE IF EXISTS public.inscription;
 CREATE TABLE IF NOT EXISTS public.inscription
 (
-    id bigint NOT NULL DEFAULT nextval('inscription_id_seq'::regclass),
+    id bigint NOT NULL,
     enabled boolean,
     id_tournament bigint,
     id_user bigint,
     CONSTRAINT inscription_pkey PRIMARY KEY (id)
 );
-
+DROP TABLE IF EXISTS public.organisers;
 CREATE TABLE IF NOT EXISTS public.organisers
 (
     address character varying(255) COLLATE pg_catalog."default",
@@ -45,15 +34,15 @@ CREATE TABLE IF NOT EXISTS public.organisers
     id bigint NOT NULL,
     CONSTRAINT organisers_pkey PRIMARY KEY (id)
 );
-
+DROP TABLE IF EXISTS public.sports_types;
 CREATE TABLE IF NOT EXISTS public.sports_types
 (
-    id bigint NOT NULL DEFAULT nextval('sports_types_id_seq'::regclass),
+    id bigint NOT NULL,
     enabled boolean,
     name character varying(255) COLLATE pg_catalog."default",
     CONSTRAINT sports_types_pkey PRIMARY KEY (id)
 );
-
+DROP TABLE IF EXISTS public.token;
 CREATE TABLE IF NOT EXISTS public.token
 (
     id integer NOT NULL,
@@ -65,10 +54,10 @@ CREATE TABLE IF NOT EXISTS public.token
     CONSTRAINT token_pkey PRIMARY KEY (id),
     CONSTRAINT uk_pddrhgwxnms2aceeku9s2ewy5 UNIQUE (token)
 );
-
+DROP TABLE IF EXISTS public.tournaments;
 CREATE TABLE IF NOT EXISTS public.tournaments
 (
-    id bigint NOT NULL DEFAULT nextval('tournaments_id_seq'::regclass),
+    id bigint NOT NULL,
     address character varying(255) COLLATE pg_catalog."default",
     description character varying(255) COLLATE pg_catalog."default",
     enabled boolean,
@@ -80,10 +69,19 @@ CREATE TABLE IF NOT EXISTS public.tournaments
     inscription boolean,
     CONSTRAINT tournaments_pkey PRIMARY KEY (id)
 );
-
+DROP TABLE IF EXISTS public.watchlist;
+CREATE TABLE IF NOT EXISTS public.watchlist
+(
+    id bigint NOT NULL,
+    enabled boolean,
+    id_tournament bigint,
+    id_user bigint,
+    CONSTRAINT watchlist_pkey PRIMARY KEY (id)
+);
+DROP TABLE IF EXISTS public.users;
 CREATE TABLE IF NOT EXISTS public.users
 (
-    id bigint NOT NULL DEFAULT nextval('users_id_seq'::regclass),
+    id bigint NOT NULL,
     email character varying(255) COLLATE pg_catalog."default",
     first_name character varying(255) COLLATE pg_catalog."default",
     last_name character varying(255) COLLATE pg_catalog."default",
@@ -94,20 +92,11 @@ CREATE TABLE IF NOT EXISTS public.users
     CONSTRAINT users_pkey PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS public.watchlist
-(
-    id bigint NOT NULL DEFAULT nextval('watchlist_id_seq'::regclass),
-    enabled boolean,
-    id_tournament bigint,
-    id_user bigint,
-    CONSTRAINT watchlist_pkey PRIMARY KEY (id)
-);
-
 ALTER TABLE IF EXISTS public.admins
     ADD CONSTRAINT fkanhsicqm3lc8ya77tr7r0je18 FOREIGN KEY (id)
     REFERENCES public.users (id) MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION;
+    ON DELETE CASCADE;
 CREATE INDEX IF NOT EXISTS admins_pkey
     ON public.admins(id);
 
@@ -116,7 +105,7 @@ ALTER TABLE IF EXISTS public.athletes
     ADD CONSTRAINT fktkjdbtevny2xu80xxyqjr1ulq FOREIGN KEY (id)
     REFERENCES public.users (id) MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION;
+    ON DELETE CASCADE;
 CREATE INDEX IF NOT EXISTS athletes_pkey
     ON public.athletes(id);
 
@@ -139,7 +128,7 @@ ALTER TABLE IF EXISTS public.organisers
     ADD CONSTRAINT fks62f11x72fwao4fe1u71tpxq8 FOREIGN KEY (id)
     REFERENCES public.users (id) MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION;
+    ON DELETE CASCADE;
 CREATE INDEX IF NOT EXISTS organisers_pkey
     ON public.organisers(id);
 
@@ -178,4 +167,3 @@ ALTER TABLE IF EXISTS public.watchlist
     ON UPDATE NO ACTION
     ON DELETE NO ACTION;
 
-END;
