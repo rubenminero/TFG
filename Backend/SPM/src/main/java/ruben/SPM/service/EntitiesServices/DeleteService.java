@@ -123,7 +123,7 @@ public class DeleteService {
         List<Watchlist> watchlists = this.watchlistService.getAllWatchlists();
 
         for (Watchlist w : watchlists) {
-            if (id == w.getAthlete().getId()){
+            if (id.equals(w.getAthlete().getId())){
                 this.watchlistService.deleteWatchlist(w.getId());
             }
         }
@@ -175,7 +175,7 @@ public class DeleteService {
         List<Watchlist> watchlists = this.watchlistService.getAllWatchlists();
 
         for (Watchlist w : watchlists) {
-            if (w.getTournament().getId() == id){
+            if (w.getTournament().getId().equals(id)){
                 this.watchlistService.deleteWatchlist(w.getId());
             }
         }
@@ -189,7 +189,7 @@ public class DeleteService {
         List<Inscription> inscriptions = this.inscriptionService.getAllInscriptions();
 
         for (Inscription i : inscriptions) {
-            if (id == i.getAthlete().getId()){
+            if (id.equals(i.getAthlete().getId())){
                 this.inscriptionService.deleteInscription(i);
             }
         }
@@ -241,7 +241,7 @@ public class DeleteService {
         List<Inscription> inscriptions = this.inscriptionService.getAllInscriptions();
 
         for (Inscription i : inscriptions) {
-            if (i.getTournament().getId() == id){
+            if (i.getTournament().getId().equals(id)){
                 this.inscriptionService.deleteInscription(i.getId());
             }
         }
@@ -255,7 +255,7 @@ public class DeleteService {
         List<Token> tokens = this.tokenService.getAllTokens();
 
         for (Token t : tokens) {
-            if (id == t.getUser().getId()){
+            if (id.equals(t.getUser().getId())){
                 this.tokenService.deleteToken(t);
             }
         }
@@ -322,7 +322,7 @@ public class DeleteService {
         List<Tournament> tournaments = this.tournamentService.getAllTournaments();
 
         for (Tournament t : tournaments) {
-            if (id == t.getOrganizer().getId()){
+            if (id.equals(t.getOrganizer().getId())){
                 this.deleteWatchlistsTournament(t.getId());
                 this.deleteInscriptionsTournament(t.getId());
                 this.tournamentService.deleteTournament(t.getId());
@@ -365,7 +365,7 @@ public class DeleteService {
         List<Tournament> tournaments = this.tournamentService.getAllEvents();
 
         for (Tournament t : tournaments) {
-            if (id == t.getOrganizer().getId()){
+            if (id.equals(t.getOrganizer().getId())){
                 this.deleteWatchlistsTournament(t.getId());
                 this.deleteInscriptionsTournament(t.getId());
                 this.tournamentService.deleteTournament(t.getId());

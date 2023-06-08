@@ -1,9 +1,6 @@
-<div>
-  <app-toolbar></app-toolbar>
-</div>
-
 <div class="container">
   <div *ngIf="!this.loading">
+    <app-toolbar></app-toolbar>
     <app-login-form (action)="loginUser($event)" [error]="loginError">
     </app-login-form>
     <div class="flex-column">

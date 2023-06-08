@@ -160,7 +160,7 @@ public class WatchlistController {
                     .body(msg);
         }
 
-        if (user.getId() != watchlist.getAthlete().getId()){
+        if (!user.getId().equals(watchlist.getAthlete().getId())){
             String msg = "The watchlist doesnt belong to your user.";
             log.warn(msg);
             return ResponseEntity

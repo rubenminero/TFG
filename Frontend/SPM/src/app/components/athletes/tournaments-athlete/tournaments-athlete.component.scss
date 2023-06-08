@@ -69,3 +69,23 @@ html{
   margin-top: 10px;
   margin-bottom: 30px;
 }
+
+.filters{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 40px;
+}
+.filter-search{
+  margin-left: 40px;
+  margin-right: 40px;
+}
+.filter-sport-type{
+  margin-left: 40px;
+  margin-right: 40px;
+}
+.filter-paginator{
+  margin-right: 40px;
+}

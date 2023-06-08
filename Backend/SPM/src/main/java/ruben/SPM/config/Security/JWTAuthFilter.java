@@ -38,8 +38,6 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws IOException {
         try {
-
-
             if (!request.getServletPath().startsWith("/api") || request.getServletPath().startsWith("/api/auth")){
                 filterChain.doFilter(request, response);
                 return;

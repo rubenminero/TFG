@@ -45,7 +45,7 @@ public class InscriptionService {
         List<Inscription> inscriptions_tournament = new ArrayList<Inscription>();
 
         for (Inscription i : inscriptions) {
-            if (i.getTournament().getId() == id) {
+            if (i.getTournament().getId().equals(id)) {
                 inscriptions_tournament.add(i);
             }
         }
@@ -118,7 +118,7 @@ public class InscriptionService {
         List<Inscription> inscriptions_enabled = new ArrayList<Inscription>();
         List<Inscription> inscriptions = this.getAllInscriptions();
         for (Inscription i : inscriptions) {
-            if (i.isEnabled() && i.getAthlete().getId() == id) {
+            if (i.isEnabled() && i.getAthlete().getId().equals(id)) {
                 inscriptions_enabled.add(i);
             }
         }
@@ -132,7 +132,7 @@ public class InscriptionService {
     public Boolean validInscription(Athlete athlete, Tournament tournament) {
         List<Inscription> inscriptions = this.getAllInscriptions();
         for (Inscription i : inscriptions) {
-            if (athlete.getId() == i.getAthlete().getId() && tournament.getId() == i.getTournament().getId()) {
+            if (athlete.getId().equals(i.getAthlete().getId()) && tournament.getId().equals(i.getTournament().getId())) {
                 return true;
             }
         }

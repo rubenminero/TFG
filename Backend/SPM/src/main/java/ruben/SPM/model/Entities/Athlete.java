@@ -73,6 +73,7 @@ public class Athlete extends User {
      * @return the enabled of the athlete.
      */
     @Column(name = "enabled")
+    @Override
     public boolean isEnabled() { return enabled; }
 
     /**

@@ -181,7 +181,7 @@ public class OrganizerController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Organizer organizer_logged = this.organizerService.getOrganizerByUsername(username);
 
-        if (organizer != null && organizer_logged.getId() == organizer.getId() ){
+        if (organizer != null && organizer_logged.getId().equals(organizer.getId())){
             if (passwordChangeDTO.getPassword().equals(passwordChangeDTO.getConfirmpassword())){
                 organizer = this.organizerService.setPasswordHashed(organizer, passwordChangeDTO.getPassword());
                 this.organizerService.updateOrganizer(organizer);

@@ -82,7 +82,7 @@ public class AthleteController {
                     .body(msg);
         }
         Boolean username_check = userService.validUsername(athlete.getUsername());
-        if (athlete_saved.getUsername().equals(athlete.getUsername()) && athlete.getId() == athlete_saved.getId()){
+        if (athlete_saved.getUsername().equals(athlete.getUsername()) && athlete.getId().equals(athlete_saved.getId())){
             log.info("The athlete has successfully been updated.");
             return ResponseEntity.ok(AthleteDTO.fromUser(athleteService.updateAthlete(athlete,athlete_saved)));
         }else {
@@ -149,7 +149,7 @@ public class AthleteController {
         User user = userService.isAuthorized();
         Athlete athlete = this.athleteService.getAthlete(passwordChangeDTO.getId_user());
         Athlete athlete_logged = athleteService.getAthlete(user.getId());
-        if (athlete != null && athlete_logged.getId() == athlete.getId() && passwordEncoder.matches(passwordChangeDTO.getOldpassword(),athlete_logged.getPassword())){
+        if (athlete != null && athlete_logged.getId().equals(athlete.getId()) && passwordEncoder.matches(passwordChangeDTO.getOldpassword(),athlete_logged.getPassword())){
             if (passwordChangeDTO.getPassword().equals(passwordChangeDTO.getConfirmpassword())){
                 athlete = this.athleteService.setPasswordHashed(athlete, passwordChangeDTO.getPassword());
                 this.athleteService.updateAthlete(athlete);

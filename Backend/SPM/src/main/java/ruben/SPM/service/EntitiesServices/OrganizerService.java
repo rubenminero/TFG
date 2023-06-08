@@ -151,7 +151,7 @@ public class OrganizerService {
         List<Tournament> tournaments = this.tournamentService.getEnabledTournaments();
         List<Tournament> tournaments_organizer = new ArrayList<Tournament>();
         for (Tournament t : tournaments) {
-            if (t.getOrganizer().getId() == id) {
+            if (t.getOrganizer().getId().equals(id)) {
                 tournaments_organizer.add(t);
             }
         }
@@ -167,7 +167,7 @@ public class OrganizerService {
         List<Tournament> events = this.tournamentService.getEnabledEvents();
         List<Tournament> events_organizer = new ArrayList<Tournament>();
         for (Tournament t : events) {
-            if (t.getOrganizer().getId() == id) {
+            if (t.getOrganizer().getId().equals(id)) {
                 events_organizer.add(t);
             }
         }
