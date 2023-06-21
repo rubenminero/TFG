@@ -80,7 +80,7 @@ public class Athlete extends User {
      * Get the phone number of the athlete.
      * @return the phone number of the athlete.
      */
-    @Column(name = "phone number")
+    @Column(name = "phone_number")
     public String getPhone_number() {
         return phone_number;
     }

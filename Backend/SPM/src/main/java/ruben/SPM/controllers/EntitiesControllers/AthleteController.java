@@ -20,7 +20,9 @@ import ruben.SPM.model.DTO.Entities.AthleteDTO;
 import ruben.SPM.model.DTO.Entities.OrganizerDTO;
 import ruben.SPM.model.DTO.Entities.WatchlistDTO;
 import ruben.SPM.model.DTO.Front.InscriptionFrontDTO;
+import ruben.SPM.model.DTO.Front.InscriptionUserFrontDTO;
 import ruben.SPM.model.DTO.Front.WatchlistFrontDTO;
+import ruben.SPM.model.DTO.Front.WatchlistUserFrontDTO;
 import ruben.SPM.model.Entities.*;
 import ruben.SPM.model.Whitelist.Role;
 import ruben.SPM.service.Auth.AuthService;
@@ -31,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 import ruben.SPM.service.EntitiesServices.UserService;
 import ruben.SPM.service.EntitiesServices.WatchlistService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -110,17 +113,21 @@ public class AthleteController {
     @Operation(summary = "Return the inscriptions for that user.")
     public ResponseEntity getInscriptionById(@PathVariable(name = "id") Long id) {
         List<Inscription> inscriptions = inscriptionService.getEnabledInscriptions(id);
+        List<InscriptionUserFrontDTO> inscriptionUserFrontDTOS = new ArrayList<>();
+
         if (inscriptions.size() == 0 || inscriptions == null) {
             String msg = "The athlete that you asked doesnt have inscriptions.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(msg);
-        }
-        else {
-            List<InscriptionFrontDTO> inscriptionDTOS = inscriptions.stream().map(InscriptionFrontDTO::new).collect(Collectors.toList());
+        } else {
+            for (Inscription i : inscriptions) {
+                InscriptionUserFrontDTO inscriptionUserFrontDTO = new InscriptionUserFrontDTO(i);
+                inscriptionUserFrontDTOS.add(inscriptionUserFrontDTO);
+            }
             log.info("The inscriptions for that athlete has successfully been retrieved.");
-            return ResponseEntity.ok(inscriptionDTOS);
+            return ResponseEntity.ok(inscriptionUserFrontDTOS);
         }
     }
 
@@ -129,6 +136,7 @@ public class AthleteController {
     @Operation(summary = "Return the watchlists for that user.")
     public ResponseEntity getWatchlistById(@PathVariable(name = "id") Long id) {
         List<Watchlist> watchlists = watchlistService.getEnabledWatchlists(id);
+        List<WatchlistUserFrontDTO> watchlistUserFrontDTOS = new ArrayList<>();
         if (watchlists.size() == 0 || watchlists == null) {
                 String msg = "The athlete that you asked doesnt have watchlists.";
                 log.warn(msg);
@@ -136,9 +144,12 @@ public class AthleteController {
                         .status(HttpStatus.NOT_FOUND)
                         .body(msg);
         } else {
-            List<WatchlistFrontDTO> watchlistDTOs = watchlists.stream().map(WatchlistFrontDTO::new).collect(Collectors.toList());
+            for (Watchlist w : watchlists) {
+                WatchlistUserFrontDTO watchlistUserFrontDTO = new WatchlistUserFrontDTO(w);
+                watchlistUserFrontDTOS.add(watchlistUserFrontDTO);
+            }
             log.info("The watchlists for that athlete has successfully been retrieved.");
-            return ResponseEntity.ok(watchlistDTOs);
+            return ResponseEntity.ok(watchlistUserFrontDTOS);
         }
     }
 

@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import ruben.SPM.model.DTO.Front.EventFrontDTO;
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
+@SpringBootTest
 public class TournamentControllerTest {
     @InjectMocks
     private TournamentController tournamentController;
@@ -188,7 +190,9 @@ public class TournamentControllerTest {
         ResponseEntity response = tournamentController.updateTournament(tournamentId, tournamentDTO);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(organizerService, times(1)).getOrganizerByCompany_name(tournamentDTO.getOrganizer());
+        verify(organizerService, times(1)).getOrganizerByCompany_name(
+                tournamentDTO.getOrganizer()
+        );
         verify(sportsTypeService, times(1)).getSport_typeByName(tournamentDTO.getSport_type());
     }
 
@@ -216,7 +220,10 @@ public class TournamentControllerTest {
         ResponseEntity response = tournamentController.updateTournament(2L, tournamentDTO);
 
         assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
-        assertEquals("Bad request, the id given in the path doesn't match with the id on the tournament.", response.getBody());
+        assertEquals(
+                "Bad request, the id given in the path doesn't match with the id on the tournament.",
+                response.getBody()
+        );
         verify(tournamentService, never()).getTournament(anyLong());
         verify(organizerService, never()).getOrganizerByCompany_name(anyString());
         verify(sportsTypeService, never()).getSport_typeByName(anyString());
@@ -259,7 +266,7 @@ public class TournamentControllerTest {
     }
 
     @Test
-    public void testUpdateTournament_InvalidOrganizer() {
+    public void testUpdateTournament_OrganizerNotFound() {
         Long tournamentId = 1L;
         TournamentFrontDTO tournamentDTO = new TournamentFrontDTO();
         tournamentDTO.setId(tournamentId);
@@ -288,12 +295,14 @@ public class TournamentControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertEquals("The organizer of the tournament doesn't exist.", response.getBody());
         verify(tournamentService, times(1)).getTournament(tournamentId);
-        verify(organizerService, times(1)).getOrganizerByCompany_name(tournamentDTO.getOrganizer());
+        verify(organizerService, times(1)).getOrganizerByCompany_name(
+                tournamentDTO.getOrganizer()
+        );
         verify(tournamentService, never()).saveTournament(any());
     }
 
     @Test
-    public void testUpdateTournament_InvalidSportType() {
+    public void testUpdateTournament_SportTypeNotFound() {
         Long tournamentId = 1L;
         TournamentFrontDTO tournamentDTO = new TournamentFrontDTO();
         tournamentDTO.setId(tournamentId);
@@ -322,7 +331,9 @@ public class TournamentControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertEquals("The sport type for the tournament doesn't exist.", response.getBody());
         verify(tournamentService, times(1)).getTournament(tournamentId);
-        verify(organizerService, times(1)).getOrganizerByCompany_name(tournamentDTO.getOrganizer());
+        verify(organizerService, times(1)).getOrganizerByCompany_name(
+                tournamentDTO.getOrganizer()
+        );
         verify(sportsTypeService, times(1)).getSport_typeByName(tournamentDTO.getSport_type());
         verify(tournamentService, never()).saveTournament(any());
     }

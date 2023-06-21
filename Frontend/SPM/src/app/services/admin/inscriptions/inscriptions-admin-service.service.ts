@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Inscriptions } from 'src/app/interfaces/inscriptions/inscriptions';
+import { InscriptionsTournament } from 'src/app/interfaces/inscriptions/inscriptions-tournament';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth-service.service';
@@ -29,7 +29,7 @@ export class InscriptionsAdminServiceService {
     );
   }
 
-  changeStateInscription(inscription: Inscriptions): Observable<any> {
+  changeStateInscription(inscription: InscriptionsTournament): Observable<any> {
     const httpOptions = {
       headers: {
         'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ export class InscriptionsAdminServiceService {
     );
   }
 
-  deleteInscription(inscription: Inscriptions): Observable<any> {
+  deleteInscription(inscription: InscriptionsTournament): Observable<any> {
     const httpOptions = {
       headers: {
         'Content-Type': 'application/json',

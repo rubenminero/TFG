@@ -170,7 +170,7 @@ public class WatchlistController {
 
         watchlistService.deleteWatchlist(watchlist.getId());
         String msg = "The watchlist has been deleted.";
-        log.warn(msg);
+        log.info(msg);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(msg);

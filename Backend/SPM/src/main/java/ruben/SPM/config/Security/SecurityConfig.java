@@ -91,6 +91,13 @@ public class SecurityConfig {
                         .requestMatchers(PUT, "/api/tournaments/**").hasAnyAuthority(ADMIN_UPDATE.name(),ORGANIZER_UPDATE.name())
                         .requestMatchers(DELETE, "/api/tournaments/**").hasAnyAuthority(ADMIN_DELETE.name(),ORGANIZER_DELETE.name())
 
+                        .requestMatchers("/api/events/**").hasAnyRole(ADMIN.name(),ORGANIZER.name(),ATHLETE.name())
+
+                        .requestMatchers(GET, "/api/events/**").hasAnyAuthority(ADMIN_READ.name(),ORGANIZER_READ.name(),ATHLETE_READ.name())
+                        .requestMatchers(POST, "/api/events/**").hasAnyAuthority(ADMIN_CREATE.name(),ORGANIZER_CREATE.name())
+                        .requestMatchers(PUT, "/api/events/**").hasAnyAuthority(ADMIN_UPDATE.name(),ORGANIZER_UPDATE.name())
+                        .requestMatchers(DELETE, "/api/events/**").hasAnyAuthority(ADMIN_DELETE.name(),ORGANIZER_DELETE.name())
+
                         .requestMatchers("/api/athletes/**").hasAnyRole(ADMIN.name(),ORGANIZER.name(),ATHLETE.name())
 
                         .requestMatchers(GET, "/api/athletes/**").hasAnyAuthority(ADMIN_READ.name(),ORGANIZER_READ.name(),ATHLETE_READ.name())

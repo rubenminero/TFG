@@ -1,7 +1,7 @@
 <mat-card-header class="header">
   <mat-card-title>
     <div class="header-text">
-      <p>Torneos</p>
+      <p>Inscripciones</p>
     </div>
   </mat-card-title>
 </mat-card-header>
@@ -35,12 +35,32 @@
       <mat-card-content>
         <div class="column">
           <div class="row">
-            <mat-label class="title">Nombre del torneo</mat-label>
-            <p class="text">{{ inscription.tournament }}</p>
+            <mat-label class="title">Nombre del usuario</mat-label>
+            <p class="text">{{ inscription.athlete_name }}</p>
           </div>
           <div class="row">
-            <mat-label class="title">Nombre del usuario</mat-label>
-            <p class="text">{{ inscription.athlete }}</p>
+            <mat-label class="title">Nombre</mat-label>
+            <p class="text">{{ inscription.tournament_name }}</p>
+          </div>
+          <div class="row">
+            <mat-label class="title">Ubicacion</mat-label>
+            <p class="text">{{ inscription.tournament_location }}</p>
+          </div>
+          <div class="row">
+            <mat-label class="title">Direccion</mat-label>
+            <p class="text">{{ inscription.tournament_address }}</p>
+          </div>
+          <div class="row" *ngIf="inscription.tournament_inscription">
+            <mat-label class="title">Aforo</mat-label>
+            <p class="text">{{ inscription.tournament_capacity }}</p>
+          </div>
+          <div class="row">
+            <mat-label class="title">Organizador</mat-label>
+            <p class="text">{{ inscription.tournament_organizer }}</p>
+          </div>
+          <div class="row">
+            <mat-label class="title">Deporte</mat-label>
+            <p class="text">{{ inscription.tournament_sport_type }}</p>
           </div>
           <div class="row">
             <mat-label class="title">Estado</mat-label>

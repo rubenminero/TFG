@@ -1,6 +1,6 @@
-export interface Watchlist {
+export interface InscriptionsTournament {
   id: number;
-  athlete_name: string;
+  athlete: string;
   athlete_id: number;
   enabled: boolean;
   tournament_id: number;

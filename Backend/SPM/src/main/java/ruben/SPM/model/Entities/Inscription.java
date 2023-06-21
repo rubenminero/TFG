@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import ruben.SPM.model.DTO.Entities.InscriptionDTO;
 import ruben.SPM.model.DTO.Front.InscriptionFrontDTO;
+import ruben.SPM.model.DTO.Front.InscriptionUserFrontDTO;
 
 @Entity
 @Table(name= "inscription")
@@ -26,6 +27,12 @@ public class Inscription {
     }
 
     public Inscription(InscriptionFrontDTO inscriptionDTO, Tournament tournament, Athlete athlete) {
+        this.id = inscriptionDTO.getId();
+        this.tournament = tournament;
+        this.athlete = athlete;
+        this.enabled = inscriptionDTO.getEnabled();
+    }
+    public Inscription(InscriptionUserFrontDTO inscriptionDTO, Tournament tournament, Athlete athlete) {
         this.id = inscriptionDTO.getId();
         this.tournament = tournament;
         this.athlete = athlete;

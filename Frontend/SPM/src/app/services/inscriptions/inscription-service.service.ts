@@ -48,7 +48,7 @@ export class InscriptionServiceService {
     );
   }
 
-  deleteInscription(inscription: Inscriptions): Observable<any> {
+  deleteInscription(id: number): Observable<any> {
     const httpOptions = {
       headers: {
         'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export class InscriptionServiceService {
       },
     };
     return this.http.delete(
-      this.envService.getApiUrl() + '/api/inscriptions/' + inscription.id,
+      this.envService.getApiUrl() + '/api/inscriptions/' + id,
       httpOptions
     );
   }

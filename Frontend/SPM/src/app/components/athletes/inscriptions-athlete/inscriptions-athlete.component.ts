@@ -1,4 +1,3 @@
-import { Inscriptions } from '../../../interfaces/inscriptions/inscriptions';
 import { Component } from '@angular/core';
 import { Tournament } from 'src/app/interfaces/tournament/tournament';
 import { InscriptionServiceService } from 'src/app/services/inscriptions/inscription-service.service';
@@ -13,6 +12,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { AuthService } from 'src/app/services/auth/auth-service.service';
+import { InscriptionsTournament } from 'src/app/interfaces/inscriptions/inscriptions-tournament';
 
 @Component({
   selector: 'app-inscriptions-athlete',
@@ -21,13 +21,21 @@ import { AuthService } from 'src/app/services/auth/auth-service.service';
 })
 export class InscriptionsAthleteComponent {
   inscription_show: boolean = false;
-  insctiption: Inscriptions = {
+  inscription: InscriptionsTournament = {
     id: -1,
-    tournament: '',
     athlete: '',
-    tournament_id: -1,
     athlete_id: -1,
     enabled: false,
+    tournament_id: -1,
+    tournament_name: '',
+    tournament_location: '',
+    tournament_address: '',
+    tournament_description: '',
+    tournament_inscription: false,
+    tournament_capacity: -1,
+    tournament_enabled: false,
+    tournament_organizer: '',
+    tournament_sport_type: '',
   };
   tournament: Tournament = {
     id: -1,
@@ -42,11 +50,11 @@ export class InscriptionsAthleteComponent {
     enabled: false,
   };
 
-  inscriptions_saved: Inscriptions[] = [];
+  inscriptions_saved: InscriptionsTournament[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   obs: Observable<any> | undefined;
-  dataSource: MatTableDataSource<Inscriptions> =
-    new MatTableDataSource<Inscriptions>();
+  dataSource: MatTableDataSource<InscriptionsTournament> =
+    new MatTableDataSource<InscriptionsTournament>();
 
   constructor(
     private inscriptionService: InscriptionServiceService,
@@ -65,16 +73,24 @@ export class InscriptionsAthleteComponent {
         for (let i = 0; i < data.length; i++) {
           let inscription_aux = {
             id: data[i].id,
-            tournament: data[i].tournament,
             athlete: data[i].athlete,
-            tournament_id: data[i].tournament_id,
             athlete_id: data[i].athlete_id,
             enabled: data[i].enabled,
+            tournament_id: data[i].tournament_id,
+            tournament_name: data[i].tournament_name,
+            tournament_location: data[i].tournament_location,
+            tournament_address: data[i].tournament_address,
+            tournament_description: data[i].tournament_description,
+            tournament_inscription: data[i].tournament_inscription,
+            tournament_capacity: data[i].tournament_capacity,
+            tournament_enabled: data[i].tournament_enabled,
+            tournament_organizer: data[i].tournament_organizer,
+            tournament_sport_type: data[i].tournament_sport_type,
           };
           this.inscriptions_saved.push(inscription_aux);
         }
         this.changeDetectorRef.detectChanges();
-        this.dataSource = new MatTableDataSource<Inscriptions>(
+        this.dataSource = new MatTableDataSource<InscriptionsTournament>(
           this.inscriptions_saved
         );
         this.dataSource.paginator = this.paginator;
@@ -108,7 +124,7 @@ export class InscriptionsAthleteComponent {
     );
   }
 
-  openTournament(inscription: Inscriptions): void {
+  openTournament(inscription: InscriptionsTournament): void {
     this.tournamentService.getTournament(inscription.tournament_id).subscribe(
       (response) => {
         this.tournament = {
@@ -140,8 +156,8 @@ export class InscriptionsAthleteComponent {
     );
   }
 
-  deleteInscription(inscription: Inscriptions): void {
-    this.inscriptionService.deleteInscription(inscription).subscribe(
+  deleteInscription(inscription: InscriptionsTournament): void {
+    this.inscriptionService.deleteInscription(inscription.id).subscribe(
       (response) => {
         this.dialog
           .open(PopUpMsgComponent, {

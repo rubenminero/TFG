@@ -326,6 +326,7 @@ public class AdminController {
     @Operation(summary = "Return all the inscriptions in the database.")
     public ResponseEntity getAllInscriptionsAdmin() {
         List<Inscription> inscriptions = adminService.getAllInscriptions();
+        List<InscriptionUserFrontDTO> inscriptionUserFrontDTOS = new ArrayList<>();
         if (inscriptions.size() == 0 || inscriptions == null) {
             String msg = "There are no inscriptions.";
             log.warn(msg);
@@ -333,9 +334,12 @@ public class AdminController {
                     .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
-        List<InscriptionFrontDTO> inscriptionDTOS = inscriptions.stream().map(InscriptionFrontDTO::new).collect(Collectors.toList());
+        for (Inscription i : inscriptions) {
+            InscriptionUserFrontDTO inscriptionUserFrontDTO = new InscriptionUserFrontDTO(i);
+            inscriptionUserFrontDTOS.add(inscriptionUserFrontDTO);
+        }
         log.info("The inscriptions has successfully been retrieved.");
-        return ResponseEntity.ok(inscriptionDTOS);
+        return ResponseEntity.ok(inscriptionUserFrontDTOS);
     }
 
     @PutMapping("/inscriptions/{id}")
@@ -382,6 +386,7 @@ public class AdminController {
     @Operation(summary = "Return all the watchlists in the database.")
     public ResponseEntity getAllWatchlists_Admin() {
         List<Watchlist> watchlists = adminService.getAllWatchlists();
+        List<WatchlistUserFrontDTO> watchlistUserFrontDTOS = new ArrayList<>();
         if (watchlists.size() == 0 || watchlists == null) {
             String msg = "There are no watchlists.";
             log.warn(msg);
@@ -389,9 +394,12 @@ public class AdminController {
                     .status(HttpStatus.NOT_FOUND)
                     .body(msg);
         }
-        List<WatchlistFrontDTO> watchlistDTOS = watchlists.stream().map(WatchlistFrontDTO::new).collect(Collectors.toList());
+        for (Watchlist w : watchlists) {
+            WatchlistUserFrontDTO watchlistUserFrontDTO = new WatchlistUserFrontDTO(w);
+            watchlistUserFrontDTOS.add(watchlistUserFrontDTO);
+        }
         log.info("The watchlists has successfully been retrieved.");
-        return ResponseEntity.ok(watchlistDTOS);
+        return ResponseEntity.ok(watchlistUserFrontDTOS);
     }
 
     @PutMapping("/watchlists/{id}")

@@ -1,5 +1,4 @@
-version: '3.9' # Por tener docker v19.03.0 o superior
-
+version: '3.9'
 services:
     front:
         image: rubenminero/front_spm:1.1
@@ -41,7 +40,27 @@ services:
             - 5432:5432
         networks:
             - back
-
 networks:
     back:
         driver: bridge
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -23,6 +23,7 @@ public class InscriptionFrontDTO {
     private Long athlete_id;
     private Boolean enabled;
 
+
     public InscriptionFrontDTO(Inscription inscription) {
         this.id = inscription.getId();
         this.tournament = inscription.getTournament().getName();
@@ -30,6 +31,7 @@ public class InscriptionFrontDTO {
         this.tournament_id = inscription.getTournament().getId();
         this.athlete_id = inscription.getAthlete().getId();
         this.enabled = inscription.isEnabled();
+
     }
 
 

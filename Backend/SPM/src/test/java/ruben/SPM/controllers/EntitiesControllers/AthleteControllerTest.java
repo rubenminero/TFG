@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -32,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
+@SpringBootTest
 public class AthleteControllerTest {
 
     @InjectMocks
@@ -71,7 +73,7 @@ public class AthleteControllerTest {
     }
 
     @Test
-    public void testGetAthleteById_AthleteNotEnabledorDoesntExist() {
+    public void testGetAthleteById_AthleteDoesntExist() {
         // Arrange
         Long athleteId = 1L;
         Athlete athlete = new Athlete();
@@ -176,16 +178,18 @@ public class AthleteControllerTest {
         athlete.setId(athleteId);
         athlete.setUsername("username1");
 
+        Tournament tournament = new Tournament();
+        tournament.setInscription(true);
+        tournament.setCapacity(1000);
+        tournament.setOrganizer(new Organizer());
+        tournament.setSport_type(new Sports_type());
+
         List<Inscription> inscriptions = new ArrayList<>();
         Inscription inscription= new Inscription();
-        Inscription inscription1= new Inscription();
-        inscription.setTournament(new Tournament());
-        inscription.setAthlete(new Athlete());
-        inscription1.setTournament(new Tournament());
-        inscription1.setAthlete(new Athlete());
+        inscription.setTournament(tournament);
+        inscription.setAthlete(athlete);
 
         inscriptions.add(inscription);
-        inscriptions.add(inscription1);
 
         when(inscriptionService.getEnabledInscriptions(athlete.getId())).thenReturn(inscriptions);
 
@@ -228,16 +232,18 @@ public class AthleteControllerTest {
         athlete.setId(athleteId);
         athlete.setUsername("username1");
 
+        Tournament tournament = new Tournament();
+        tournament.setInscription(true);
+        tournament.setCapacity(1000);
+        tournament.setOrganizer(new Organizer());
+        tournament.setSport_type(new Sports_type());
+
         List<Watchlist> watchlists = new ArrayList<>();
         Watchlist watchlist= new Watchlist();
-        Watchlist watchlist1= new Watchlist();
-        watchlist.setTournament(new Tournament());
-        watchlist.setAthlete(new Athlete());
-        watchlist1.setTournament(new Tournament());
-        watchlist1.setAthlete(new Athlete());
+        watchlist.setTournament(tournament);
+        watchlist.setAthlete(athlete);
 
         watchlists.add(watchlist);
-        watchlists.add(watchlist1);
 
         when(watchlistService.getEnabledWatchlists(athleteId)).thenReturn(watchlists);
 

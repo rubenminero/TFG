@@ -22,11 +22,19 @@ export class WatchlistAthleteComponent {
   watchlist_show: boolean = false;
   watchlist: Watchlist = {
     id: -1,
-    tournament_name: '',
     athlete_name: '',
-    tournament_id: -1,
     athlete_id: -1,
     enabled: false,
+    tournament_id: -1,
+    tournament_name: '',
+    tournament_location: '',
+    tournament_address: '',
+    tournament_description: '',
+    tournament_inscription: false,
+    tournament_capacity: -1,
+    tournament_enabled: false,
+    tournament_organizer: '',
+    tournament_sport_type: '',
   };
   tournament_show: boolean = false;
   tournament: Tournament = {
@@ -69,16 +77,25 @@ export class WatchlistAthleteComponent {
 
   ngOnInit(): void {
     this.watchlist_show = false;
+    this.watchlists_saved = [];
     this.watchlistService.getWatchlists().subscribe(
       (data: any[]) => {
         for (let i = 0; i < data.length; i++) {
           let watchlist_aux = {
             id: data[i].id,
-            tournament_name: data[i].tournament,
             athlete_name: data[i].athlete,
-            tournament_id: data[i].tournament_id,
             athlete_id: data[i].athlete_id,
             enabled: data[i].enabled,
+            tournament_id: data[i].tournament_id,
+            tournament_name: data[i].tournament_name,
+            tournament_location: data[i].tournament_location,
+            tournament_address: data[i].tournament_address,
+            tournament_description: data[i].tournament_description,
+            tournament_inscription: data[i].tournament_inscription,
+            tournament_capacity: data[i].tournament_capacity,
+            tournament_enabled: data[i].tournament_enabled,
+            tournament_organizer: data[i].tournament_organizer,
+            tournament_sport_type: data[i].tournament_sport_type,
           };
           this.watchlists_saved.push(watchlist_aux);
         }
@@ -192,28 +209,54 @@ export class WatchlistAthleteComponent {
   deleteWatchlist(watchlist: Watchlist): void {
     this.watchlistService.deleteWatchlist(watchlist).subscribe(
       (response) => {
-        this.dialog
-          .open(PopUpMsgComponent, {
-            data: {
-              msg: 'Borrado correctamente.',
-            },
-          })
-          .afterClosed()
-          .subscribe(() => {
-            this.ngOnInit();
-          });
+        if (response.status == 200) {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Borrada correctamente.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.ngOnInit();
+            });
+        }
       },
       (error) => {
-        this.dialog
-          .open(PopUpMsgComponent, {
-            data: {
-              msg: 'Error al añadir.',
-            },
-          })
-          .afterClosed()
-          .subscribe(() => {
-            this.ngOnInit();
-          });
+        if (error.status == 200) {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Borrada correctamente.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.ngOnInit();
+            });
+        } else if (error.status == 400) {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Este torneo o evento no esta en tu lista de seguimiento.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.ngOnInit();
+            });
+        } else if (error.status == 404) {
+          this.dialog
+            .open(PopUpMsgComponent, {
+              data: {
+                msg: 'Error al añadirXD.',
+              },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.ngOnInit();
+            });
+        }
       }
     );
   }

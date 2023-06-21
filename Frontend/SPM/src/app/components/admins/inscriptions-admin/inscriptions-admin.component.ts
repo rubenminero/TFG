@@ -1,6 +1,4 @@
-import { Watchlist } from 'src/app/interfaces/watchlists/watchlist';
 import { Component } from '@angular/core';
-import { Inscriptions } from 'src/app/interfaces/inscriptions/inscriptions';
 import { ChangeDetectorRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -11,6 +9,7 @@ import { InscriptionsAdminServiceService } from 'src/app/services/admin/inscript
 import { PopUpMsgComponent } from 'src/app/components/shared/pop-ups/pop-up-msg/pop-up-msg.component';
 import { State } from 'src/app/interfaces/state';
 import { FormControl, Validators } from '@angular/forms';
+import { InscriptionsTournament } from 'src/app/interfaces/inscriptions/inscriptions-tournament';
 
 @Component({
   selector: 'app-inscriptions-admin',
@@ -28,19 +27,27 @@ export class InscriptionsAdminComponent {
   ];
   selected = new FormControl('', [Validators.required]);
 
-  inscription: Inscriptions = {
+  inscription: InscriptionsTournament = {
     id: -1,
-    tournament: '',
     athlete: '',
-    tournament_id: -1,
     athlete_id: -1,
     enabled: false,
+    tournament_id: -1,
+    tournament_name: '',
+    tournament_location: '',
+    tournament_address: '',
+    tournament_description: '',
+    tournament_inscription: false,
+    tournament_capacity: -1,
+    tournament_enabled: false,
+    tournament_organizer: '',
+    tournament_sport_type: '',
   };
-  inscriptions_saved: Inscriptions[] = [];
+  inscriptions_saved: InscriptionsTournament[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   obs: Observable<any> | undefined;
-  dataSource: MatTableDataSource<Inscriptions> =
-    new MatTableDataSource<Inscriptions>();
+  dataSource: MatTableDataSource<InscriptionsTournament> =
+    new MatTableDataSource<InscriptionsTournament>();
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
@@ -62,11 +69,19 @@ export class InscriptionsAdminComponent {
         for (let i = 0; i < data.length; i++) {
           let inscription_aux = {
             id: data[i].id,
-            tournament: data[i].tournament,
             athlete: data[i].athlete,
-            tournament_id: data[i].tournament_id,
             athlete_id: data[i].athlete_id,
             enabled: data[i].enabled,
+            tournament_id: data[i].tournament_id,
+            tournament_name: data[i].tournament_name,
+            tournament_location: data[i].tournament_location,
+            tournament_address: data[i].tournament_address,
+            tournament_description: data[i].tournament_description,
+            tournament_inscription: data[i].tournament_inscription,
+            tournament_capacity: data[i].tournament_capacity,
+            tournament_enabled: data[i].tournament_enabled,
+            tournament_organizer: data[i].tournament_organizer,
+            tournament_sport_type: data[i].tournament_sport_type,
           };
           if (
             inscription_aux.enabled == this.state.value ||
@@ -76,7 +91,7 @@ export class InscriptionsAdminComponent {
           }
         }
         this.changeDetectorRef.detectChanges();
-        this.dataSource = new MatTableDataSource<Inscriptions>(
+        this.dataSource = new MatTableDataSource<InscriptionsTournament>(
           this.inscriptions_saved
         );
         this.dataSource.paginator = this.paginator;
@@ -115,7 +130,7 @@ export class InscriptionsAdminComponent {
     );
   }
 
-  changeStateInscription(inscription: Inscriptions): void {
+  changeStateInscription(inscription: InscriptionsTournament): void {
     this.adminService
       .changeStateInscription(inscription)
       .subscribe((response) => {
@@ -132,7 +147,7 @@ export class InscriptionsAdminComponent {
       });
   }
 
-  deleteInscription(inscription: Inscriptions): void {
+  deleteInscription(inscription: InscriptionsTournament): void {
     this.adminService.deleteInscription(inscription).subscribe(
       (response) => {
         this.dialog

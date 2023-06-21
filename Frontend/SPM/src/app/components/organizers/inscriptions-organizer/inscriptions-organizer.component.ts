@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Inscriptions } from 'src/app/interfaces/inscriptions/inscriptions';
 import { Tournament } from 'src/app/interfaces/tournament/tournament';
 import { TournamentServiceService } from 'src/app/services/tournament/tournament-service.service';
 import { InscriptionServiceService } from 'src/app/services/inscriptions/inscription-service.service';
@@ -10,6 +9,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ChangeDetectorRef, Input, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Inscriptions } from 'src/app/interfaces/inscriptions/inscriptions';
 
 @Component({
   selector: 'app-inscriptions-organizer',
@@ -31,11 +31,11 @@ export class InscriptionsOrganizerComponent {
   };
   inscription: Inscriptions = {
     id: -1,
-    tournament: '',
     athlete: '',
-    tournament_id: -1,
     athlete_id: -1,
     enabled: false,
+    tournament_id: -1,
+    tournament: '',
   };
   inscriptions_saved: Inscriptions[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
@@ -57,11 +57,11 @@ export class InscriptionsOrganizerComponent {
         for (let i = 0; i < data.length; i++) {
           let inscriptions_aux = {
             id: data[i].id,
-            tournament: data[i].tournament,
             athlete: data[i].athlete,
-            tournament_id: data[i].tournament_id,
             athlete_id: data[i].athlete_id,
             enabled: data[i].enabled,
+            tournament_id: data[i].tournament_id,
+            tournament: data[i].tournament,
           };
           this.inscriptions_saved.push(inscriptions_aux);
         }
@@ -98,10 +98,11 @@ export class InscriptionsOrganizerComponent {
         }
       }
     );
+    console.log(this.inscriptions_saved);
   }
 
   deleteInscription(inscription: Inscriptions): void {
-    this.inscriptionService.deleteInscription(inscription).subscribe(
+    this.inscriptionService.deleteInscription(inscription.id).subscribe(
       (response) => {
         console.log(response);
         this.dialog

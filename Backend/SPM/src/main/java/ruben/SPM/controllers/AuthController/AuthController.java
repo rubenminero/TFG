@@ -60,6 +60,22 @@ public class AuthController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(msg);
         }
+        Boolean email_check = userService.validEmail(request.getEmail());
+        if (email_check){
+            String msg = "This email is already taken.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(msg);
+        }
+        Boolean company_check = organizerService.validCompany_name(request.getCompany());
+        if (company_check){
+            String msg = "This company is already taken.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(msg);
+        }
         return ResponseEntity.ok(service.registerOrganizer(request));
     }
 
@@ -69,6 +85,14 @@ public class AuthController {
         Boolean username_check = userService.validUsername(request.getUsername());
         if (username_check){
             String msg = "This username is already taken.";
+            log.warn(msg);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(msg);
+        }
+        Boolean email_check = userService.validEmail(request.getEmail());
+        if (email_check){
+            String msg = "This email is already taken.";
             log.warn(msg);
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
