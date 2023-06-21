@@ -30,7 +30,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -87,7 +86,7 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<rgoupId>org.springframework.boot</rgoupId>
+					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
 					<configuration>
 						<mainClass>ruben.SPM.SPMApplication</mainClass>

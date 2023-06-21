@@ -1,7 +1,7 @@
 version: '3.9'
 services:
     front:
-        image: rubenminero/front_spm:1.1
+        image: rubenminero/front_spm:1.2
         container_name: front_spm
         restart: always
         ports:
@@ -9,7 +9,7 @@ services:
         networks:
             - back
     back:
-        image: rubenminero/back_spm:2.0
+        image: rubenminero/back_spm:2.1
         container_name: back_spm
         restart: always
         environment:
@@ -43,24 +43,3 @@ services:
 networks:
     back:
         driver: bridge
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
