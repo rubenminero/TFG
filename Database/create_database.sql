@@ -28,7 +28,7 @@ DROP TABLE IF EXISTS public.inscription;
 
 CREATE TABLE IF NOT EXISTS public.inscription
 (
-    id bigint NOT NULL DEFAULT nextval('inscription_id_seq'::regclass),
+    id bigint NOT NULL DEFAULT,
     enabled boolean,
     id_tournament bigint,
     id_user bigint,
@@ -51,7 +51,7 @@ DROP TABLE IF EXISTS public.sports_types;
 
 CREATE TABLE IF NOT EXISTS public.sports_types
 (
-    id bigint NOT NULL DEFAULT nextval('sports_types_id_seq'::regclass),
+    id bigint NOT NULL DEFAULT,
     enabled boolean,
     name character varying(255) COLLATE pg_catalog."default",
     CONSTRAINT sports_types_pkey PRIMARY KEY (id)
@@ -75,7 +75,7 @@ DROP TABLE IF EXISTS public.tournaments;
 
 CREATE TABLE IF NOT EXISTS public.tournaments
 (
-    id bigint NOT NULL DEFAULT nextval('tournaments_id_seq'::regclass),
+    id bigint NOT NULL DEFAULT,
     address character varying(255) COLLATE pg_catalog."default",
     description character varying(255) COLLATE pg_catalog."default",
     enabled boolean,
@@ -92,7 +92,7 @@ DROP TABLE IF EXISTS public.users;
 
 CREATE TABLE IF NOT EXISTS public.users
 (
-    id bigint NOT NULL DEFAULT nextval('users_id_seq'::regclass),
+    id bigint NOT NULL DEFAULT,
     email character varying(255) COLLATE pg_catalog."default",
     first_name character varying(255) COLLATE pg_catalog."default",
     last_name character varying(255) COLLATE pg_catalog."default",
@@ -107,7 +107,7 @@ DROP TABLE IF EXISTS public.watchlist;
 
 CREATE TABLE IF NOT EXISTS public.watchlist
 (
-    id bigint NOT NULL DEFAULT nextval('watchlist_id_seq'::regclass),
+    id bigint NOT NULL DEFAULT,
     enabled boolean,
     id_tournament bigint,
     id_user bigint,

@@ -121,7 +121,7 @@ export class RegisterTournamentOrganizerComponent {
           })
           .afterClosed()
           .subscribe(() => {
-            this.ngOnInit();
+            this.back();
           });
       },
       (error) => {

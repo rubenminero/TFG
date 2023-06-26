@@ -30,12 +30,12 @@ class Data_Generator:
             admin = self.generate_user(fake)
             admin['id'] = id
             admin['role'] = 'ADMIN'
-            admin['firstname'] = fake.first_name()
-            admin['lastname'] = fake.last_name()
-            admin['nif'] = fake.nif()
-            admin['username'] = 'admin' + str(id) + 'SPM'
+            admin['firstname'] = fake.first_name().encode('utf-8')
+            admin['lastname'] = fake.last_name().encode('utf-8')
+            admin['nif'] = fake.nif().encode('utf-8')
+            admin['username'] = 'admin' + str(id) + 'SPM'.encode('utf-8')
             admin['password'] = bcrypt.hashpw(admin['username'].encode('utf-8'),bcrypt.gensalt())
-            admin['email'] = admin['username'] + '@gmail.com'
+            admin['email'] = admin['username'] + '@gmail.com'.encode('utf-8')
             admin['valid_from'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             admin['valid_to'] = None
             admins.append(admin)
@@ -48,13 +48,13 @@ class Data_Generator:
             athlete = self.generate_user(fake)
             athlete['id'] = id
             athlete['role'] = 'ATHLETE'
-            athlete['firstname'] = fake.first_name()
-            athlete['lastname'] = fake.last_name()
-            athlete['nif'] = fake.nif()
-            athlete['username'] = 'athlete' + str(id)
+            athlete['firstname'] = fake.first_name().encode('utf-8')
+            athlete['lastname'] = fake.last_name().encode('utf-8')
+            athlete['nif'] = fake.nif().encode('utf-8')
+            athlete['username'] = 'athlete' + str(id).encode('utf-8')
             athlete['password'] = bcrypt.hashpw(athlete['username'].encode('utf-8'),bcrypt.gensalt())
-            athlete['email'] = athlete['username'] + '@gmail.com'
-            athlete['phone_number'] = fake.phone_number()
+            athlete['email'] = athlete['username'] + '@gmail.com'.encode('utf-8')
+            athlete['phone_number'] = fake.phone_number().encode('utf-8')
             athlete['enabled'] = True
             athletes.append(athlete)
         return athletes
@@ -66,14 +66,14 @@ class Data_Generator:
             organizer = self.generate_user(fake)
             organizer['id'] = id
             organizer['role'] = 'ORGANIZER'
-            organizer['firstname'] = fake.first_name()
-            organizer['lastname'] = fake.last_name()
-            organizer['nif'] = fake.nif()
-            organizer['username'] = 'organizer' + str(id)
+            organizer['firstname'] = fake.first_name().encode('utf-8')
+            organizer['lastname'] = fake.last_name().encode('utf-8')
+            organizer['nif'] = fake.nif().encode('utf-8')
+            organizer['username'] = 'organizer' + str(id).encode('utf-8')
             organizer['password'] = bcrypt.hashpw(organizer['username'].encode('utf-8'),bcrypt.gensalt())
-            organizer['email'] = organizer['username'] + '@gmail.com'
-            organizer['company_name'] = fake.company()
-            organizer['address'] = fake.address()
+            organizer['email'] = organizer['username'] + '@gmail.com'.encode('utf-8')
+            organizer['company_name'] = fake.company().encode('utf-8')
+            organizer['address'] = fake.address().encode('utf-8')
             organizer['enabled'] = True
             organizers.append(organizer)
         return organizers

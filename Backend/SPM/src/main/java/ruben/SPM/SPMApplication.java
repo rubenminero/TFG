@@ -11,13 +11,7 @@ import java.util.Date;
 
 
 @SpringBootApplication
-public class SPMApplication {
-
-	@Autowired
-	private  AdminService adminService;
-
-	public static void main(String[] args) {
-
+public class SPMApplication {	public static void main(String[] args) {
 		SpringApplication.run(SPMApplication.class, args);
 
 	}

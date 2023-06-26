@@ -111,7 +111,7 @@ export class RegisterEventOrganizerComponent {
           })
           .afterClosed()
           .subscribe(() => {
-            this.ngOnInit();
+            this.back();
           });
       },
       (error) => {
