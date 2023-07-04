@@ -1,101 +1,122 @@
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (1,'admin1SPM@gmail.com', 'Iker', 'Grande Acu�a', '55185000L', '$2b$12$akWdaPYLXnAzf6EL82XAvOwOA3OrL3Ckr8LvA9F0yOvHzhpkEVG9W', 'ADMIN','admin1SPM');
-INSERT INTO admins (valid_from, id) VALUES ('2023-06-08 11:31:25', 1);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (1,'admin1SPM@gmail.com', 'Apolinar', 'Iba�ez Giner',  '84236699G ', '$2b$12$6StDuP04V8pxjBUjiLz4gOjRqMdz.Zk9kM9W/HdA2RwmW/AkvOx/G', 'ADMIN','admin1SPM');
+INSERT INTO admins (valid_from, id) VALUES ('2023-07-04 22:44:26', 1);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (2,'admin2SPM@gmail.com', 'Samanta', 'Herrera-Murcia', '10458770A', '$2b$12$Aptm41KSj0iO6odFkZTrou1MkD0zns.532LrxJbpVFiPtuEF1EFGi', 'ADMIN','admin2SPM');
-INSERT INTO admins (valid_from, id) VALUES ('2023-06-08 11:31:25', 2);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (2,'admin2SPM@gmail.com', 'Patricia', 'Oca�a Aroca',  '77358823W ', '$2b$12$6TE1eSN/MxpT5tgtfp4gYerk5U2d8ddaAOCRiUXTn3/jQRbiU4Yge', 'ADMIN','admin2SPM');
+INSERT INTO admins (valid_from, id) VALUES ('2023-07-04 22:44:27', 2);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (3,'admin3SPM@gmail.com', 'Priscila', 'del Ad�n', '27893476L', '$2b$12$0Wbmy6Vq9HyzFptU/emvquvTjztxPt0Sw1QiODA8NZnWqu3wLi.V.', 'ADMIN','admin3SPM');
-INSERT INTO admins (valid_from, id) VALUES ('2023-06-08 11:31:25', 3);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (3,'admin3SPM@gmail.com', 'Cecilio', 'Rubio Lu�s',  '01959609D ', '$2b$12$81VU8DEbC4D3dP1XS0nOQudGyI5Gx7jAm3atR5B7VvUs1.CJ7yjIm', 'ADMIN','admin3SPM');
+INSERT INTO admins (valid_from, id) VALUES ('2023-07-04 22:44:27', 3);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (4,'admin4SPM@gmail.com', 'Tatiana', 'Mar�n', '58880177Q', '$2b$12$swit8kq1L19b/3KkXnOjj.qxiMZmjDMdW5jmDepmUVoGcE/1dLtXG', 'ADMIN','admin4SPM');
-INSERT INTO admins (valid_from, id) VALUES ('2023-06-08 11:31:26', 4);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (4,'admin4SPM@gmail.com', '�frica', 'Sol� Batlle',  '02915862Z ', '$2b$12$gWUvI6x2VXdHIflDy5AvSuwyehg8fq8WW8bDbVdfG3AczlXAoVgpa', 'ADMIN','admin4SPM');
+INSERT INTO admins (valid_from, id) VALUES ('2023-07-04 22:44:27', 4);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (5,'admin5SPM@gmail.com', '�scar', 'del Perell�', '14251269D', '$2b$12$w98CWX51K7odkeJWhqMVTeQelPl0TC3yYfe3Y/7oiPPlx4PUcd9AO', 'ADMIN','admin5SPM');
-INSERT INTO admins (valid_from, id) VALUES ('2023-06-08 11:31:26', 5);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (5,'admin5SPM@gmail.com', 'Eufemia', 'Clavero Madrigal',  '45120288S ', '$2b$12$YwumRAbz2uaOh01U3gjGg.3C//UxsoU6DUTXagk6Zk84qAo3SF43.', 'ADMIN','admin5SPM');
+INSERT INTO admins (valid_from, id) VALUES ('2023-07-04 22:44:27', 5);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (6,'admin6SPM@gmail.com', 'Florencio', 'Baquero Rosa', '68059043L', '$2b$12$ft62qyim4YYvD8Ly5ieN5uNjLHt27LOFx29Q/x4O.t7f/C0EY20W6', 'ADMIN','admin6SPM');
-INSERT INTO admins (valid_from, id) VALUES ('2023-06-08 11:31:26', 6);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (6,'admin6SPM@gmail.com', 'Tecla', 'del Gordillo',  '35003227X ', '$2b$12$5JJ89SRs9yjHhDYlBSC1Hua6bRrIPyZIAkE5KK5TYCcSlS5u7lkMW', 'ADMIN','admin6SPM');
+INSERT INTO admins (valid_from, id) VALUES ('2023-07-04 22:44:27', 6);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (7,'admin7SPM@gmail.com', 'Graciana', 'Colom Pera', '41631172E', '$2b$12$wuJZMKzM5I7ZOs51NfX77uBXpZsfU4d2Se3Txf9zy/6KFqhnV8.vy', 'ADMIN','admin7SPM');
-INSERT INTO admins (valid_from, id) VALUES ('2023-06-08 11:31:26', 7);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (7,'admin7SPM@gmail.com', 'Trini', 'Segura Granados',  '73604866J ', '$2b$12$7oROWthcE1jPtHU0h4AwkuEEB1eS36zdVKniT7HPi1NDrnkq60crC', 'ADMIN','admin7SPM');
+INSERT INTO admins (valid_from, id) VALUES ('2023-07-04 22:44:28', 7);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (8,'admin8SPM@gmail.com', 'Marina', 'Arranz', '20272035L', '$2b$12$YLU8xsN4aPN5qOo0kzlaIOjQ78nIOqi1m5A2dUNg2D3u6uDQ5.EoO', 'ADMIN','admin8SPM');
-INSERT INTO admins (valid_from, id) VALUES ('2023-06-08 11:31:26', 8);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (8,'admin8SPM@gmail.com', 'Jes�s', 'Anastasio Prat Escamilla',  '63037221V ', '$2b$12$c6370a3u/8/Ad7lX.DErwuCQcp4qJItMltrSJWchi8z0gteiyd9Ty', 'ADMIN','admin8SPM');
+INSERT INTO admins (valid_from, id) VALUES ('2023-07-04 22:44:28', 8);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (9,'admin9SPM@gmail.com', 'Miguela', 'Fuente', '27802822P', '$2b$12$wDD1uGGaLV8Rj7LKuN3Wwux8KL1q59ad22faF3pmLp5tLEpBWGT.u', 'ADMIN','admin9SPM');
-INSERT INTO admins (valid_from, id) VALUES ('2023-06-08 11:31:26', 9);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (9,'admin9SPM@gmail.com', 'Nereida', 'Marquez B�rcena',  '86764431J ', '$2b$12$QTvVH30/Ki6K85nbGCpfA.mUj7qoLkvk.8LGAxEllE529EyrhQ83m', 'ADMIN','admin9SPM');
+INSERT INTO admins (valid_from, id) VALUES ('2023-07-04 22:44:28', 9);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (10,'admin10SPM@gmail.com', 'Itziar', 'Cabezas Roldan', '86422941G', '$2b$12$i5nxu7Fq/tlwhiI8zrf/EOTwo1UE3hTKgzLZPgG18edujj9NMGbj2', 'ADMIN','admin10SPM');
-INSERT INTO admins (valid_from, id) VALUES ('2023-06-08 11:31:27', 10);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (10,'admin10SPM@gmail.com', 'Adora', 'Company Arias',  '09691953Y ', '$2b$12$PeRzv6rZPoNTSMNTGpfLwu7OF3sykv2s6GidkPvuSoF6X2MMQYAmS', 'ADMIN','admin10SPM');
+INSERT INTO admins (valid_from, id) VALUES ('2023-07-04 22:44:28', 10);
 
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (11,'athlete11@gmail.com', 'Juan', 'Tomas', '24487574A', '$2b$12$gh11Jm8BM4CjKkaL6YvHTONkEoBmHTHzePospG5ZqCQEymxmncqUm', 'ATHLETE','athlete11');
-INSERT INTO athletes (enabled,phone_number ,id) VALUES (True, '+34922 844 292' ,11);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (11,'athlete11@gmail.com', 'Jacinta', 'Exposito',  '17506497R ', '$2b$12$N1wNn5x5TYjk.Vgkok1A8uOWNDnOU0XI1hiQEoPcQKNaZofA55MI.', 'ATHLETE','athlete11');
+INSERT INTO athletes (enabled,phone_number ,id) VALUES (True,  '+34 974 076 749 ' ,11);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (12,'athlete12@gmail.com', 'Rosendo', 'Sanz Espinosa', '03652609W', '$2b$12$m3Qz7RMrq8fVUnrDeABUTuO8VWuE3TqZb6gOX5mvYvmBq.qVV98sy', 'ATHLETE','athlete12');
-INSERT INTO athletes (enabled,phone_number ,id) VALUES (True, '+34971574080' ,12);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (12,'athlete12@gmail.com', 'Macarena', 'Calder�n Burgos',  '32963437K ', '$2b$12$r1PpOrqRvPlFqD.dwVJ5xuY0QImiPHxVCNqC5S.47RqKIPeWiiEyC', 'ATHLETE','athlete12');
+INSERT INTO athletes (enabled,phone_number ,id) VALUES (True,  '+34 849 88 62 14 ' ,12);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (13,'athlete13@gmail.com', 'Alex', 'Quiroga-Alcolea', '25845050L', '$2b$12$4P95aSUdeDFTQRsjFXFR/u.t8wipwFr6RT8Ek/gO2vLnc0gB7WSrW', 'ATHLETE','athlete13');
-INSERT INTO athletes (enabled,phone_number ,id) VALUES (True, '+34876 83 71 52' ,13);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (13,'athlete13@gmail.com', 'Marisa', 'Leal-Bejarano',  '54306131A ', '$2b$12$pc7jEpAmEDl2pI08E5RGw.GKs5R3p6yBIuNCYa8c1Qf9algFRJkse', 'ATHLETE','athlete13');
+INSERT INTO athletes (enabled,phone_number ,id) VALUES (True,  '+34 810915777 ' ,13);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (14,'athlete14@gmail.com', 'Consuelo', 'Quintanilla Arnaiz', '11122714Y', '$2b$12$K4tohbh0RuQel.Xlwg9LzOgMRcWfN2uLar7Tw08C.zKg6lPfB.f4q', 'ATHLETE','athlete14');
-INSERT INTO athletes (enabled,phone_number ,id) VALUES (True, '+34816 42 92 89' ,14);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (14,'athlete14@gmail.com', 'Celia', 'Rosales Landa',  '00957094H ', '$2b$12$TskOQA/Xq97C62sCfVp5keqlnIthZL20ysOo3Q.r0HkLyPuwa.9rC', 'ATHLETE','athlete14');
+INSERT INTO athletes (enabled,phone_number ,id) VALUES (True,  '+34803 48 00 57 ' ,14);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (15,'athlete15@gmail.com', 'Jose', 'Juli�n Jord� Asensio', '40845475M', '$2b$12$KlJEPD7pHF0aSQoFE5Dlge5siyuWo7I9IXURz6A9jzxoiPvYHont2', 'ATHLETE','athlete15');
-INSERT INTO athletes (enabled,phone_number ,id) VALUES (True, '+34988 367 058' ,15);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (15,'athlete15@gmail.com', 'Hilda', 'Plaza Carpio',  '41013489G ', '$2b$12$li/6JsQnC2neyBmKTd3q6OP63QdByIfQfw8ekWgDQ0mQgNyBwmi/O', 'ATHLETE','athlete15');
+INSERT INTO athletes (enabled,phone_number ,id) VALUES (True,  '+34888 28 42 14 ' ,15);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (16,'athlete16@gmail.com', 'Ren�', 'Gallardo Casta�eda', '33505982L', '$2b$12$kd6BhspozIPJskNK6hcf.uTMRh/7vO35.a7XKWkCCDqA..ox3HC4y', 'ATHLETE','athlete16');
-INSERT INTO athletes (enabled,phone_number ,id) VALUES (True, '+34883 782 718' ,16);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (16,'athlete16@gmail.com', 'Itziar', 'Grande �lamo',  '27466620C ', '$2b$12$wlJ8eGD12L9qKZCWu41l.eCWacv6aek2ni0.ofxbxDg428LfNayW2', 'ATHLETE','athlete16');
+INSERT INTO athletes (enabled,phone_number ,id) VALUES (True,  '+34844691877 ' ,16);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (17,'athlete17@gmail.com', 'Reyes', 'Vaquero-Guillen', '78688092D', '$2b$12$ly4mV6SxTzNF0B5RllQG8uiDzmRHH.ptwTVYJyz4O11cDWWaCGvLG', 'ATHLETE','athlete17');
-INSERT INTO athletes (enabled,phone_number ,id) VALUES (True, '+34 876 133 303' ,17);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (17,'athlete17@gmail.com', 'Alejandro', 'Bellido Segovia',  '60663927R ', '$2b$12$zSlnZaoMSAQhnVtxJH7MuOE7hHsdlqi2sSZa2A5DYZRELa485NA2W', 'ATHLETE','athlete17');
+INSERT INTO athletes (enabled,phone_number ,id) VALUES (True,  '+34823 267 658 ' ,17);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (18,'athlete18@gmail.com', 'Gracia', 'Vendrell Bad�a', '66518254T', '$2b$12$bHg7GAUPVugAI3GWs.1.YupqOAJRHRXOQZa0MLggE0FFrGpAqU4Vm', 'ATHLETE','athlete18');
-INSERT INTO athletes (enabled,phone_number ,id) VALUES (True, '+34 900034077' ,18);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (18,'athlete18@gmail.com', 'Odalys', 'Zaragoza Barros',  '54334093C ', '$2b$12$6hTh/CiTcOwV9qmhTOH3c.pV7vQXIMb3BMggRCRjVX5u192DlRDj6', 'ATHLETE','athlete18');
+INSERT INTO athletes (enabled,phone_number ,id) VALUES (True,  '+34988 62 34 61 ' ,18);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (19,'athlete19@gmail.com', 'Cosme', 'Riera Iglesia', '39114459S', '$2b$12$2rSomTDfBpOdPHgjpqxDc.dDdk4otAzEohXPHUf0nqRAfPjLkLhqi', 'ATHLETE','athlete19');
-INSERT INTO athletes (enabled,phone_number ,id) VALUES (True, '+34 926 87 01 01' ,19);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (19,'athlete19@gmail.com', 'Nydia', 'Ros-�lvarez',  '72421031B ', '$2b$12$X1nLQVN4QfLpApYVT/K6keixITuTYJU5NyrU7qYZqDpKmbWCYIfFy', 'ATHLETE','athlete19');
+INSERT INTO athletes (enabled,phone_number ,id) VALUES (True,  '+34980153176 ' ,19);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (20,'athlete20@gmail.com', 'Jord�n', 'Isa�as Tejada Villanueva', '14600202D', '$2b$12$pPCpV/o.JcuovXzyPam7Q.QyiQgPzyY1AwV6QR3W5jiAyu8gvmejm', 'ATHLETE','athlete20');
-INSERT INTO athletes (enabled,phone_number ,id) VALUES (True, '+34629464059' ,20);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (20,'athlete20@gmail.com', 'Ana', 'de Abril',  '59232645D ', '$2b$12$dUGBmQRODTK3JZW/hRSrvu8zUmXgHE2ZdNdyYJvBFb9ayraK0jUHq', 'ATHLETE','athlete20');
+INSERT INTO athletes (enabled,phone_number ,id) VALUES (True,  '+34 822 04 17 75 ' ,20);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (21,'organizer21@gmail.com', 'Fabiana', 'Vi�a Moraleda', '13230286L', '$2b$12$9Sw5jN6YF6yKx4lhi3KDM.SgTnsdgxV6eMXx/0IqlVJ7snB3qtMr6', 'ORGANIZER','organizer21');
-INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True, 'Carretero, Calzada and Diaz','Alameda Malena Falc� 540 Piso 6 
-Ciudad, 37357',21);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (21,'organizer21@gmail.com', 'Gustavo', 'Espa�a Taboada',  '75106343G ', '$2b$12$mYWZtubejX7/E5uTRdISE.hItwSS2UpP55s0jr43sK34nFZwfVyCy', 'ORGANIZER','organizer21');
+INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True,  'Benavides LLC ', 'Rambla de Severo Redondo 58\nAlbacete, 27009 ',21);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (22,'organizer22@gmail.com', 'Ariel', 'de Ad�n', '55616597K', '$2b$12$G0uGoHtCojzFiZr9Kzy5Au2PG3U82haamWiVTdBWzXpVm1sIzM1v2', 'ORGANIZER','organizer22');
-INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True, 'Coello Inc','Rambla Rosenda Mart� 2
-Girona, 16380',22);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (22,'organizer22@gmail.com', 'Juli�n', 'Barrio',  '34171175Y ', '$2b$12$NAsJtiWwzjQHTYlVmzkY/ujEVrIMa5KIyDzxQ6nDrPHBKA4uk1.R.', 'ORGANIZER','organizer22');
+INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True,  'Arag\xc3\xb3n PLC ', 'Cuesta de Gustavo Peir\xc3\xb3 4\nAlmer\xc3\xada, 34779 ',22);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (23,'organizer23@gmail.com', 'Teodoro', 'Flor Anglada', '89700655B', '$2b$12$IKbNhcAVNcMAU.f1E.zlD.RgobjbgShRDXODC.YZ/2KlulpUIH5sy', 'ORGANIZER','organizer23');
-INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True, 'Bautista-Acevedo','Via Macarena Cuadrado 91
-Asturias, 29671',23);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (23,'organizer23@gmail.com', 'Elba', 'Barrag�n-Sastre',  '97155647J ', '$2b$12$U0s4ptUp9HBsILYUIkqNBOozfFez.8QNxoKLPe8i/PAwg2FiGYCqy', 'ORGANIZER','organizer23');
+INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True,  'Mendoza LLC ', 'Plaza P\xc3\xada Palomo 8 Puerta 6 \nLe\xc3\xb3n, 29864 ',23);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (24,'organizer24@gmail.com', 'Javiera', 'Tamayo Ad�n', '81858735X', '$2b$12$YW8.uHwLVADKwr0VgCqp/OGjwHCo8fSRxcJCvedWzofvA6I5xcQJ6', 'ORGANIZER','organizer24');
-INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True, 'Torrents-Herrera','Ca�ada de Raquel Ribas 16 Apt. 73 
-Toledo, 29652',24);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (24,'organizer24@gmail.com', 'Mar�a', 'Del Carmen B�rcena Villalba',  '41237000R ', '$2b$12$1DbY.sKTRbqcXpr2V5qVxudc3HazrCU/6o769gYGCeO33MrMJA526', 'ORGANIZER','organizer24');
+INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True,  'Casanovas Ltd ', 'Paseo Balduino Calatayud 6 Piso 5 \n\xc3\x81lava, 05371 ',24);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (25,'organizer25@gmail.com', 'Teodora', 'Tom�s Morales', '22546909D', '$2b$12$Q3Myy1oD/CHGDGDK6KB11eN2U4QsnEdkp2Y1FUJ697Q4TAFVEQUNq', 'ORGANIZER','organizer25');
-INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True, 'Sosa, Porras and G�lvez','Camino Paca Fonseca 39 Apt. 39 
-Cantabria, 15479',25);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (25,'organizer25@gmail.com', 'Paco', 'Quero Armengol',  '98006593M ', '$2b$12$bnGhCAzC3VqKCRQemhDbnOfcWzImYtzE/wBQO3AEGLbiHQtCDdNOe', 'ORGANIZER','organizer25');
+INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True,  'Cervantes-Giner ', 'Paseo H\xc3\xa9ctor Melero 29 Puerta 7 \nBurgos, 51912 ',25);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (26,'organizer26@gmail.com', 'Ambrosio', 'T�llez J�dar', '49248634E', '$2b$12$UDcOuKvuDi9pDh59MP5lveGbG56XlHjJpzLqZYTUhv9CV0oWIRomC', 'ORGANIZER','organizer26');
-INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True, 'Cortes Group','Alameda Vidal Quevedo 62
-�vila, 05434',26);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (26,'organizer26@gmail.com', 'Poncio', 'Pag�s Guardia',  '52404983N ', '$2b$12$.lVMRtjORGWBCQzkxs48oO07eKW1HPV/SwuUmPJQcFIwv1Is4dGUu', 'ORGANIZER','organizer26');
+INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True,  'Tom\xc3\xa9, Feijoo and Villalobos ', 'Rambla de Jesusa Castej\xc3\xb3n 250 Apt. 95 \nC\xc3\xa1ceres, 10547 ',26);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (27,'organizer27@gmail.com', 'Ignacia', 'Benet Rodriguez', '56808695Y', '$2b$12$xAV1fNRFcRLJw2kQbaGLvOwZAeR5BVE89/eEfpx2/3k3Toa362.aa', 'ORGANIZER','organizer27');
-INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True, 'Sebasti�n Ltd','Rambla Lalo Barber� 84 Puerta 3 
-Castell�n, 26897',27);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (27,'organizer27@gmail.com', 'Saturnina', 'Pera Iniesta',  '63836512N ', '$2b$12$DVn893tqN7.Mn3fwjPrHtOSAc7my/J/rvHEqOlZw4fYS.JM7ZMQW.', 'ORGANIZER','organizer27');
+INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True,  'Crespo Inc ', 'Paseo Eusebio Arcos 5 Apt. 37 \nHuelva, 41731 ',27);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (28,'organizer28@gmail.com', 'Narcisa', 'Corral Mascar�', '33396217X', '$2b$12$3KDvQ3smcVOHxHM4Y/8l9ecdsN/D73yqBxyML5gys.kT9FcJVnYru', 'ORGANIZER','organizer28');
-INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True, 'Cuadrado, Amador and Sanchez','Ronda de Sebasti�n Moliner 79
-Salamanca, 29018',28);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (28,'organizer28@gmail.com', 'Josep', 'Adadia Roma',  '57392264L ', '$2b$12$xfKU4DxrJMmVPneTbJOcpuKo.r6gYXkCz8xhfVTixvePFSs1DCRyq', 'ORGANIZER','organizer28');
+INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True,  'Corominas-Arnau ', 'Avenida de Francisca Casares 4\n\xc3\x81vila, 09339 ',28);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (29,'organizer29@gmail.com', 'Celestino', 'Anguita Briones', '53573771D', '$2b$12$e6eKQbWa6ttiT/bGwO9w3.f6fPW9HkYdwZQ1SE9W374o6V4oIgKhu', 'ORGANIZER','organizer29');
-INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True, 'Batlle-Agudo','Vial de Aurelio Pintor 21
-Soria, 41243',29);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (29,'organizer29@gmail.com', 'Bernab�', 'Rivera-Sobrino',  '46172152C ', '$2b$12$HUwtRZMakFVO2LjrDdCNleHc/m/hkNAyOKgQ8/DBh8vKNcFNSGSaS', 'ORGANIZER','organizer29');
+INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True,  'Font, Figuerola and Fortuny ', 'Plaza de Fabiola Aznar 5 Apt. 11 \nVizcaya, 17254 ',29);
 
-INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (30,'organizer30@gmail.com', 'Benigno', 'Lago Oliver', '13583795H', '$2b$12$d.nCDFZV8D.QY0Rmu5NBEuQ9.Tzl4ESVfvvkg8yd6b6HG3w0RVsT6', 'ORGANIZER','organizer30');
-INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True, 'Sanmiguel LLC','Vial Candelas Casta�eda 32 Apt. 26 
-Ciudad, 18055',30);
+INSERT INTO users (id, email, first_name, last_name, nif, password, role,username) VALUES (30,'organizer30@gmail.com', 'Iris', 'Arellano Villena',  '11110409Y ', '$2b$12$Yrok2.RByTR6ohz8/gNQQuoeDIXMCWKM2CwDlXuX9pPOJfWGWatFC', 'ORGANIZER','organizer30');
+INSERT INTO organisers (enabled,company_name,address ,id) VALUES (True,  'Pera-Gir\xc3\xb3n ', 'Paseo Leandro Montserrat 5 Apt. 10 \nLa Coru\xc3\xb1a, 16431 ',30);
+
+INSERT INTO tournaments (address, description, name, enabled, location, id_organizers, id_sports_type, capacity, inscription, id) 
+VALUES ( 'Calle de la imagen 1', 'Torneo de prueba 1.', 'Torneo de prueba 1', True,  'Madrid ', 22, 1, 100, True, 1); 
+
+INSERT INTO tournaments (address, description, name, enabled, location, id_organizers, id_sports_type, capacity, inscription, id)
+VALUES ( 'Calle de la imagen 2', 'Torneo de prueba 2.', 'Torneo de prueba 2', True,  'Madrid ', 22, 1, 100, True, 2);
+
+INSERT INTO tournaments (address, description, name, enabled, location, id_organizers, id_sports_type, capacity, inscription, id)
+VALUES ( 'Calle de la imagen 3', 'Torneo de prueba 3.', 'Torneo de prueba 3', True,  'Madrid ', 22, 1, 100, True, 3);
+
+INSERT INTO tournaments (address, description, name, enabled, location, id_organizers, id_sports_type, capacity, inscription, id)
+VALUES ( 'Calle de la imagen 4', 'Torneo de prueba 4.', 'Torneo de prueba 4', True,  'Madrid ', 22, 1, 100, True, 4);
+
+INSERT INTO tournaments (address, description, name, enabled, location, id_organizers, id_sports_type, capacity, inscription, id)
+VALUES ( 'Calle de la imagen 5', 'Torneo de prueba 5.', 'Torneo de prueba 5', True,  'Madrid ', 22, 1, 100, True, 5);
+
+INSERT INTO tournaments (address, description, name, enabled, location, id_organizers, id_sports_type, capacity, inscription, id)
+VALUES ( 'Calle de la Alameda 1', 'Evento de prueba 1.', 'Evento de prueba 1', True,  'Barcelona', 22, 1, -1, False, 6);
+
+INSERT INTO tournaments (address, description, name, enabled, location, id_organizers, id_sports_type, capacity, inscription, id)
+VALUES ( 'Calle de la Alameda 2', 'Evento de prueba 2.', 'Evento de prueba 2', True,  'Barcelona', 22, 1, -1, False, 7);
+
+INSERT INTO tournaments (address, description, name, enabled, location, id_organizers, id_sports_type, capacity, inscription, id)
+VALUES ( 'Calle de la Alameda 3', 'Evento de prueba 3.', 'Evento de prueba 3', True,  'Barcelona', 22, 1, -1, False, 8);
+
+INSERT INTO tournaments (address, description, name, enabled, location, id_organizers, id_sports_type, capacity, inscription, id)
+VALUES ( 'Calle de la Alameda 4', 'Evento de prueba 4.', 'Evento de prueba 4', True,  'Barcelona', 22, 1, -1, False, 9);
+
+INSERT INTO tournaments (address, description, name, enabled, location, id_organizers, id_sports_type, capacity, inscription, id)
+VALUES ( 'Calle de la Alameda 5', 'Evento de prueba 5.', 'Evento de prueba 5', True,  'Barcelona', 22, 1, -1, False, 10);
+
 
